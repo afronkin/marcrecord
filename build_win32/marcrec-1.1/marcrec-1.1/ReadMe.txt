@@ -1,13 +1,13 @@
 ========================================================================
-    STATIC LIBRARY : marcrec-1.0 Project Overview
+    STATIC LIBRARY : marcrec-1.1 Project Overview
 ========================================================================
 
-AppWizard has created this marcrec-1.0 library project for you.
+AppWizard has created this marcrec-1.1 library project for you.
 
 No source files were created as part of your project.
 
 
-marcrec-1.0.vcproj
+marcrec-1.1.vcproj
     This is the main project file for VC++ projects generated using an Application Wizard.
     It contains information about the version of Visual C++ that generated the file, and
     information about the platforms, configurations, and project features selected with the

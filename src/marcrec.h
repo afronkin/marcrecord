@@ -2,7 +2,7 @@
  * Copyright (c) Tver Regional Scientific Library
  * Author: Alexander Fronkin
  *
- * Version 1.0 (1 Jan 2003)
+ * Version 1.1 (1 Jan 2003)
  */
 
 #ifndef __MARCREC_H
@@ -190,7 +190,7 @@ public:
 	// Маркер Marc-записи
 	TMarker Marker;
 	// Флаги распаковки записей
-	enum { UnpackFlagLiber = 0x00000001, UnpackFlagMarc21 = 0x00000002 };
+	enum { UnpackFlagLiber = 0x00000001, UnpackFlagMarc21 = 0x00000002, UnpackFlagCheckDlm = 0x00000004};
 	// Типы записей
 	typedef enum { RecordTypeRusmarc = 1, RecordTypeMarc21 = 2 } TRecordType;
 

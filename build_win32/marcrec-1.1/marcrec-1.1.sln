@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "marcrec-1.1", "marcrec-1.1\marcrec-1.1.vcproj", "{70F078BF-CB0D-4FE6-BFB1-E79114A010F1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcproj", "{74FD4BAC-1A9A-41AF-A066-BC1D86E8C183}"
+	ProjectSection(ProjectDependencies) = postProject
+		{70F078BF-CB0D-4FE6-BFB1-E79114A010F1} = {70F078BF-CB0D-4FE6-BFB1-E79114A010F1}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70F078BF-CB0D-4FE6-BFB1-E79114A010F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{70F078BF-CB0D-4FE6-BFB1-E79114A010F1}.Debug|Win32.Build.0 = Debug|Win32
+		{70F078BF-CB0D-4FE6-BFB1-E79114A010F1}.Release|Win32.ActiveCfg = Release|Win32
+		{70F078BF-CB0D-4FE6-BFB1-E79114A010F1}.Release|Win32.Build.0 = Release|Win32
+		{74FD4BAC-1A9A-41AF-A066-BC1D86E8C183}.Debug|Win32.ActiveCfg = Debug|Win32
+		{74FD4BAC-1A9A-41AF-A066-BC1D86E8C183}.Debug|Win32.Build.0 = Debug|Win32
+		{74FD4BAC-1A9A-41AF-A066-BC1D86E8C183}.Release|Win32.ActiveCfg = Release|Win32
+		{74FD4BAC-1A9A-41AF-A066-BC1D86E8C183}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

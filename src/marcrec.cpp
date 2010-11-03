@@ -2,7 +2,7 @@
  * Copyright (c) Tver Regional Scientific Library
  * Author: Alexander Fronkin
  *
- * Version 1.0 (1 Jan 2003)
+ * Version 1.1 (1 Jan 2003)
  */
 
 #include <errno.h>
@@ -18,6 +18,8 @@ CMarcRec::CMarcRec()
 	// Очистка Marc-записи
 	this->hRecodeIconv = (iconv_t)-1;
 	Clear();
+	// Установка типа записи
+	SetRecordType(RecordTypeRusmarc);
 }
 
 CMarcRec::CMarcRec(iconv_t hNewRecodeIconv)
@@ -25,10 +27,10 @@ CMarcRec::CMarcRec(iconv_t hNewRecodeIconv)
 	// Очистка Marc-записи
 	hRecodeIconv = (iconv_t)-1;
 	Clear();
-	// Установка таблицы перекодировки
-	SetRecodeHandle(hNewRecodeIconv);
 	// Установка типа записи
 	SetRecordType(RecordTypeRusmarc);
+	// Установка таблицы перекодировки
+	SetRecodeHandle(hNewRecodeIconv);
 }
 
 // -----------------
@@ -350,21 +352,45 @@ int CMarcRec::ReadFromFile(FILE *MarcFile, int iFlags)
 	szMarcRecSize[0] = (char)iSymbol;
 
 	// Чтение Marc-записи из файла
-	if(fread((void *)(szMarcRecSize + 1), 1, MARCREC_SIZE_RECLEN - 1, MarcFile) !=
-		MARCREC_SIZE_RECLEN - 1)
-		return (feof(MarcFile) ? MARCREC_ERROR_EOF : MARCREC_ERROR_FILE);
-	szMarcRecSize[MARCREC_SIZE_RECLEN] = '\0';
-	iMarcRecSize = atol(szMarcRecSize);
-	pBuf = (char *)malloc(MARCREC_SIZE_RECLEN + iMarcRecSize);
-	memcpy(pBuf, (void *)szMarcRecSize, MARCREC_SIZE_RECLEN);
-	if(fread(pBuf + MARCREC_SIZE_RECLEN, 1,
-		iMarcRecSize - MARCREC_SIZE_RECLEN, MarcFile) != iMarcRecSize - MARCREC_SIZE_RECLEN)
-	{
+	try {
+		if(fread((void *)(szMarcRecSize + 1), 1, MARCREC_SIZE_RECLEN - 1, MarcFile) !=
+			MARCREC_SIZE_RECLEN - 1)
+			return (feof(MarcFile) ? MARCREC_ERROR_EOF : MARCREC_ERROR_FILE);
+
+		szMarcRecSize[MARCREC_SIZE_RECLEN] = '\0';
+		iMarcRecSize = atol(szMarcRecSize);
+		if(iMarcRecSize < MARCREC_SIZE_RECLEN)
+			throw MARCREC_ERROR_FILE;
+		
+		pBuf = (char *)malloc(MARCREC_SIZE_RECLEN + iMarcRecSize);
+		memcpy(pBuf, (void *)szMarcRecSize, MARCREC_SIZE_RECLEN);
+		if(fread(pBuf + MARCREC_SIZE_RECLEN, 1,
+			iMarcRecSize - MARCREC_SIZE_RECLEN, MarcFile) != iMarcRecSize - MARCREC_SIZE_RECLEN)
+		{
+			free(pBuf);
+			throw MARCREC_ERROR_FILE;
+		}
+
+//		strMarcRec.assign(pBuf, MARCREC_SIZE_RECLEN + iMarcRecSize);
+		strMarcRec.assign(pBuf, iMarcRecSize);
 		free(pBuf);
-		return MARCREC_ERROR_FILE;
+		throw MARCREC_SUCCESS;
+	} catch(int iErrCode) {
+		// Проверка разделителя записей
+		if((iFlags & UnpackFlagCheckDlm) && strMarcRec[strMarcRec.length() - 1] != MARCREC_SYMBOL_IS3) {
+			// Пропуск всех символов файла записей до разделителя
+			while(!feof(MarcFile)) {
+				iSymbol = fgetc(MarcFile);
+				if(iSymbol == MARCREC_SYMBOL_IS3)
+					break;
+			}
+
+			return (iErrCode == MARCREC_SUCCESS ? MARCREC_ERROR_BADRECORD : iErrCode);
+		}
+
+		if(iErrCode != MARCREC_SUCCESS)
+			return iErrCode;
 	}
-	strMarcRec.assign(pBuf, MARCREC_SIZE_RECLEN + iMarcRecSize);
-	free(pBuf);
 
 	// Распаковка Marc-записи
 	if((iCmdResult = Unpack(strMarcRec, iFlags)) != MARCREC_SUCCESS)
@@ -616,7 +642,8 @@ int CMarcRec::DeleteEmpty(bool bRecursive /* = false */)
 // -------------------------------
 int CMarcRec::DeleteEmpty(const TFieldRef &FieldRef)
 {
-	TSubFieldRef SubFieldRef, EndSubFieldRef, EmptySubFieldRef = FieldRef->SubFieldList.end();
+	TSubFieldRef SubFieldRef, EndSubFieldRef, EmptySubFieldRef;
+	TSubFieldRef InsSubFieldRef, EndInsSubFieldRef, EmptyInsSubFieldRef;
 	TFieldRef InsFieldRef;
 	int iCmdResult;
 
@@ -627,13 +654,29 @@ int CMarcRec::DeleteEmpty(const TFieldRef &FieldRef)
 	// Перебор подполей
 	SubFieldRef = FieldRef->SubFieldList.begin();
 	EndSubFieldRef = FieldRef->SubFieldList.end();
+	EmptySubFieldRef = EndSubFieldRef;
 	while(SubFieldRef != EndSubFieldRef) {
 		if(SubFieldRef->InsFieldRef != InsFieldList.end()) {
 			// Обработка встроенного поля
 			InsFieldRef = SubFieldRef->InsFieldRef;
-			iCmdResult = DeleteEmpty(InsFieldRef);
-			if(iCmdResult != MARCREC_SUCCESS)
-				return iCmdResult;
+
+			// Перебор подполей встроенного поля
+			InsSubFieldRef = InsFieldRef->SubFieldList.begin();
+			EndInsSubFieldRef = InsFieldRef->SubFieldList.end();
+			EmptyInsSubFieldRef = EndInsSubFieldRef;
+			while(InsSubFieldRef != EndInsSubFieldRef) {
+				if(InsSubFieldRef->strValue == "")
+					EmptyInsSubFieldRef = InsSubFieldRef;
+
+				InsSubFieldRef++;
+
+				// Удаление пустого подполя встроенного поля
+				if(EmptyInsSubFieldRef != EndInsSubFieldRef) {
+					InsFieldRef->SubFieldList.erase(EmptyInsSubFieldRef);
+					EmptyInsSubFieldRef = EndInsSubFieldRef;
+				}
+			}
+
 			// Проверка числа оставшихся элементов во встроенном поле
 			if(InsFieldRef->SubFieldList.size() == 0)
 				EmptySubFieldRef = SubFieldRef;
@@ -645,7 +688,7 @@ int CMarcRec::DeleteEmpty(const TFieldRef &FieldRef)
 		// Удаление пустого подполя
 		if(EmptySubFieldRef != FieldRef->SubFieldList.end()) {
 			FieldRef->SubFieldList.erase(EmptySubFieldRef);
-			EmptySubFieldRef = FieldRef->SubFieldList.end();
+			EmptySubFieldRef = EndSubFieldRef;
 		}
 	}
 
