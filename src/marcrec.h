@@ -2,290 +2,147 @@
  * Copyright (c) Tver Regional Scientific Library
  * Author: Alexander Fronkin
  *
- * Version 1.1 (1 Jan 2003)
+ * Version 2.0 (1 Jan 2003)
  */
 
-#ifndef __MARCREC_H
-#define __MARCREC_H
+#ifndef MARCREC_H
+#define MARCREC_H
 
-#include <stdio.h>
-
-#if defined(sun) || defined(__sun) || defined(_sun_) || defined(__solaris__)
-#define _XPG6
-#endif // defined(sun) || defined(__sun) || defined(_sun_) || defined(__solaris__)
-#include <iconv.h>
-
-#pragma warning (disable : 4786)
 #include <string>
 #include <list>
-#include <iterator>
-
-#define MARCREC_SUCCESS	1
-#define MARCREC_ERROR	0
-#define MARCREC_ERROR_WRONGARGS	-1
-#define MARCREC_ERROR_BADRECORD	-2
-#define MARCREC_ERROR_FILE		-3
-#define MARCREC_ERROR_NOTFOUND	-4
-#define MARCREC_ERROR_EOF		-5
-
-#define MARCREC_SYMBOL_IS1	'\x1f'
-#define MARCREC_SYMBOL_IS2	'\x1e'
-#define MARCREC_SYMBOL_IS3	'\x1d'
-
-#define MARCREC_SIZE_RECORD		100000
-#define MARCREC_SIZE_FIELD		10000
-#define MARCREC_SIZE_LABEL		3
-#define MARCREC_SIZE_FIELDLEN	4
-#define MARCREC_SIZE_OFFSETLEN	5
-#define MARCREC_SIZE_RECLEN		5
-#define MARCREC_SIZE_IND		2
-#define MARCREC_SIZE_SUBLABEL	1
-
-#ifndef INLINE
-#define INLINE	__inline
-#endif
 
 // -----------------
-// Класс Marc-записи
+// MARC record class
 // -----------------
-class CMarcRec {
+class CMarcRecord {
 public:
-	struct TField;
+    // Enum of MARC record types
+    typedef enum {
+        UNIMARC = 1,
+        MARC21 = 2
+    } TRecordType;
 
-	// Список полей
-	typedef std::list<TField> TFieldList;
-	typedef TFieldList::iterator TFieldRef;
+    // Enum of error codes
+    typedef enum {
+        SUCCESS = 0,
+        ERROR = -1
+    } TErrorCode;
 
-	// Подполе
-	struct TSubField {
-		char cLabel;			// Метка подполя
-		std::string strValue;	// Значение подполя
-		TFieldRef InsFieldRef;	// Встроенное поле
-	};
+    #pragma pack(1)
 
-	// Список подполей
-	typedef std::list<TSubField> TSubFieldList;
-	typedef TSubFieldList::iterator TSubFieldRef;
+    // Structure of record label
+    struct TRecordLabel {
+        char aRecLength[5];         // [ 0] Record length
+        char cRecStatus;            // [ 5] Record status
+        char cRecType;              // [ 6] Type of record
+        char cBibliographicalLevel; // [ 7] Bibliographical level
+        char cHierarchicalLevel;    // [ 8] Hierarchical level code
+        char cUndefined1;           // [ 9] Undefined = '#'
+        char cIndicatorLength;      // [10] Indicator length = '2'
+        char cSubfieldIdLength;     // [11] Subfield identifier length = '2'
+        char aBaseAddress[5];       // [12] Base address of data
+        char cEncodingLevel;        // [17] Encoding level
+        char cCataloguingForm;      // [18] Descriptive cataloguing form
+        char cUndefined2;           // [19] Undefined = '#'
+        char cLenFieldLength;       // [20] Length of 'Length of field' = '4'
+        char cStartPosLength;       // [21] Length of 'Starting character position' = '5'
+        char cImplDefLength;        // [22] Length of implementationdefined portion = '0'
+        char cUndefined3;           // [23] Undefined = '#'
+    };
 
-	// Поле
-	struct TField {
-		unsigned short iLabel;			// Метка поля
-		char szInd[MARCREC_SIZE_IND];	// Индикаторы поля
-		TSubFieldList SubFieldList;		// Список подполей
-	};
+    // Structure of record directory entry
+    struct TRecordDirEntry {
+        char aTag[3];       // Field tag
+        char aLength[4];    // Field length
+        char aStartPos[5];  // Field starting position
+    };
 
-	#pragma pack(1)
+    #pragma pack()
 
-	// Элемент списка полей записи
-	struct TMapItem {
-		char szLabel[MARCREC_SIZE_LABEL];		// Метка поля
-		char szLen[MARCREC_SIZE_FIELDLEN];		// Длина поля
-		char szOffset[MARCREC_SIZE_OFFSETLEN];	// Смещение поля от начала блока данных
-	};
+    struct TSubfield;
 
-	// Маркер записи
-	struct TMarker {
-		char szLength[MARCREC_SIZE_RECLEN];	// Длина записи
+    // List of subfields
+    typedef std::list<TSubfield> TSubfieldList;
+    typedef TSubfieldList::iterator TSubfieldRef;
+    // List of subfields references
+    typedef std::list<TSubfieldRef> TSubfieldPtrList;
+    typedef TSubfieldPtrList::iterator TSubfieldPtrRef;
 
-		char cStatus;	/* Статус записи
-						c = измененная
-						d = удаленная
-						n = новая
-						o = предварительно составленная запись более высокого уровня
-						p = предварительно составленная неполная, допубликационная запись
-						*/
+    // Structure of MARC field
+    struct TField {
+        int iTag;                   // Field tag
+        char cInd1;                 // Indicator 1
+        char cInd2;                 // Indicator 2
+        std::string strData;        // Data of control field
+        TSubfieldList SubfieldList; // List of regular subfields
 
-		char cTypeRecord;	/* Тип записи
-							a = текстовые материалы, печатные
-							b = текстовые материалы, рукописные
-							с = музыкальные партитуры, печатные
-							d = музыкальные партитуры, рукописные
-							е = картографические материалы, печатные
-							f = картографические материалы, рукописные
-							g = проекционные и видеоматериалы (кинофильмы,
-								диафильмы, слайды,пленочные материалы, видеозаписи)
-							i = звукозаписи, немузыкальные
-							j = звукозаписи, музыкальные
-							к = двухмерная графика (иллюстрации, чертежи и т. п.)
-							l = компьютерная среда (программы, базы данных и т. п.)
-							m = информация на нескольких носителях (например, книга
-								с приложением программ на дискете, CD и т. п.)
-							r = трехмерные художественные объекты и реалии
-							*/
+        void Clear()
+        {
+            iTag = 0;
+            cInd1 = cInd2 = ' ';
+            strData.erase();
+            SubfieldList.clear();
+        }
+    };
 
-		char cBiblioLevel;	/* Библиографический уровень
-							а = аналитический - документ, является частью физической единицы
-								(составная часть)
-								Например: статья в журнале, продолжающаяся колонка или заметка
-								внутри журнала, отдельный доклад в сборнике трудов конференции.
-							m = монографический - документ, представляет собой физически единое
-								целое или издается в заранее определенном количестве частей.
-								Например: отдельная книга, многотомное издание в целом, том
-								многотомного издания, выпуск сериального издания. 
-							s = сериальный - документ, выпускаемый последовательными частями и
-								рассчитанный на издание в течение неопределенного периода времени.
-								(Общая часть библиографического описания сериального издания).
-							с = подборка - искусственно скомплектованная библиографическая
-								единица. Например: собрание брошюр в коробке или папке. 
-								этот код используется только при составлении библиографического
-								описания подборки.
-							*/
+    // List of fields
+    typedef std::list<TField> TFieldList;
+    typedef TFieldList::iterator TFieldRef;
+    // List of fields references
+    typedef std::list<TFieldRef> TFieldPtrList;
+    typedef TFieldPtrList::iterator TFieldPtrRef;
 
-		char cHierarchyLevel;	/* Код иерархического уровня
-								# = иерархическая связь не определена
-								0 = иерархическая связь отсутствует
-								1 = запись высшего уровня
-								2 = запись ниже высшего уровня (любая запись ниже высшего уровня)
-								*/
+    // Structure of MARC subfield
+    struct TSubfield {
+        char cId;               // Subfield identifier
+        std::string strData;    // Subfield data
+        TField EmbeddedField;   // Embedded field
 
-		char cReserved1;	// Не определено (содержит #)
-		char cIndLength;	// Длина индикатора (содержит 2)
-		char cIdLength;		// Длина идентификатора подполя (содержит 2)
-		char szBaseAddr[5];	// Базовый адрес данных относительно начала записи
+        void Clear()
+        {
+            cId = ' ';
+            strData.erase();
+            EmbeddedField.Clear();
+        }
+    };
 
-		char cCodingLevel;	/* Уровень кодирования
-							# = полный уровень
-								Корректно составленная запись о полностью каталогизированном
-								документе, подготовленная для использования в Электронном
-								каталоге или для обмена. (Запись, составленная на основе
-								каталогизируемого документа, у которой заполнены все поля
-								и подполя со статусами "обязательное" и "условно обязательное").
-							1 = подуровень 1
-								Запись, составленная на основе каталожной карточки
-								(ретроконверсия) или импортированная из другого формата, не
-								предоставляющего достаточно данных для корректного заполнения
-								всех обязательных (в т.ч. условно обязательных) элементов
-								формата, и неоткорректированная по документу.
-							2 = подуровень 2
-								Опознавательная запись (например, допубликационная запись,
-								запись на документ не проходивший каталогизацию) 
-							3 = подуровень 3
-								Не полностью каталогизированный документ.
-								(Запись, на документ в процессе каталогизации)
-							*/
+private:
+    // Type of record
+    TRecordType iRecordType;
 
-		char cReferenceForm;	/* Форма каталогизационного описания
-								# - запись составлена по правилам ISBD
-								i - запись составлена не полностью по правилам ISBD,
-									(отдельные поля соответствуют положениям ISBD)
-								*/
-
-		char cReserved2;	// Не определено (содержит #)
-		char szMapPlan[4];	// План справочника (содержит 450#)
-	};
-
-	#pragma pack()
-
-protected:
-	// Список полей Marc-записи
-	TFieldList FieldList;
-	// Список встроенных полей Marc-записи
-	TFieldList InsFieldList;
-	// Дескриптор перекодировки
-	iconv_t hRecodeIconv;
-	// Тип записи
-	int RecordType;
+    // Record label
+    TRecordLabel Label;
+    // List of fields
+    TFieldList FieldList;
 
 public:
-	// Маркер Marc-записи
-	TMarker Marker;
-	// Флаги распаковки записей
-	enum { UnpackFlagLiber = 0x00000001, UnpackFlagMarc21 = 0x00000002, UnpackFlagCheckDlm = 0x00000004};
-	// Типы записей
-	typedef enum { RecordTypeRusmarc = 1, RecordTypeMarc21 = 2 } TRecordType;
-
-protected:
-	// Упаковка поля Marc-записи в строку
-	void PackField(TField &Field, std::string &strMarcField, bool bInsField = false);
-	// Распаковка поля Marc-записи
-	void UnpackField(int iFieldLabel, const char *pMarcField, int iFieldLen,
-		TField &Field);
-	// Конвертирование строки с использованием iconv
-	bool IconvRecode(iconv_t hIconv, std::string &strString);
+    TErrorCode iErrorCode;
 
 public:
-	// Получение ссылки на конец списка полей
-	inline TFieldRef NullFieldRef()
-	{
-		return FieldList.end();
-	};
-	// Получение ссылки на конец списка подполей
-	inline TSubFieldRef NullSubFieldRef(const TFieldRef &FieldRef)
-	{
-		return FieldRef->SubFieldList.end();
-	};
-	// Получение ссылки на конец списка подполей
-	inline TFieldRef NullInsFieldRef()
-	{
-		return InsFieldList.end();
-	};
+    // Constructors and destructor
+    CMarcRecord();
+    CMarcRecord(TRecordType iNewRecordType);
+    ~CMarcRecord();
 
-public:
-	CMarcRec();
-	CMarcRec(iconv_t hNewRecodeIconv);
-	~CMarcRec();
+    // Clear record
+    void Clear();
+    // Set record type
+    void SetType(TRecordType iNewRecordType);
 
-	// Очистка Marc-записи
-	void Clear();
-	// Установка декскриптора перекодировки
-	void SetRecodeHandle(iconv_t hNewRecodeIconv);
-	// Установка типа записи
-	void SetRecordType(TRecordType NewRecordType);
-	// Упаковка Marc-записи в строку
-	int Pack(std::string &strMarcRec);
-	// Распаковка Marc-записи из строки
-	int Unpack(const std::string &strMarcRec, int iFlags = 0);
+    // Read record from file
+    bool Read(FILE *File, const char *lpszEncoding = "UTF-8");
+    // Write record to file
+    bool Write(FILE *File, const char *lpszEncoding = "UTF-8");
+    // Parse record from buffer
+    bool Parse(const char *pRecordBuf, const char *lpszEncoding = "UTF-8");
 
-	// Чтение Marc-записи из файла
-	int ReadFromFile(FILE *MarcFile, int iFlags = 0);
-	// Вывод Marc-записи в файл
-	int WriteToFile(FILE *MarcFile);
-	// Чтение Marc-записи из потока
-	int ReadFromStream(std::istream &MarcStream);
-	// Вывод Marc-записи в поток
-	int WriteToStream(std::ostream &MarcStream);
+    // Get list of fields references from record
+    TFieldPtrList GetFieldList(int iFieldTag = 0);
+    // Get list of subfields references from field
+    TSubfieldPtrList GetSubfieldList(TFieldRef FieldRef, char cSubfieldId = ' ');
 
-	// Получение поля
-	int GetField(int iFieldLabel, const TFieldRef &PrevFieldRef, TFieldRef &ResFieldRef);
-	// Получение подполя
-	int GetSubField(TField &Field, char cSubFieldLabel,
-		const TSubFieldRef &PrevSubFieldRef, TSubFieldRef &ResSubFieldRef);
-	inline int GetSubField(const TFieldRef &FieldRef, char cSubFieldLabel,
-		const TSubFieldRef &PrevSubFieldRef, TSubFieldRef &ResSubFieldRef)
-	{
-		return GetSubField(*FieldRef, cSubFieldLabel, PrevSubFieldRef, ResSubFieldRef);
-	}
-	// Получение подполя с встроенным полем
-	int GetInsSubField(TField &Field, char cSubFieldLabel, int iInsFieldLabel,
-		const TSubFieldRef &PrevSubFieldRef, TSubFieldRef &ResSubFieldRef);
-	inline int GetInsSubField(const TFieldRef &FieldRef, char cSubFieldLabel, int iInsFieldLabel,
-		const TSubFieldRef &PrevSubFieldRef, TSubFieldRef &ResSubFieldRef)
-	{
-		return GetInsSubField(*FieldRef, cSubFieldLabel, iInsFieldLabel,
-			PrevSubFieldRef, ResSubFieldRef);
-	}
-	// Получение встроенного поля
-	int GetInsField(TSubField &SubField, TFieldRef &InsFieldRef);
-	int GetInsField(const TSubFieldRef &SubFieldRef, TFieldRef &InsFieldRef)
-	{
-		return GetInsField(*SubFieldRef, InsFieldRef);
-	}
-
-	// Создание поля
-	int CreateField(TFieldRef &FieldRef);
-	// Создание подполя
-	int CreateSubField(const TFieldRef &FieldRef, TSubFieldRef &SubFieldRef);
-	// Создание встроенного поля
-	int CreateInsField(const TSubFieldRef &SubFieldRef, TFieldRef &InsFieldRef);
-
-	// Удаление поля
-	int DeleteField(const TFieldRef &FieldRef);
-	// Удаление подполя
-	int DeleteSubField(TField &Field, const TSubFieldRef &SubFieldRef);
-	// Удаление пустых полей в записи
-	int DeleteEmpty(bool bRecursive = false);
-	// Удаление пустых подполей в поле
-	int DeleteEmpty(const TFieldRef &FieldRef);
+    // Format record to string for printing
+    std::string ToString();
 };
 
 #endif
