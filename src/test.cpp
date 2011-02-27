@@ -1,73 +1,85 @@
 /*
- * Copyright (c) Tver Regional Scientific Library
- * Author: Alexander Fronkin
+ * Copyright (C) 2011  Alexander Fronkin
  *
- * Version 2.0 (1 Jan 2003)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+/* Version: 2.0 (27 Feb 2011) */
 
 #include <locale.h>
 #include <wchar.h>
 #include <stdio.h>
 #include "marcrec.h"
 
-// -------------
-// Main function
-// -------------
+/*
+ * Main function.
+ */
 int main(int argc, char *argv[])
 {
-    CMarcRecord MarcRecord(CMarcRecord::UNIMARC);
-    FILE *MarcFile = NULL;
-    CMarcRecord::TFieldPtrList FieldList;
-    CMarcRecord::TFieldPtrRef FieldRef;
-    CMarcRecord::TSubfieldPtrList SubfieldList;
-    CMarcRecord::TSubfieldPtrRef SubfieldRef;
+	MarcRecord marcRecord(MarcRecord::UNIMARC);
+	FILE *marcFile = NULL;
+	MarcRecord::FieldPtrList fieldList;
+	MarcRecord::FieldPtrRef fieldRef;
+	MarcRecord::SubfieldPtrList subfieldList;
+	MarcRecord::SubfieldPtrRef subfieldRef;
 
-    setlocale(LC_CTYPE, "en_US.UTF-8");
+	setlocale(LC_CTYPE, "en_US.UTF-8");
 
-    try {
-        // Open records file
-        MarcFile = fopen(argv[1], "rb");
-        if (MarcFile == NULL) {
-            printf("Error: can't open file '%s'\n", argv[1]);
-            throw 1;
-        }
+	try {
+		/* Open records file. */
+		marcFile = fopen(argv[1], "rb");
+		if (marcFile == NULL) {
+			printf("Error: can't open file '%s'\n", argv[1]);
+			throw 1;
+		}
 
-        // Read record
-        if (MarcRecord.Read(MarcFile) != true) {
-            printf("Error: can't open file '%s'\n", argv[1]);
-            throw 1;
-        }
+		/* Read record. */
+		if (marcRecord.read(marcFile) != true) {
+			printf("Error: can't open file '%s'\n", argv[1]);
+			throw 1;
+		}
 
-        // Print some subfields
-        FieldList = MarcRecord.GetFieldList(200);
-        for (FieldRef = FieldList.begin(); FieldRef != FieldList.end();
-            FieldRef++)
-        {
-            SubfieldList = MarcRecord.GetSubfieldList(*FieldRef, 'a');
-            if (!SubfieldList.empty()) {
-                SubfieldRef = SubfieldList.begin();
-                printf("%03d [%c%c] $%c %s\n",
-                    (*FieldRef)->iTag, (*FieldRef)->cInd1, (*FieldRef)->cInd2,
-                    (*SubfieldRef)->cId, (*SubfieldRef)->strData.c_str());
-(*FieldRef)->iTag = 999;
-(*SubfieldRef)->strData = "456";
-            }
-        }
+		/* Print some subfields. */
+		fieldList = marcRecord.getFieldList(200);
+		for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
+			fieldRef++)
+		{
+			subfieldList = marcRecord.getSubfieldList(*fieldRef, 'a');
+			if (!subfieldList.empty()) {
+				subfieldRef = subfieldList.begin();
+				printf("%03d [%c%c] $%c %s\n",
+					(*fieldRef)->tag, (*fieldRef)->ind1, (*fieldRef)->ind2,
+					(*subfieldRef)->id, (*subfieldRef)->data.c_str());
+(*fieldRef)->tag = 999;
+(*subfieldRef)->data = "456";
+			}
+		}
 
-        // Print record
-        std::string strTextRecord = MarcRecord.ToString();
-        printf("%s\n", strTextRecord.c_str());
+		/* Print record. */
+		std::string textRecord = marcRecord.toString();
+		printf("%s\n", textRecord.c_str());
 
-        fclose(MarcFile);
-    } catch (int iErrorCode) {
-        if (MarcFile != NULL)
-            fclose(MarcFile);
+		fclose(marcFile);
+	} catch (int errorCode) {
+		if (marcFile != NULL)
+			fclose(marcFile);
 
-        return iErrorCode;
-    }
+		return errorCode;
+	}
 
-    wprintf(L"Done.\n");
+	wprintf(L"Done.\n");
 
-    return 0;
+	return 0;
 }
-

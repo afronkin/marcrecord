@@ -6,6 +6,7 @@ VPATH=../src
 
 CXX=CC
 CXXFLAGS=-O2
+LDFLAGS=
 LIBS=
 
 .PHONY: all clean
@@ -15,7 +16,7 @@ all: $(PROG_NAME)
 	@echo $@ done.
 
 $(PROG_NAME): $(OBJS) $(MODULES)
-	$(CXX) $(CXXFLAGS) *.o $(LIBS) -o $@
+	$(CXX) *.o $(LDFLAGS) $(LIBS) -o $@
 	@echo $@ done.
 
 clean:

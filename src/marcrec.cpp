@@ -1,9 +1,22 @@
 /*
- * Copyright (c) Tver Regional Scientific Library
- * Author: Alexander Fronkin
+ * Copyright (C) 2011  Alexander Fronkin
  *
- * Version 2.0 (1 Jan 2003)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+/* Version: 2.0 (27 Feb 2011) */
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -11,309 +24,318 @@
 #include <string.h>
 #include "marcrec.h"
 
-// --------------------------------------
-// Print formatted output for std::string
-// --------------------------------------
+/*
+ * Print formatted output to std::string.
+ */
 int snprintf(std::string &s, size_t n, const char *format, ...)
 {
-    va_list ap;
-    char *pBuf;
-    int iResultCode;
+	va_list ap;
+	char *buf;
+	int resultCode;
 
-    pBuf = (char *)malloc(n + 1);
-    va_start(ap, format);
-    iResultCode = vsnprintf(pBuf, n + 1, format, ap);
-    va_end(ap);
+	buf = (char *) malloc(n + 1);
+	va_start(ap, format);
+	resultCode = vsnprintf(buf, n + 1, format, ap);
+	va_end(ap);
 
-    if (iResultCode >= 0)
-        s.append(pBuf);
-    free(pBuf);
+	if (resultCode >= 0) {
+		s.append(buf);
+	}
+	free(buf);
 
-    return iResultCode;
+	return resultCode;
 }
 
-// -----------
-// Constructor
-// -----------
-CMarcRecord::CMarcRecord()
+/*
+ * Constructor.
+ */
+MarcRecord::MarcRecord()
 {
-    iRecordType = UNIMARC;
-    Clear();
+	recordType = UNIMARC;
+	clear();
 }
 
-CMarcRecord::CMarcRecord(TRecordType iNewRecordType)
+MarcRecord::MarcRecord(RecordType newRecordType)
 {
-    SetType(iNewRecordType);
-    Clear();
+	setType(newRecordType);
+	clear();
 }
 
-// ----------
-// Destructor
-// ----------
-CMarcRecord::~CMarcRecord()
+/*
+ * Destructor.
+ */
+MarcRecord::~MarcRecord()
 {
 }
 
-// ------------
-// Clear record
-// ------------
-void CMarcRecord::Clear()
+/*
+ * Clear record.
+ */
+void MarcRecord::clear()
 {
-    // Clear field list
-    FieldList.clear();
+	/* Clear field list. */
+	fieldList.clear();
 
-    // Reset record label
-    memset(Label.aRecLength, ' ', sizeof(Label.aRecLength));
-    Label.cRecStatus = 'n';
-    Label.cRecType = 'a';
-    Label.cBibliographicalLevel = 'm';
-    Label.cHierarchicalLevel = ' ';
-    Label.cUndefined1 = ' ';
-    Label.cIndicatorLength = '2';
-    Label.cSubfieldIdLength = '2';
-    memset(Label.aBaseAddress, ' ', sizeof(Label.aBaseAddress));
-    Label.cEncodingLevel = ' ';
-    Label.cCataloguingForm = ' ';
-    Label.cUndefined2 = ' ';
-    Label.cLenFieldLength = '4';
-    Label.cStartPosLength = '5';
-    Label.cImplDefLength = '0';
-    Label.cUndefined3 = ' ';
+	/* Reset record label. */
+	memset(label.recordLength, ' ', sizeof(label.recordLength));
+	label.recordStatus = 'n';
+	label.recordType = 'a';
+	label.bibliographicalLevel = 'm';
+	label.hierarchicalLevel = ' ';
+	label.undefined1 = ' ';
+	label.indicatorLength = '2';
+	label.subfieldIdLength = '2';
+	memset(label.baseAddress, ' ', sizeof(label.baseAddress));
+	label.encodingLevel = ' ';
+	label.cataloguingForm = ' ';
+	label.undefined2 = ' ';
+	label.lengthFieldLength = '4';
+	label.startPosLength = '5';
+	label.implDefLength = '0';
+	label.undefined3 = ' ';
 }
 
-// ---------------
-// Set record type
-// ---------------
-void CMarcRecord::SetType(TRecordType iNewRecordType)
+/*
+ * Set record type.
+ */
+void MarcRecord::setType(RecordType newRecordType)
 {
-    iRecordType = iNewRecordType;
+	recordType = newRecordType;
 }
 
-// ---------------------
-// Read record from file
-// ---------------------
-bool CMarcRecord::Read(FILE *File, const char *lpszEncoding)
+/*
+ * Read record from file.
+ */
+bool MarcRecord::read(FILE *file, const char *encoding)
 {
-    int iSymbol;
-    char RecordBuf[10000];
-    size_t iRecordLen;
+	int symbol;
+	char recordBuf[10000];
+	size_t recordLen;
 
-    // Skip possible wrong symbols
-    do {
-        iSymbol = fgetc(File);
-    } while (iSymbol >= 0 && isdigit(iSymbol) == 0);
+	/* Skip possible wrong symbols. */
+	do {
+		symbol = fgetc(file);
+	} while (symbol >= 0 && isdigit(symbol) == 0);
 
-    if (iSymbol < 0)
-        return false;
+	if (symbol < 0) {
+		return false;
+	}
 
-    // Read record length
-    RecordBuf[0] = (char)iSymbol;
-    if (fread(RecordBuf + 1, 1, 4, File) != 4)
-        return false;
+	/* Read record length. */
+	recordBuf[0] = (char) symbol;
+	if (fread(recordBuf + 1, 1, 4, file) != 4) {
+		return false;
+	}
 
-    // Parse record length
-    if (sscanf(RecordBuf, "%5d", &iRecordLen) != 1)
-        return false;
+	/* Parse record length. */
+	if (sscanf(recordBuf, "%5d", &recordLen) != 1) {
+		return false;
+	}
 
-    // Read record
-    if (fread(RecordBuf + 5, 1, iRecordLen - 5, File) != iRecordLen - 5)
-        return false;
+	/* Read record. */
+	if (fread(recordBuf + 5, 1, recordLen - 5, file) != recordLen - 5) {
+		return false;
+	}
 
-    // Parse record
-    return Parse(RecordBuf, lpszEncoding);
+	/* Parse record. */
+	return parse(recordBuf, encoding);
 }
 
-// --------------------
-// Write record to file
-// --------------------
-bool CMarcRecord::Write(FILE *File, const char *lpszEncoding)
+/*
+ * Write record to file.
+ */
+bool MarcRecord::write(FILE *file, const char *encoding)
 {
-    return true;
+	return true;
 }
 
-// ------------------------
-// Parse record from buffer
-// ------------------------
-bool CMarcRecord::Parse(const char *pRecordBuf, const char *lpszEncoding)
+/*
+ * Parse record from buffer.
+ */
+bool MarcRecord::parse(const char *recordBuf, const char *encoding)
 {
-    size_t iBaseAddress, iNumFields;
-    TRecordDirEntry *pDirEntry;
-    const char *pRecordData, *pFieldData;
-    int iFieldNo;
-    TField Field;
-    TSubfield Subfield;
-    size_t iFieldLength, iFieldStartPos;
-	int iSymbolPos, iSubfieldStartPos;
+	size_t baseAddress, numFields;
+	RecordDirEntry *dirEntry;
+	const char *recordData, *fieldData;
+	int fieldNo;
+	Field field;
+	Subfield subfield;
+	size_t fieldLength, fieldStartPos;
+	int symbolPos, subfieldStartPos;
 
-    try {
-        // Copy record label
-        memcpy(&Label, pRecordBuf, sizeof(TRecordLabel));
+	try {
+		/* Copy record label. */
+		memcpy(&label, recordBuf, sizeof(RecordLabel));
 
-        // Get base address of data
-        if (sscanf(Label.aBaseAddress, "%05d", &iBaseAddress) != 1)
-            throw ERROR;
+		/* Get base address of data. */
+		if (sscanf(label.baseAddress, "%05d", &baseAddress) != 1) {
+			throw ERROR;
+		}
 
-        // Get number of fields
-        iNumFields = (iBaseAddress - sizeof(TRecordLabel) - 1) /
-            sizeof(TRecordDirEntry);
+		/* Get number of fields. */
+		numFields = (baseAddress - sizeof(RecordLabel) - 1) /
+			sizeof(RecordDirEntry);
 
-        // Parse list of fields
-        pDirEntry = (TRecordDirEntry *)(pRecordBuf + sizeof(TRecordLabel));
-        pRecordData = pRecordBuf + iBaseAddress;
-        for (iFieldNo = 0; iFieldNo < iNumFields; iFieldNo++, pDirEntry++) {
-            // Clear field
-            Field.Clear();
+		/* Parse list of fields. */
+		dirEntry = (RecordDirEntry *) (recordBuf + sizeof(RecordLabel));
+		recordData = recordBuf + baseAddress;
+		for (fieldNo = 0; fieldNo < numFields; fieldNo++, dirEntry++) {
+			/* Clear field. */
+			field.clear();
 
-            // Parse directory entry
-            if (sscanf((char *)pDirEntry, "%3d%4d%5d",
-                &Field.iTag, &iFieldLength, &iFieldStartPos) != 3)
-            {
-                throw ERROR;
-            }
+			/* Parse directory entry. */
+			if (sscanf((char *) dirEntry, "%3d%4d%5d",
+				&field.tag, &fieldLength, &fieldStartPos) != 3)
+			{
+				throw ERROR;
+			}
 
-            // Parse field
-            pFieldData = pRecordData + iFieldStartPos;
-            if(pFieldData[iFieldLength - 1] == '\x1e')
-                iFieldLength--;
+			/* Parse field. */
+			fieldData = recordData + fieldStartPos;
+			if (fieldData[fieldLength - 1] == '\x1e') {
+				fieldLength--;
+			}
 
-            if (Field.iTag < 10 || iFieldLength < 2) {
-                // Parse control field
-                Field.strData.assign(pFieldData, iFieldLength);
-            } else {
-                // Parse regular field
-                Field.cInd1 = pFieldData[0];
-                Field.cInd2 = pFieldData[1];
+			if (field.tag < 10 || fieldLength < 2) {
+				/* Parse control field. */
+				field.data.assign(fieldData, fieldLength);
+			} else {
+				/* Parse regular field. */
+				field.ind1 = fieldData[0];
+				field.ind2 = fieldData[1];
 
-                // Parse list of subfields
-                for (iSymbolPos = 2; iSymbolPos <= iFieldLength; iSymbolPos++) {
-                    if (pFieldData[iSymbolPos] == '\x1f' ||
-                        iSymbolPos == iFieldLength)
-                    {
-                        if (iSymbolPos > 2) {
-                            // Clear subfield
-                            Subfield.Clear();
-                            // Get subfield identifier
-                            Subfield.cId = pFieldData[iSubfieldStartPos + 1];
+				/* Parse list of subfields. */
+				for (symbolPos = 2; symbolPos <= fieldLength; symbolPos++) {
+					if (fieldData[symbolPos] == '\x1f' ||
+						symbolPos == fieldLength)
+					{
+						if (symbolPos > 2) {
+							/* Clear subfield. */
+							subfield.clear();
+							/* Get subfield identifier. */
+							subfield.id = fieldData[subfieldStartPos + 1];
 
-                            // Check for embedded field
-                            if (Subfield.cId == '1' &&
-                                iRecordType == UNIMARC &&
-                                sscanf(pFieldData + iSubfieldStartPos + 2,
-                                    "%3d", &Subfield.EmbeddedField.iTag) == 1)
-                            {
-                                // Parse embedded field
-                                Subfield.EmbeddedField.SubfieldList.clear();
-                                if (Subfield.EmbeddedField.iTag < 10) {
-                                    Subfield.EmbeddedField.strData.assign(
-                                        pFieldData + iSubfieldStartPos + 5,
-                                        iSymbolPos - iSubfieldStartPos - 5);
-                                } else {
-                                    Subfield.EmbeddedField.cInd1 =
-                                        pFieldData[iSubfieldStartPos + 5];
-                                    Subfield.EmbeddedField.cInd2 =
-                                        pFieldData[iSubfieldStartPos + 6];
+							/* Check for embedded field. */
+							if (subfield.id == '1' &&
+								recordType == UNIMARC &&
+								sscanf(fieldData + subfieldStartPos + 2,
+									"%3d", &subfield.embeddedField.tag) == 1)
+							{
+								/* Parse embedded field. */
+								subfield.embeddedField.subfieldList.clear();
+								if (subfield.embeddedField.tag < 10) {
+									subfield.embeddedField.data.assign(
+										fieldData + subfieldStartPos + 5,
+										symbolPos - subfieldStartPos - 5);
+								} else {
+									subfield.embeddedField.ind1 =
+										fieldData[subfieldStartPos + 5];
+									subfield.embeddedField.ind2 =
+										fieldData[subfieldStartPos + 6];
 
-                                    // Parse subfields of embedded field
-                                    // .............
-                                }
-                            } else {
-                                // Parse regular subfield
-                                Subfield.strData.assign(
-                                    pFieldData + iSubfieldStartPos + 2,
-                                    iSymbolPos - iSubfieldStartPos - 2);
-                            }
+									/* Parse subfields of embedded field. */
+									// .............
+								}
+							} else {
+								/* Parse regular subfield. */
+								subfield.data.assign(
+									fieldData + subfieldStartPos + 2,
+									symbolPos - subfieldStartPos - 2);
+							}
 
-                            // Append subfield to list
-                            Field.SubfieldList.push_back(Subfield);
-                        }
+							/* Append subfield to list. */
+							field.subfieldList.push_back(subfield);
+						}
 
-                        iSubfieldStartPos = iSymbolPos;
-                    }
-                }
-            }
+						subfieldStartPos = symbolPos;
+					}
+				}
+			}
 
-            // Append field to list
-            FieldList.push_back(Field);
-        }
-    } catch (int iErrorCode) {
-        if (iErrorCode != 0) {
-            Clear();
-            return false;
-        }
-    }
+			/* Append field to list. */
+			fieldList.push_back(field);
+		}
+	} catch (int errorCode) {
+		if (errorCode != 0) {
+			clear();
+			return false;
+		}
+	}
 
-    return true;
+	return true;
 }
 
-// ------------------------------
-// Get list of fields from record
-// ------------------------------
-CMarcRecord::TFieldPtrList CMarcRecord::GetFieldList(int iFieldTag)
+/*
+ * Get list of fields from record.
+ */
+MarcRecord::FieldPtrList MarcRecord::getFieldList(int fieldTag)
 {
-    TFieldPtrList ResultFieldList;
-    TFieldRef FieldRef;
+	FieldPtrList resultFieldList;
+	FieldRef fieldRef;
 
-    // Check all fields in list
-    for (FieldRef = FieldList.begin(); FieldRef != FieldList.end();
-        FieldRef++)
-    {
-        if (iFieldTag == 0 || iFieldTag == FieldRef->iTag)
-            ResultFieldList.push_back(FieldRef);
-    }
+	/* Check all fields in list. */
+	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
+		fieldRef++)
+	{
+		if (fieldTag == 0 || fieldTag == fieldRef->tag) {
+			resultFieldList.push_back(fieldRef);
+		}
+	}
 
-    return ResultFieldList;
+	return resultFieldList;
 }
 
-// --------------------------------
-// Get list of subfields from field
-// --------------------------------
-CMarcRecord::TSubfieldPtrList CMarcRecord::GetSubfieldList(TFieldRef FieldRef,
-    char cSubfieldId)
+/*
+ * Get list of subfields from field.
+ */
+MarcRecord::SubfieldPtrList MarcRecord::getSubfieldList(FieldRef fieldRef,
+	char subfieldId)
 {
-    TSubfieldPtrList ResultSubfieldList;
-    TSubfieldRef SubfieldRef;
+	SubfieldPtrList resultSubfieldList;
+	SubfieldRef subfieldRef;
 
-    for (SubfieldRef = FieldRef->SubfieldList.begin();
-        SubfieldRef != FieldRef->SubfieldList.end(); SubfieldRef++)
-    {
-        if (cSubfieldId == ' ' || SubfieldRef->cId == cSubfieldId)
-            ResultSubfieldList.push_back(SubfieldRef);
-    }
+	for (subfieldRef = fieldRef->subfieldList.begin();
+		subfieldRef != fieldRef->subfieldList.end(); subfieldRef++)
+	{
+		if (subfieldId == ' ' || subfieldRef->id == subfieldId) {
+			resultSubfieldList.push_back(subfieldRef);
+		}
+	}
 
-    return ResultSubfieldList;
+	return resultSubfieldList;
 }
 
-// ------------------------------------
-// Format record to string for printing
-// ------------------------------------
-std::string CMarcRecord::ToString()
+/*
+ * Format record to string for printing.
+ */
+std::string MarcRecord::toString()
 {
-    std::string strTextRecord = "";
-    CMarcRecord::TFieldRef FieldRef;
-    CMarcRecord::TSubfieldRef SubfieldRef;
+	std::string textRecord = "";
+	MarcRecord::FieldRef fieldRef;
+	MarcRecord::SubfieldRef subfieldRef;
 
-    for (FieldRef = FieldList.begin(); FieldRef != FieldList.end();
-        FieldRef++)
-    {
-        snprintf(strTextRecord, 3, "%03d", FieldRef->iTag);
+	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
+		fieldRef++)
+	{
+		snprintf(textRecord, 3, "%03d", fieldRef->tag);
 
-        if (FieldRef->iTag < 10) {
-            strTextRecord += " ";
-            strTextRecord += FieldRef->strData.c_str();
-        } else {
-            snprintf(strTextRecord, 5, " [%c%c]",
-                FieldRef->cInd1, FieldRef->cInd2);
+		if (fieldRef->tag < 10) {
+			textRecord += " ";
+			textRecord += fieldRef->data.c_str();
+		} else {
+			snprintf(textRecord, 5, " [%c%c]",
+				fieldRef->ind1, fieldRef->ind2);
 
-            for (SubfieldRef = FieldRef->SubfieldList.begin();
-                SubfieldRef != FieldRef->SubfieldList.end(); SubfieldRef++)
-            {
-                snprintf(strTextRecord, 4, " $%c ", SubfieldRef->cId);
-                strTextRecord += SubfieldRef->strData;
-            }
-        }
+			for (subfieldRef = fieldRef->subfieldList.begin();
+				subfieldRef != fieldRef->subfieldList.end(); subfieldRef++)
+			{
+				snprintf(textRecord, 4, " $%c ", subfieldRef->id);
+				textRecord += subfieldRef->data;
+			}
+		}
 
-        strTextRecord += "\n";
-    }
+		textRecord += "\n";
+	}
 
-    return strTextRecord;
+	return textRecord;
 }

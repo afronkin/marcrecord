@@ -1,148 +1,162 @@
 /*
- * Copyright (c) Tver Regional Scientific Library
- * Author: Alexander Fronkin
+ * Copyright (C) 2011  Alexander Fronkin
  *
- * Version 2.0 (1 Jan 2003)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MARCREC_H
+/* Version: 2.0 (27 Feb 2011) */
+
+#if !defined(MARCREC_H)
 #define MARCREC_H
 
 #include <string>
 #include <list>
 
-// -----------------
-// MARC record class
-// -----------------
-class CMarcRecord {
+/*
+ * MARC record class.
+ */
+class MarcRecord {
 public:
-    // Enum of MARC record types
-    typedef enum {
-        UNIMARC = 1,
-        MARC21 = 2
-    } TRecordType;
+	/* Enum of MARC record types. */
+	typedef enum {
+		UNIMARC = 1,
+		MARC21 = 2
+	} RecordType;
 
-    // Enum of error codes
-    typedef enum {
-        SUCCESS = 0,
-        ERROR = -1
-    } TErrorCode;
+	/* Enum of error codes. */
+	typedef enum {
+		SUCCESS = 0,
+		ERROR = -1
+	} ErrorCode;
 
-    #pragma pack(1)
+	#pragma pack(1)
 
-    // Structure of record label
-    struct TRecordLabel {
-        char aRecLength[5];         // [ 0] Record length
-        char cRecStatus;            // [ 5] Record status
-        char cRecType;              // [ 6] Type of record
-        char cBibliographicalLevel; // [ 7] Bibliographical level
-        char cHierarchicalLevel;    // [ 8] Hierarchical level code
-        char cUndefined1;           // [ 9] Undefined = '#'
-        char cIndicatorLength;      // [10] Indicator length = '2'
-        char cSubfieldIdLength;     // [11] Subfield identifier length = '2'
-        char aBaseAddress[5];       // [12] Base address of data
-        char cEncodingLevel;        // [17] Encoding level
-        char cCataloguingForm;      // [18] Descriptive cataloguing form
-        char cUndefined2;           // [19] Undefined = '#'
-        char cLenFieldLength;       // [20] Length of 'Length of field' = '4'
-        char cStartPosLength;       // [21] Length of 'Starting character position' = '5'
-        char cImplDefLength;        // [22] Length of implementationdefined portion = '0'
-        char cUndefined3;           // [23] Undefined = '#'
-    };
+	/* Structure of record label. */
+	struct RecordLabel {
+		char recordLength[5];		// [ 0] Record length
+		char recordStatus;		// [ 5] Record status
+		char recordType;		// [ 6] Type of record
+		char bibliographicalLevel;	// [ 7] Bibliographical level
+		char hierarchicalLevel;		// [ 8] Hierarchical level code
+		char undefined1;		// [ 9] Undefined = '#'
+		char indicatorLength;		// [10] Indicator length = '2'
+		char subfieldIdLength;		// [11] Subfield identifier length = '2'
+		char baseAddress[5];		// [12] Base address of data
+		char encodingLevel;		// [17] Encoding level
+		char cataloguingForm;		// [18] Descriptive cataloguing form
+		char undefined2;		// [19] Undefined = '#'
+		char lengthFieldLength;		// [20] Length of 'Length of field' = '4'
+		char startPosLength;		// [21] Length of 'Starting character position' = '5'
+		char implDefLength;		// [22] Length of implementationdefined portion = '0'
+		char undefined3;		// [23] Undefined = '#'
+	};
 
-    // Structure of record directory entry
-    struct TRecordDirEntry {
-        char aTag[3];       // Field tag
-        char aLength[4];    // Field length
-        char aStartPos[5];  // Field starting position
-    };
+	/* Structure of record directory entry. */
+	struct RecordDirEntry {
+		char tag[3];			// Field tag
+		char length[4];			// Field length
+		char startPos[5];		// Field starting position
+	};
 
-    #pragma pack()
+	#pragma pack()
 
-    struct TSubfield;
+	struct Subfield;
 
-    // List of subfields
-    typedef std::list<TSubfield> TSubfieldList;
-    typedef TSubfieldList::iterator TSubfieldRef;
-    // List of subfields references
-    typedef std::list<TSubfieldRef> TSubfieldPtrList;
-    typedef TSubfieldPtrList::iterator TSubfieldPtrRef;
+	/* List of subfields. */
+	typedef std::list<Subfield> SubfieldList;
+	typedef SubfieldList::iterator SubfieldRef;
+	/* List of subfields references. */
+	typedef std::list<SubfieldRef> SubfieldPtrList;
+	typedef SubfieldPtrList::iterator SubfieldPtrRef;
 
-    // Structure of MARC field
-    struct TField {
-        int iTag;                   // Field tag
-        char cInd1;                 // Indicator 1
-        char cInd2;                 // Indicator 2
-        std::string strData;        // Data of control field
-        TSubfieldList SubfieldList; // List of regular subfields
+	/* Structure of MARC field. */
+	struct Field {
+		int tag;			// Field tag
+		char ind1;			// Indicator 1
+		char ind2;			// Indicator 2
+		std::string data;		// Data of control field
+		SubfieldList subfieldList;	// List of regular subfields
 
-        void Clear()
-        {
-            iTag = 0;
-            cInd1 = cInd2 = ' ';
-            strData.erase();
-            SubfieldList.clear();
-        }
-    };
+		void clear()
+		{
+			tag = 0;
+			ind1 = ' ';
+			ind2 = ' ';
+			data.erase();
+			subfieldList.clear();
+		}
+	};
 
-    // List of fields
-    typedef std::list<TField> TFieldList;
-    typedef TFieldList::iterator TFieldRef;
-    // List of fields references
-    typedef std::list<TFieldRef> TFieldPtrList;
-    typedef TFieldPtrList::iterator TFieldPtrRef;
+	/* List of fields. */
+	typedef std::list<Field> FieldList;
+	typedef FieldList::iterator FieldRef;
+	/* List of fields references. */
+	typedef std::list<FieldRef> FieldPtrList;
+	typedef FieldPtrList::iterator FieldPtrRef;
 
-    // Structure of MARC subfield
-    struct TSubfield {
-        char cId;               // Subfield identifier
-        std::string strData;    // Subfield data
-        TField EmbeddedField;   // Embedded field
+	/* Structure of MARC subfield. */
+	struct Subfield {
+		char id;		// Subfield identifier
+		std::string data;	// Subfield data
+		Field embeddedField;	// Embedded field
 
-        void Clear()
-        {
-            cId = ' ';
-            strData.erase();
-            EmbeddedField.Clear();
-        }
-    };
+		void clear()
+		{
+			id = ' ';
+			data.erase();
+			embeddedField.clear();
+		}
+	};
 
 private:
-    // Type of record
-    TRecordType iRecordType;
+	/* Type of record. */
+	RecordType recordType;
 
-    // Record label
-    TRecordLabel Label;
-    // List of fields
-    TFieldList FieldList;
-
-public:
-    TErrorCode iErrorCode;
+	/* Record label. */
+	RecordLabel label;
+	/* List of fields. */
+	FieldList fieldList;
 
 public:
-    // Constructors and destructor
-    CMarcRecord();
-    CMarcRecord(TRecordType iNewRecordType);
-    ~CMarcRecord();
+	ErrorCode errorCode;
 
-    // Clear record
-    void Clear();
-    // Set record type
-    void SetType(TRecordType iNewRecordType);
+public:
+	/* Constructors and destructor. */
+	MarcRecord();
+	MarcRecord(RecordType newRecordType);
+	~MarcRecord();
 
-    // Read record from file
-    bool Read(FILE *File, const char *lpszEncoding = "UTF-8");
-    // Write record to file
-    bool Write(FILE *File, const char *lpszEncoding = "UTF-8");
-    // Parse record from buffer
-    bool Parse(const char *pRecordBuf, const char *lpszEncoding = "UTF-8");
+	/* Clear record. */
+	void clear();
+	/* Set record type. */
+	void setType(RecordType newRecordType);
 
-    // Get list of fields references from record
-    TFieldPtrList GetFieldList(int iFieldTag = 0);
-    // Get list of subfields references from field
-    TSubfieldPtrList GetSubfieldList(TFieldRef FieldRef, char cSubfieldId = ' ');
+	/* Read record from file. */
+	bool read(FILE *file, const char *encoding = "UTF-8");
+	/* Write record to file. */
+	bool write(FILE *file, const char *encoding = "UTF-8");
+	/* Parse record from buffer. */
+	bool parse(const char *recordBuf, const char *encoding = "UTF-8");
 
-    // Format record to string for printing
-    std::string ToString();
+	/* Get list of fields references from record. */
+	FieldPtrList getFieldList(int fieldTag = 0);
+	/* Get list of subfields references from field. */
+	SubfieldPtrList getSubfieldList(FieldRef fieldRef, char subfieldId = ' ');
+
+	/* Format record to string for printing. */
+	std::string toString();
 };
 
-#endif
+#endif // MARCREC_H
