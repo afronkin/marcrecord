@@ -41,13 +41,13 @@ int main(int argc, char *argv[])
 		/* Open records file. */
 		marcFile = fopen(argv[1], "rb");
 		if (marcFile == NULL) {
-			printf("Error: can't open file '%s'\n", argv[1]);
+			fprintf(stderr, "Error: can't open file '%s'\n", argv[1]);
 			throw 1;
 		}
 
 		/* Read record. */
 		if (marcRecord.read(marcFile) != true) {
-			printf("Error: can't open file '%s'\n", argv[1]);
+			fprintf(stderr, "Error: can't read file '%s'\n", argv[1]);
 			throw 1;
 		}
 

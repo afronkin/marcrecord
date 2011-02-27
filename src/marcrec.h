@@ -45,29 +45,29 @@ public:
 
 	/* Structure of record label. */
 	struct RecordLabel {
-		char recordLength[5];		// [ 0] Record length
-		char recordStatus;		// [ 5] Record status
-		char recordType;		// [ 6] Type of record
-		char bibliographicalLevel;	// [ 7] Bibliographical level
-		char hierarchicalLevel;		// [ 8] Hierarchical level code
-		char undefined1;		// [ 9] Undefined = '#'
-		char indicatorLength;		// [10] Indicator length = '2'
-		char subfieldIdLength;		// [11] Subfield identifier length = '2'
-		char baseAddress[5];		// [12] Base address of data
-		char encodingLevel;		// [17] Encoding level
-		char cataloguingForm;		// [18] Descriptive cataloguing form
-		char undefined2;		// [19] Undefined = '#'
-		char lengthFieldLength;		// [20] Length of 'Length of field' = '4'
-		char startPosLength;		// [21] Length of 'Starting character position' = '5'
-		char implDefLength;		// [22] Length of implementationdefined portion = '0'
-		char undefined3;		// [23] Undefined = '#'
+		char recordLength[5];		// [ 0] Record length.
+		char recordStatus;		// [ 5] Record status.
+		char recordType;		// [ 6] Type of record.
+		char bibliographicalLevel;	// [ 7] Bibliographical level.
+		char hierarchicalLevel;		// [ 8] Hierarchical level code.
+		char undefined1;		// [ 9] Undefined = '#'.
+		char indicatorLength;		// [10] Indicator length = '2'.
+		char subfieldIdLength;		// [11] Subfield identifier length = '2'.
+		char baseAddress[5];		// [12] Base address of data.
+		char encodingLevel;		// [17] Encoding level.
+		char cataloguingForm;		// [18] Descriptive cataloguing form.
+		char undefined2;		// [19] Undefined = '#'.
+		char lengthFieldLength;		// [20] Length of 'Length of field' = '4'.
+		char startPosLength;		// [21] Length of 'Starting character position' = '5'.
+		char implDefLength;		// [22] Length of implementationdefined portion = '0'.
+		char undefined3;		// [23] Undefined = '#'.
 	};
 
 	/* Structure of record directory entry. */
 	struct RecordDirEntry {
-		char tag[3];			// Field tag
-		char length[4];			// Field length
-		char startPos[5];		// Field starting position
+		char tag[3];			// Field tag.
+		char length[4];			// Field length.
+		char startPos[5];		// Field starting position.
 	};
 
 	#pragma pack()
@@ -83,20 +83,14 @@ public:
 
 	/* Structure of MARC field. */
 	struct Field {
-		int tag;			// Field tag
-		char ind1;			// Indicator 1
-		char ind2;			// Indicator 2
-		std::string data;		// Data of control field
-		SubfieldList subfieldList;	// List of regular subfields
+		int tag;			// Field tag.
+		char ind1;			// Indicator 1.
+		char ind2;			// Indicator 2.
+		std::string data;		// Data of control field.
+		SubfieldList subfieldList;	// List of regular subfields.
 
-		void clear()
-		{
-			tag = 0;
-			ind1 = ' ';
-			ind2 = ' ';
-			data.erase();
-			subfieldList.clear();
-		}
+		/* Clear field data. */
+		void clear();
 	};
 
 	/* List of fields. */
@@ -108,16 +102,12 @@ public:
 
 	/* Structure of MARC subfield. */
 	struct Subfield {
-		char id;		// Subfield identifier
-		std::string data;	// Subfield data
-		Field embeddedField;	// Embedded field
+		char id;		// Subfield identifier.
+		std::string data;	// Subfield data.
+		Field embeddedField;	// Embedded field.
 
-		void clear()
-		{
-			id = ' ';
-			data.erase();
-			embeddedField.clear();
-		}
+		/* Clear subfield data. */
+		void clear();
 	};
 
 private:
@@ -132,6 +122,14 @@ private:
 public:
 	ErrorCode errorCode;
 
+private:
+	/* Parse field. */
+	inline Field parseField(int fieldTag, const char *fieldData,
+		size_t fieldLength, const char *encoding);
+	/* Parse embedded field. */
+	inline Field parseEmbeddedField(int fieldTag, const char *fieldData,
+		size_t fieldLength, const char *encoding);
+
 public:
 	/* Constructors and destructor. */
 	MarcRecord();
@@ -144,9 +142,9 @@ public:
 	void setType(RecordType newRecordType);
 
 	/* Read record from file. */
-	bool read(FILE *file, const char *encoding = "UTF-8");
+	bool read(FILE *marcFile, const char *encoding = "UTF-8");
 	/* Write record to file. */
-	bool write(FILE *file, const char *encoding = "UTF-8");
+	bool write(FILE *marcFile, const char *encoding = "UTF-8");
 	/* Parse record from buffer. */
 	bool parse(const char *recordBuf, const char *encoding = "UTF-8");
 
@@ -157,6 +155,8 @@ public:
 
 	/* Format record to string for printing. */
 	std::string toString();
+	/* Format field to string for printing. */
+	std::string toString(Field field);
 };
 
 #endif // MARCREC_H
