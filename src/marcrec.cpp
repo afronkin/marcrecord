@@ -91,7 +91,7 @@ bool MarcRecord::read(FILE *marcFile, const char *encoding)
 {
 	int symbol;
 	char recordBuf[10000];
-	size_t recordLen;
+	unsigned int recordLen;
 
 	/* Skip possible wrong symbols. */
 	do {
@@ -135,12 +135,12 @@ bool MarcRecord::write(FILE *marcFile, const char *encoding)
  */
 bool MarcRecord::parse(const char *recordBuf, const char *encoding)
 {
-	size_t baseAddress, numFields;
+	unsigned int baseAddress, numFields;
 	RecordDirEntry *dirEntry;
 	const char *recordData, *fieldData;
 	int fieldNo;
 	int fieldTag;
-	size_t fieldLength, fieldStartPos;
+	unsigned int fieldLength, fieldStartPos;
 	Field field;
 
 	try {
@@ -185,7 +185,7 @@ bool MarcRecord::parse(const char *recordBuf, const char *encoding)
 /*
  * Parse field.
  */
-MarcRecord::Field MarcRecord::parseField(int fieldTag, const char *fieldData, size_t fieldLength, const char *encoding)
+MarcRecord::Field MarcRecord::parseField(int fieldTag, const char *fieldData, unsigned int fieldLength, const char *encoding)
 {
 	Field field;
 	Subfield subfield;
@@ -263,7 +263,7 @@ MarcRecord::Field MarcRecord::parseField(int fieldTag, const char *fieldData, si
 /*
  * Parse embedded field.
  */
-MarcRecord::Field MarcRecord::parseEmbeddedField(int fieldTag, const char *fieldData, size_t fieldLength,
+MarcRecord::Field MarcRecord::parseEmbeddedField(int fieldTag, const char *fieldData, unsigned int fieldLength,
 	const char *encoding)
 {
 	Field field;

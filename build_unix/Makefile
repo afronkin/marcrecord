@@ -4,8 +4,8 @@ OBJS=marcrec.o test.o
 MODULES=
 VPATH=../src
 
-CXX=g++
-CXXFLAGS=-O2
+CXX=CC
+CXXFLAGS=-g -O2
 LDFLAGS=
 LIBS=
 

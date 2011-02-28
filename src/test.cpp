@@ -29,6 +29,7 @@
 int main(int argc, char *argv[])
 {
 	MarcRecord marcRecord(MarcRecord::UNIMARC);
+	const char *marcFileName = NULL;
 	FILE *marcFile = NULL;
 	MarcRecord::FieldPtrList fieldList;
 	MarcRecord::FieldPtrRef fieldRef;
@@ -37,17 +38,25 @@ int main(int argc, char *argv[])
 
 	setlocale(LC_CTYPE, "en_US.UTF-8");
 
+	/* Parse arguments. */
+	if (argc < 2) {
+		fwprintf(stderr, L"Error: MARC file must be specified.\n");
+		return 1;
+	}
+
+	marcFileName = argv[1];
+
 	try {
 		/* Open records file. */
-		marcFile = fopen(argv[1], "rb");
+		marcFile = fopen(marcFileName, "rb");
 		if (marcFile == NULL) {
-			fprintf(stderr, "Error: can't open file '%s'\n", argv[1]);
+			fprintf(stderr, "Error: can't open file '%s'.\n", marcFileName);
 			throw 1;
 		}
 
 		/* Read record. */
 		if (marcRecord.read(marcFile) != true) {
-			fprintf(stderr, "Error: can't read file '%s'\n", argv[1]);
+			fwprintf(stderr, L"Error: can't read file '%s'.\n", marcFileName);
 			throw 1;
 		}
 
@@ -79,7 +88,7 @@ int main(int argc, char *argv[])
 		return errorCode;
 	}
 
-	wprintf(L"Done.\n");
+	fwprintf(stderr, L"Done.\n");
 
 	return 0;
 }

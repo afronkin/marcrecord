@@ -125,10 +125,10 @@ public:
 private:
 	/* Parse field. */
 	inline Field parseField(int fieldTag, const char *fieldData,
-		size_t fieldLength, const char *encoding);
+		unsigned int fieldLength, const char *encoding);
 	/* Parse embedded field. */
 	inline Field parseEmbeddedField(int fieldTag, const char *fieldData,
-		size_t fieldLength, const char *encoding);
+		unsigned int fieldLength, const char *encoding);
 
 public:
 	/* Constructors and destructor. */
