@@ -61,17 +61,17 @@ int main(int argc, char *argv[])
 		}
 
 		/* Print some subfields. */
-		fieldList = marcRecord.getFieldList(200);
+		fieldList = marcRecord.getFieldList("200");
 		for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
 			fieldRef++)
 		{
 			subfieldList = marcRecord.getSubfieldList(*fieldRef, 'a');
 			if (!subfieldList.empty()) {
 				subfieldRef = subfieldList.begin();
-				printf("%03d [%c%c] $%c %s\n",
-					(*fieldRef)->tag, (*fieldRef)->ind1, (*fieldRef)->ind2,
+				printf("%3s [%c%c] $%c %s\n",
+					(*fieldRef)->tag.c_str(), (*fieldRef)->ind1, (*fieldRef)->ind2,
 					(*subfieldRef)->id, (*subfieldRef)->data.c_str());
-(*fieldRef)->tag = 999;
+(*fieldRef)->tag = "999";
 (*subfieldRef)->data = "456";
 			}
 		}

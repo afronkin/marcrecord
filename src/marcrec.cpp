@@ -139,7 +139,7 @@ bool MarcRecord::parse(const char *recordBuf, const char *encoding)
 	RecordDirEntry *dirEntry;
 	const char *recordData, *fieldData;
 	int fieldNo;
-	int fieldTag;
+	std::string fieldTag;
 	unsigned int fieldLength, fieldStartPos;
 	Field field;
 
@@ -161,9 +161,8 @@ bool MarcRecord::parse(const char *recordBuf, const char *encoding)
 		recordData = recordBuf + baseAddress;
 		for (fieldNo = 0; fieldNo < numFields; fieldNo++, dirEntry++) {
 			/* Parse directory entry. */
-			if (sscanf((char *) dirEntry, "%3d%4d%5d",
-				&fieldTag, &fieldLength, &fieldStartPos) != 3)
-			{
+			fieldTag.assign(dirEntry->tag, 0, 3);
+			if (sscanf(dirEntry->length, "%4d%5d", &fieldLength, &fieldStartPos) != 2) {
 				throw ERROR;
 			}
 
@@ -185,12 +184,12 @@ bool MarcRecord::parse(const char *recordBuf, const char *encoding)
 /*
  * Parse field.
  */
-MarcRecord::Field MarcRecord::parseField(int fieldTag, const char *fieldData, unsigned int fieldLength, const char *encoding)
+MarcRecord::Field MarcRecord::parseField(std::string fieldTag,
+	const char *fieldData, unsigned int fieldLength, const char *encoding)
 {
 	Field field;
 	Subfield subfield;
 	int symbolPos, subfieldStartPos;
-	int embeddedFieldTag;
 
 	/* Clear field. */
 	/* field.clear(); */
@@ -201,7 +200,7 @@ MarcRecord::Field MarcRecord::parseField(int fieldTag, const char *fieldData, un
 	}
 
 	field.tag = fieldTag;
-	if (field.tag < 10 || fieldLength < 2) {
+	if (field.tag < "010" || fieldLength < 2) {
 		/* Parse control field. */
 		field.data.assign(fieldData, fieldLength);
 	} else {
@@ -218,79 +217,9 @@ MarcRecord::Field MarcRecord::parseField(int fieldTag, const char *fieldData, un
 			}
 
 			if (symbolPos > 2) {
-				/* Skip subfields of embedded field. */
-				if (symbolPos < fieldLength && fieldData[subfieldStartPos + 1] == '1') {
-					if (fieldData[symbolPos + 1] != '1') {
-						continue;
-					}
-				}
-
-				/* Clear subfield. */
-				subfield.clear();
-				/* Get subfield identifier. */
-				subfield.id = fieldData[subfieldStartPos + 1];
-
-				/* Check for embedded field. */
-				if ( recordType == UNIMARC && subfield.id == '1') {
-					/* Get embedded field tag. */
-					if (sscanf(fieldData + subfieldStartPos + 2, "%3d", &embeddedFieldTag) != 1) {
-						embeddedFieldTag = 0;
-					}
-
-					/* Parse embedded field. */
-					subfield.embeddedField = parseEmbeddedField(embeddedFieldTag,
-						fieldData + subfieldStartPos + 5,
-						symbolPos - subfieldStartPos - 5,
-						encoding);
-				} else {
-					/* Parse regular subfield. */
-					subfield.data.assign(
-						fieldData + subfieldStartPos + 2,
-						symbolPos - subfieldStartPos - 2);
-				}
-
-				/* Append subfield to list. */
-				field.subfieldList.push_back(subfield);
-			}
-
-			subfieldStartPos = symbolPos;
-		}
-	}
-
-	return field;
-}
-
-/*
- * Parse embedded field.
- */
-MarcRecord::Field MarcRecord::parseEmbeddedField(int fieldTag, const char *fieldData, unsigned int fieldLength,
-	const char *encoding)
-{
-	Field field;
-	Subfield subfield;
-	int symbolPos, subfieldStartPos;
-
-	field.tag = fieldTag;
-	if (field.tag < 10) {
-		field.data.assign(fieldData, fieldLength);
-	} else {
-		field.ind1 = fieldData[0];
-		field.ind2 = fieldData[1];
-
-		/* Parse list of subfields. */
-		subfieldStartPos = 2;
-		for (symbolPos = 2; symbolPos <= fieldLength; symbolPos++) {
-			if (fieldData[symbolPos] != '\x1F' && symbolPos != fieldLength) {
-				continue;
-			}
-
-			if (symbolPos > 2) {
-				/* Clear subfield. */
-				subfield.clear();
-				/* Get subfield identifier. */
-				subfield.id = fieldData[subfieldStartPos + 1];
-
 				/* Parse regular subfield. */
+				subfield.clear();
+				subfield.id = fieldData[subfieldStartPos + 1];
 				subfield.data.assign(
 					fieldData + subfieldStartPos + 2,
 					symbolPos - subfieldStartPos - 2);
@@ -309,7 +238,7 @@ MarcRecord::Field MarcRecord::parseEmbeddedField(int fieldTag, const char *field
 /*
  * Get list of fields from record.
  */
-MarcRecord::FieldPtrList MarcRecord::getFieldList(int fieldTag)
+MarcRecord::FieldPtrList MarcRecord::getFieldList(std::string fieldTag)
 {
 	FieldPtrList resultFieldList;
 	FieldRef fieldRef;
@@ -318,7 +247,7 @@ MarcRecord::FieldPtrList MarcRecord::getFieldList(int fieldTag)
 	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
 		fieldRef++)
 	{
-		if (fieldTag == 0 || fieldTag == fieldRef->tag) {
+		if (fieldTag == "" || fieldTag == fieldRef->tag) {
 			resultFieldList.push_back(fieldRef);
 		}
 	}
@@ -354,8 +283,9 @@ std::string MarcRecord::toString()
 	std::string textRecord = "";
 	MarcRecord::FieldRef fieldRef;
 
-	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end(); fieldRef++)
-	{
+	/* Enumerate all fields. */
+	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end(); fieldRef++) {
+		/* Print field. */
 		textRecord += toString(*fieldRef) + "\n";
 	}
 
@@ -370,21 +300,33 @@ std::string MarcRecord::toString(Field field)
 	std::string textField = "";
 	MarcRecord::SubfieldRef subfieldRef, embeddedSubfieldRef;
 
-	snprintf(textField, 3, "%03d", field.tag);
+	textField += field.tag;
 
-	if (field.tag < 10) {
+	if (field.tag < "010") {
+		/* Print control field. */
 		textField += " ";
 		textField += field.data.c_str();
 	} else {
+		/* Print header of regular field. */
 		snprintf(textField, 5, " [%c%c]", field.ind1, field.ind2);
 
+		/* Enumerate all subfields. */
 		for (subfieldRef = field.subfieldList.begin();
 			subfieldRef != field.subfieldList.end(); subfieldRef++)
 		{
 			if (recordType == UNIMARC && subfieldRef->id == '1') {
+				/* Print header of embedded field. */
 				snprintf(textField, 4, " $%c ", subfieldRef->id);
-				textField += toString(subfieldRef->embeddedField);
+				if (subfieldRef->getEmbeddedTag() < "010") {
+					textField += "<" + subfieldRef->getEmbeddedTag() + "> "
+						+ subfieldRef->getEmbeddedData();
+				} else {
+					textField += "<" + subfieldRef->getEmbeddedTag() + "> ["
+						+ subfieldRef->getEmbeddedInd1()
+						+ subfieldRef->getEmbeddedInd2() + "]";
+				}
 			} else {
+				/* Print regular subfield. */
 				snprintf(textField, 4, " $%c ", subfieldRef->id);
 				textField += subfieldRef->data;
 			}
@@ -399,7 +341,7 @@ std::string MarcRecord::toString(Field field)
  */
 void MarcRecord::Field::clear()
 {
-	tag = 0;
+	tag = "";
 	ind1 = ' ';
 	ind2 = ' ';
 	data.erase();
@@ -413,7 +355,62 @@ void MarcRecord::Subfield::clear()
 {
 	id = ' ';
 	data.erase();
-	embeddedField.clear();
+}
+
+/*
+ * Check presence of embedded field.
+ */
+bool MarcRecord::Subfield::isEmbedded()
+{
+	return (id == '1' ? true : false);
+}
+
+/*
+ * Get tag of embedded field.
+ */
+std::string MarcRecord::Subfield::getEmbeddedTag()
+{
+	if (id != '1') {
+		return "";
+	}
+
+	return data.substr(0, 3);
+}
+
+/*
+ * Get indicator 1 of embedded field.
+ */
+char MarcRecord::Subfield::getEmbeddedInd1()
+{
+	if (id != '1' || data.substr(0, 3) < "010") {
+		return '?';
+	}
+
+	return data[3];
+}
+
+/*
+ * Get indicator 2 of embedded field.
+ */
+char MarcRecord::Subfield::getEmbeddedInd2()
+{
+	if (id != '1' || data.substr(0, 3) < "010") {
+		return '?';
+	}
+
+	return data[4];
+}
+
+/*
+ * Get data of embedded field.
+ */
+std::string MarcRecord::Subfield::getEmbeddedData()
+{
+	if (id != '1' || data.substr(0, 3) >= "010") {
+		return "";
+	}
+
+	return data.substr(3);
 }
 
 /*

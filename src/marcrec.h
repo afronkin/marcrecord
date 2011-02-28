@@ -83,7 +83,7 @@ public:
 
 	/* Structure of MARC field. */
 	struct Field {
-		int tag;			// Field tag.
+		std::string tag;		// Field tag.
 		char ind1;			// Indicator 1.
 		char ind2;			// Indicator 2.
 		std::string data;		// Data of control field.
@@ -104,10 +104,20 @@ public:
 	struct Subfield {
 		char id;		// Subfield identifier.
 		std::string data;	// Subfield data.
-		Field embeddedField;	// Embedded field.
 
 		/* Clear subfield data. */
 		void clear();
+
+		/* Check presence of embedded field. */
+		inline bool isEmbedded();
+		/* Get tag of embedded field. */
+		inline std::string getEmbeddedTag();
+		/* Get indicator 1 of embedded field. */
+		inline char getEmbeddedInd1();
+		/* Get indicator 2 of embedded field. */
+		inline char getEmbeddedInd2();
+		/* Get data of embedded field. */
+		inline std::string getEmbeddedData();
 	};
 
 private:
@@ -124,11 +134,8 @@ public:
 
 private:
 	/* Parse field. */
-	inline Field parseField(int fieldTag, const char *fieldData,
-		unsigned int fieldLength, const char *encoding);
-	/* Parse embedded field. */
-	inline Field parseEmbeddedField(int fieldTag, const char *fieldData,
-		unsigned int fieldLength, const char *encoding);
+	inline Field parseField(std::string fieldTag,
+		const char *fieldData, unsigned int fieldLength, const char *encoding);
 
 public:
 	/* Constructors and destructor. */
@@ -149,7 +156,7 @@ public:
 	bool parse(const char *recordBuf, const char *encoding = "UTF-8");
 
 	/* Get list of fields references from record. */
-	FieldPtrList getFieldList(int fieldTag = 0);
+	FieldPtrList getFieldList(std::string fieldTag = "");
 	/* Get list of subfields references from field. */
 	SubfieldPtrList getSubfieldList(FieldRef fieldRef, char subfieldId = ' ');
 
