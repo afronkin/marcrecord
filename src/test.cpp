@@ -28,67 +28,143 @@
  */
 int main(int argc, char *argv[])
 {
-	MarcRecord marcRecord(MarcRecord::UNIMARC);
-	const char *marcFileName = NULL;
 	FILE *marcFile = NULL;
-	MarcRecord::FieldPtrList fieldList;
-	MarcRecord::FieldPtrRef fieldRef;
-	MarcRecord::SubfieldPtrList subfieldList;
-	MarcRecord::SubfieldPtrRef subfieldRef;
 
-	setlocale(LC_CTYPE, "en_US.UTF-8");
+	// setlocale(LC_CTYPE, "en_US.UTF-8");
 
 	/* Parse arguments. */
 	if (argc < 2) {
-		fwprintf(stderr, L"Error: MARC file must be specified.\n");
+		fprintf(stdout, "Error: MARC file must be specified.\n");
 		return 1;
 	}
-
-	marcFileName = argv[1];
+	const char *marcFileName = argv[1];
 
 	try {
 		/* Open records file. */
 		marcFile = fopen(marcFileName, "rb");
 		if (marcFile == NULL) {
-			fprintf(stderr, "Error: can't open file '%s'.\n", marcFileName);
+			fprintf(stdout, "Error: can't open file '%s'.\n", marcFileName);
 			throw 1;
 		}
 
 		/* Read record. */
+		MarcRecord marcRecord(MarcRecord::UNIMARC);
 		if (marcRecord.read(marcFile) != true) {
-			fwprintf(stderr, L"Error: can't read file '%s'.\n", marcFileName);
+			fprintf(stdout, "Error: can't read file '%s'.\n", marcFileName);
 			throw 1;
 		}
 
-		/* Print some subfields. */
-		fieldList = marcRecord.getFieldList("200");
-		for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
-			fieldRef++)
+		/* Testing 'toString()'. */
 		{
-			subfieldList = marcRecord.getSubfieldList(*fieldRef, 'a');
-			if (!subfieldList.empty()) {
-				subfieldRef = subfieldList.begin();
-				printf("%3s [%c%c] $%c %s\n",
-					(*fieldRef)->tag.c_str(), (*fieldRef)->ind1, (*fieldRef)->ind2,
-					(*subfieldRef)->id, (*subfieldRef)->data.c_str());
-(*fieldRef)->tag = "999";
-(*subfieldRef)->data = "456";
-			}
+			printf("Testing 'toString()'.\n");
+
+			std::string textRecord = marcRecord.toString();
+			printf("%s", textRecord.c_str());
+
+			printf("Done.\n\n");
 		}
 
-		/* Print record. */
-		std::string textRecord = marcRecord.toString();
-		printf("%s\n", textRecord.c_str());
+		/* Testing getFields(), getSubfields(). */
+		{
+			printf("Testing 'getFields()', 'getSubfields()'.\n");
+
+			MarcRecord::FieldPtrList fieldList = marcRecord.getFields("801");
+			for (MarcRecord::FieldPtrRef fieldRef = fieldList.begin();
+				fieldRef != fieldList.end();
+				fieldRef++)
+			{
+				MarcRecord::SubfieldPtrList subfieldList =
+					(*fieldRef)->getSubfields('b');
+				if (!subfieldList.empty()) {
+					MarcRecord::SubfieldPtrRef subfieldRef =
+						subfieldList.begin();
+					printf("%3s [%c%c] $%c %s\n",
+						(*fieldRef)->tag.c_str(),
+						(*fieldRef)->ind1, (*fieldRef)->ind2,
+						(*subfieldRef)->id, (*subfieldRef)->data.c_str());
+// (*fieldRef)->tag = "999";
+// (*subfieldRef)->data = "456";
+				}
+			}
+
+			printf("Done.\n\n");
+		}
+
+		/* Testing getField(), getSubfield(). */
+		{
+			printf("Testing 'getField()', 'getSubfield()'.\n");
+
+			MarcRecord::FieldRef fieldRef = marcRecord.getField("210");
+			if (fieldRef == marcRecord.nullField()) {
+				throw "field not found";
+			}
+
+			MarcRecord::SubfieldRef subfieldRef = fieldRef->getSubfield('d');
+			if (subfieldRef == fieldRef->nullSubfield()) {
+				throw "subfield not found";
+			}
+
+			printf("Subfield 210d: '%s'\n",
+				subfieldRef->data.c_str());
+
+			printf("Done.\n\n");
+		}
+
+		/* Testing getEmbeddedFields(). */
+		{
+			printf("Testing 'getEmbeddedFields()'.\n");
+			MarcRecord::FieldRef fieldRef = marcRecord.getField("461");
+			MarcRecord::EmbeddedFieldList embeddedFieldList =
+				fieldRef->getEmbeddedFields("801");
+			printf("Found embedded fields: %d\n", embeddedFieldList.size());
+			for (MarcRecord::EmbeddedFieldRef subfieldList = embeddedFieldList.begin();
+				subfieldList != embeddedFieldList.end();
+				subfieldList++)
+			{
+				printf("Embedded field 461 <801>:");
+				for (MarcRecord::SubfieldPtrRef subfieldRef = subfieldList->begin();
+					subfieldRef != subfieldList->end();
+					subfieldRef++)
+				{
+					printf(" $%c '%s'",
+						(*subfieldRef)->id, (*subfieldRef)->data.c_str());
+				}
+				printf("\n");
+			}
+			printf("Done.\n\n");
+		}
+
+		/* Testing 'getEmbeddedField()', 'getEmbeddedData()'. */
+		{
+			printf("Testing 'getEmbeddedField()', 'getEmbeddedData()'.\n");
+			MarcRecord::FieldRef fieldRef = marcRecord.getField("461");
+			MarcRecord::SubfieldPtrList subfieldList =
+				fieldRef->getEmbeddedField("001");
+			if (subfieldList.empty() == true) {
+				throw "embedded field not found";
+			}
+			for (MarcRecord::SubfieldPtrRef subfieldRef = subfieldList.begin();
+				subfieldRef != subfieldList.end();
+				subfieldRef++)
+			{
+				printf("Embedded field 461 <001>: '%s'\n",
+					(*subfieldRef)->getEmbeddedData().c_str());
+			}
+			printf("Done.\n\n");
+		}
 
 		fclose(marcFile);
-	} catch (int errorCode) {
+	} catch (const char *errorMessage) {
 		if (marcFile != NULL)
 			fclose(marcFile);
 
-		return errorCode;
+		fprintf(stdout, "Error: %s.\n", errorMessage);
+		return 1;
 	}
 
-	fwprintf(stderr, L"Done.\n");
+	// fwprintf(stderr, L"Done.\n");
+	printf("Done.\n");
 
 	return 0;
 }
+

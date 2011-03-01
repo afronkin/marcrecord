@@ -72,53 +72,28 @@ public:
 
 	#pragma pack()
 
-	struct Subfield;
-
-	/* List of subfields. */
-	typedef std::list<Subfield> SubfieldList;
-	typedef SubfieldList::iterator SubfieldRef;
-	/* List of subfields references. */
-	typedef std::list<SubfieldRef> SubfieldPtrList;
-	typedef SubfieldPtrList::iterator SubfieldPtrRef;
-
-	/* Structure of MARC field. */
-	struct Field {
-		std::string tag;		// Field tag.
-		char ind1;			// Indicator 1.
-		char ind2;			// Indicator 2.
-		std::string data;		// Data of control field.
-		SubfieldList subfieldList;	// List of regular subfields.
-
-		/* Clear field data. */
-		void clear();
-	};
+	/* MARC field class. */
+	class Field;
+	/* MARC subfield class. */
+	class Subfield;
 
 	/* List of fields. */
 	typedef std::list<Field> FieldList;
 	typedef FieldList::iterator FieldRef;
-	/* List of fields references. */
+	/* List of fields iterators. */
 	typedef std::list<FieldRef> FieldPtrList;
 	typedef FieldPtrList::iterator FieldPtrRef;
 
-	/* Structure of MARC subfield. */
-	struct Subfield {
-		char id;		// Subfield identifier.
-		std::string data;	// Subfield data.
+	/* List of subfields. */
+	typedef std::list<Subfield> SubfieldList;
+	typedef SubfieldList::iterator SubfieldRef;
+	/* List of subfields iterators. */
+	typedef std::list<SubfieldRef> SubfieldPtrList;
+	typedef SubfieldPtrList::iterator SubfieldPtrRef;
 
-		/* Clear subfield data. */
-		void clear();
-
-		/* Check presence of embedded field. */
-		inline bool isEmbedded();
-		/* Get tag of embedded field. */
-		inline std::string getEmbeddedTag();
-		/* Get indicator 1 of embedded field. */
-		inline char getEmbeddedInd1();
-		/* Get indicator 2 of embedded field. */
-		inline char getEmbeddedInd2();
-		/* Get data of embedded field. */
-		inline std::string getEmbeddedData();
-	};
+	/* List of embedded fields. */
+	typedef std::list<SubfieldPtrList> EmbeddedFieldList;
+	typedef EmbeddedFieldList::iterator EmbeddedFieldRef;
 
 private:
 	/* Type of record. */
@@ -155,15 +130,85 @@ public:
 	/* Parse record from buffer. */
 	bool parse(const char *recordBuf, const char *encoding = "UTF-8");
 
-	/* Get list of fields references from record. */
-	FieldPtrList getFieldList(std::string fieldTag = "");
-	/* Get list of subfields references from field. */
-	SubfieldPtrList getSubfieldList(FieldRef fieldRef, char subfieldId = ' ');
+	/* Get list of fields. */
+	FieldPtrList getFields(std::string fieldTag = "");
+	/* Get field. */
+	FieldRef getField(std::string fieldTag);
 
 	/* Format record to string for printing. */
 	std::string toString();
 	/* Format field to string for printing. */
 	std::string toString(Field field);
+
+	/* Return null field value. */
+	inline FieldRef nullField()
+	{
+		return fieldList.end();
+	}
+};
+
+/*
+ * MARC field class.
+ */
+class MarcRecord::Field {
+public:
+	/* Field tag. */
+	std::string tag;
+	/* Indicator 1. */
+	char ind1;
+	/* Indicator 2. */
+	char ind2;
+	/* Data of control field. */
+	std::string data;
+	/* List of regular subfields. */
+	SubfieldList subfieldList;
+
+public:
+	/* Clear field data. */
+	void clear();
+
+	/* Get list of subfields. */
+	SubfieldPtrList getSubfields(char subfieldId = ' ');
+	/* Get subfield. */
+	SubfieldRef getSubfield(char subfieldId);
+
+	/* Get list of embedded fields. */
+	EmbeddedFieldList getEmbeddedFields(std::string fieldTag = "");
+	/* Get embedded field. */
+	SubfieldPtrList getEmbeddedField(std::string fieldTag);
+
+	/* Return null subfield value. */
+	inline SubfieldRef nullSubfield()
+	{
+		return subfieldList.end();
+	}
+};
+
+/*
+ * MARC subfield class.
+ */
+class MarcRecord::Subfield {
+public:
+	/* Subfield identifier. */
+	char id;
+	/* Subfield data. */
+	std::string data;
+
+public:
+	/* Clear subfield data. */
+	void clear();
+
+	/* Check presence of embedded field. */
+	bool isEmbedded();
+	/* Get tag of embedded field. */
+	std::string getEmbeddedTag();
+	/* Get indicator 1 of embedded field. */
+	char getEmbeddedInd1();
+	/* Get indicator 2 of embedded field. */
+	char getEmbeddedInd2();
+	/* Get data of embedded field. */
+	std::string getEmbeddedData();
 };
 
 #endif // MARCREC_H
+

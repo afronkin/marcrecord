@@ -1,11 +1,11 @@
 PROG_NAME=test
 
-OBJS=marcrec.o test.o
+OBJS=marcrec.o marcrec_field.o marcrec_subfield.o test.o
 MODULES=
 VPATH=../src
 
 CXX=CC
-CXXFLAGS=-O2
+CXXFLAGS=-g -O2
 LDFLAGS=
 LIBS=
 
