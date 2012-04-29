@@ -10,7 +10,7 @@ LDFLAGS=
 LIBS=
 
 .PHONY: all clean
-.SUFFIXES: .cpp .o
+.SUFFIXES: .cxx .o
 
 all: $(PROG_NAME)
 	@echo $@ done.
@@ -23,7 +23,7 @@ clean:
 	rm -f $(PROG_NAME) *.o
 	@echo $@ done.
 
-%.o: %.cpp
+%.o: %.cxx
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 module.%:
