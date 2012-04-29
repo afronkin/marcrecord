@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "marcrec.h"
+#include "marcrecord.h"
 
 /* Print formatted output to std::string. */
 int snprintf(std::string &s, size_t n, const char *format, ...);

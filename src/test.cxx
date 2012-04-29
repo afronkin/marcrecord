@@ -36,7 +36,7 @@
 #include <locale.h>
 #include <wchar.h>
 #include <stdio.h>
-#include "marcrec.h"
+#include "marcrecord.h"
 
 /*
  * Main function.

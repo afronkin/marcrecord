@@ -33,7 +33,7 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#include "marcrec.h"
+#include "marcrecord.h"
 
 /*
  * Read record from ISO 2709 file.

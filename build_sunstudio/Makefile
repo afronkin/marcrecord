@@ -1,6 +1,6 @@
 PROG_NAME=test
 
-OBJS=marcrec.o marcrec_field.o marcrec_subfield.o test.o
+OBJS=marcrecord.o marcrecord_field.o marcrecord_subfield.o test.o
 MODULES=
 VPATH=../src
 

@@ -1,5 +1,6 @@
 SRC_DIR=../src
-OBJS=marcrec.o marcrec_field.o marcrec_iso2709.o marcrec_subfield.o test.o
+OBJS=marcrecord.o marcrecord_field.o marcrecord_iso2709.o \
+  marcrecord_subfield.o test.o
 PROGRAM=test
 
 CXX=g++
