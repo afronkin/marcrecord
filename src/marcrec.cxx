@@ -1,19 +1,34 @@
 /*
- * Copyright (C) 2011  Alexander Fronkin
+ * Copyright (c) 2012, Alexander Fronkin
+ * All rights reserved.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * Redistribution and use in source and binary forms,
+ * with or without modification, are permitted provided
+ * that the following conditions are met:
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * 1. Redistributions of source code must retain the above
+ *    copyright notice, this list of conditions and the
+ *    following disclaimer.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * 2. Redistributions in binary form must reproduce the above
+ *    copyright notice, this list of conditions and the following
+ *    disclaimer in the documentation and/or other materials
+ *    provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+ * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
  */
 
 /* Version: 2.0 (27 Feb 2011) */
@@ -61,7 +76,7 @@ void MarcRecord::clear()
 	memset(label.recordLength, ' ', sizeof(label.recordLength));
 	label.recordStatus = 'n';
 	label.recordType = 'a';
-	label.bibliographicalLevel = 'm';
+	label.bibliographicLevel = 'm';
 	label.hierarchicalLevel = ' ';
 	label.undefined1 = ' ';
 	label.indicatorLength = '2';
@@ -70,9 +85,9 @@ void MarcRecord::clear()
 	label.encodingLevel = ' ';
 	label.cataloguingForm = ' ';
 	label.undefined2 = ' ';
-	label.lengthFieldLength = '4';
-	label.startPosLength = '5';
-	label.implDefLength = '0';
+	label.lengthOfFieldLength = '4';
+	label.startingPositionLength = '5';
+	label.implementationDefinedLength = '0';
 	label.undefined3 = ' ';
 }
 
@@ -82,158 +97,6 @@ void MarcRecord::clear()
 void MarcRecord::setType(RecordType newRecordType)
 {
 	recordType = newRecordType;
-}
-
-/*
- * Read record from file.
- */
-bool MarcRecord::read(FILE *marcFile, const char *encoding)
-{
-	int symbol;
-	char recordBuf[10000];
-	unsigned int recordLen;
-
-	/* Skip possible wrong symbols. */
-	do {
-		symbol = fgetc(marcFile);
-	} while (symbol >= 0 && isdigit(symbol) == 0);
-
-	if (symbol < 0) {
-		return false;
-	}
-
-	/* Read record length. */
-	recordBuf[0] = (char) symbol;
-	if (fread(recordBuf + 1, 1, 4, marcFile) != 4) {
-		return false;
-	}
-
-	/* Parse record length. */
-	if (sscanf(recordBuf, "%5d", &recordLen) != 1) {
-		return false;
-	}
-
-	/* Read record. */
-	if (fread(recordBuf + 5, 1, recordLen - 5, marcFile) != recordLen - 5) {
-		return false;
-	}
-
-	/* Parse record. */
-	return parse(recordBuf, encoding);
-}
-
-/*
- * Write record to file.
- */
-bool MarcRecord::write(FILE *marcFile, const char *encoding)
-{
-	return true;
-}
-
-/*
- * Parse record from buffer.
- */
-bool MarcRecord::parse(const char *recordBuf, const char *encoding)
-{
-	unsigned int baseAddress, numFields;
-	RecordDirEntry *dirEntry;
-	const char *recordData, *fieldData;
-	int fieldNo;
-	std::string fieldTag;
-	unsigned int fieldLength, fieldStartPos;
-	Field field;
-
-	try {
-		/* Copy record label. */
-		memcpy(&label, recordBuf, sizeof(RecordLabel));
-
-		/* Get base address of data. */
-		if (sscanf(label.baseAddress, "%05d", &baseAddress) != 1) {
-			throw ERROR;
-		}
-
-		/* Get number of fields. */
-		numFields = (baseAddress - sizeof(RecordLabel) - 1) /
-			sizeof(RecordDirEntry);
-
-		/* Parse list of fields. */
-		dirEntry = (RecordDirEntry *) (recordBuf + sizeof(RecordLabel));
-		recordData = recordBuf + baseAddress;
-		for (fieldNo = 0; fieldNo < numFields; fieldNo++, dirEntry++) {
-			/* Parse directory entry. */
-			fieldTag.assign(dirEntry->tag, 0, 3);
-			if (sscanf(dirEntry->length, "%4d%5d", &fieldLength, &fieldStartPos) != 2) {
-				throw ERROR;
-			}
-
-			/* Parse field. */
-			field = parseField(fieldTag,
-				recordData + fieldStartPos, fieldLength, encoding);
-			/* Append field to list. */
-			fieldList.push_back(field);
-		}
-	} catch (int errorCode) {
-		if (errorCode != 0) {
-			clear();
-			return false;
-		}
-	}
-
-	return true;
-}
-
-/*
- * Parse field.
- */
-MarcRecord::Field MarcRecord::parseField(std::string fieldTag,
-	const char *fieldData, unsigned int fieldLength, const char *encoding)
-{
-	Field field;
-	Subfield subfield;
-	int symbolPos, subfieldStartPos;
-
-	/* Clear field. */
-	/* field.clear(); */
-
-	/* Adjust field length. */
-	if (fieldData[fieldLength - 1] == '\x1E') {
-		fieldLength--;
-	}
-
-	field.tag = fieldTag;
-	if (field.tag < "010" || fieldLength < 2) {
-		/* Parse control field. */
-		field.data.assign(fieldData, fieldLength);
-	} else {
-		/* Parse regular field. */
-		field.ind1 = fieldData[0];
-		field.ind2 = fieldData[1];
-
-		/* Parse list of subfields. */
-		subfieldStartPos = 0;
-		for (symbolPos = 2; symbolPos <= fieldLength; symbolPos++) {
-			/* Skip symbols of subfield data. */
-			if (fieldData[symbolPos] != '\x1F' && symbolPos != fieldLength) {
-				continue;
-			}
-
-			if (symbolPos > 2) {
-				/* Parse regular subfield. */
-				subfield.clear();
-				subfield.id = fieldData[subfieldStartPos + 1];
-				subfield.data.assign(
-					fieldData + subfieldStartPos + 2,
-					symbolPos - subfieldStartPos - 2);
-
-				/* Append subfield to list. */
-				field.subfieldList.push_back(subfield);
-			}
-
-			subfieldStartPos = symbolPos;
-		}
-	}
-
-	return field;
 }
 
 /*
