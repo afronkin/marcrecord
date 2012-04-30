@@ -23,7 +23,7 @@ clean:
 	@echo $@ done.
 
 verify:
-	./$(PROGRAM) ../share/test/rusmarc_2.iso | iconv -f cp1251 -t utf-8 | less
+	./$(PROGRAM) ../share/test/rusmarc_2.iso test.iso | iconv -f cp1251 -t utf-8 | less
 	@echo $@ done.
 
 %.o: $(SRC_DIR)/%.cxx

@@ -153,10 +153,10 @@ public:
 
 	/* Read record from ISO 2709 file. */
 	bool readIso2709(FILE *marcFile, const char *encoding = "UTF-8");
-	/* Write record to ISO 2709 file. */
-	bool writeIso2709(FILE *marcFile, const char *encoding = "UTF-8");
 	/* Parse record from ISO 2709 buffer. */
 	bool parseIso2709(const char *recordBuf, const char *encoding = "UTF-8");
+	/* Write record to ISO 2709 file. */
+	bool writeIso2709(FILE *marcFile, const char *encoding = "UTF-8");
 
 	/* Get record label. */
 	Label getLabel(void);

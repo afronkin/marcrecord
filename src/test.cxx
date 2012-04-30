@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
 	// setlocale(LC_CTYPE, "en_US.UTF-8");
 
 	/* Parse arguments. */
-	if (argc < 2) {
-		fprintf(stdout, "Error: MARC file must be specified.\n");
+	if (argc < 3) {
+		fprintf(stdout, "Error: source and destination files must be specified.\n");
 		return 1;
 	}
 	const char *marcFileName = argv[1];
@@ -251,6 +251,47 @@ int main(int argc, char *argv[])
 
 			std::string textRecord = newMarcRecord.toString();
 			printf("%s", textRecord.c_str());
+
+			printf("Done.\n\n");
+		}
+
+		/* Testing 'writeIso2709()'. */
+		{
+			printf("Testing 'writeIso2709()'.\n");
+
+			FILE *outputFile = fopen(argv[2], "wb");
+			if (outputFile == NULL) {
+				throw "can't open destination file";
+			}
+
+			MarcRecord newMarcRecord(MarcRecord::UNIMARC);
+			MarcRecord::FieldIt fieldIt;
+
+			newMarcRecord.clear();
+			fieldIt = newMarcRecord.addField("001");
+			fieldIt->data = "12345";
+			fieldIt = newMarcRecord.addField("200", '0', '1');
+			fieldIt->addSubfield('a', "abc");
+			fieldIt->addSubfield('b', "defg");
+			fieldIt = newMarcRecord.addField("899", '2', '3');
+			fieldIt->addSubfield('c', "123");
+			fieldIt->addSubfield('d', "12345");
+			fieldIt->addSubfield('e', "1234567");
+			fieldIt = newMarcRecord.addField("899", '2', '3');
+			fieldIt->addSubfield('c', "987");
+			fieldIt->addSubfield('d', "98765");
+			fieldIt->addSubfield('e', "9876543");
+			newMarcRecord.writeIso2709(outputFile, "utf-8");
+
+			newMarcRecord.clear();
+			fieldIt = newMarcRecord.addField("001");
+			fieldIt->data = "abcde";
+			fieldIt = newMarcRecord.addField("201", '0', '1');
+			fieldIt->addSubfield('a', "123");
+			fieldIt->addSubfield('b', "456");
+			newMarcRecord.writeIso2709(outputFile, "utf-8");
+
+			fclose(outputFile);
 
 			printf("Done.\n\n");
 		}

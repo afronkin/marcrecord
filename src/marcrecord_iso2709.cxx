@@ -35,6 +35,10 @@
 
 #include "marcrecord.h"
 
+#define ISO2709_RECORD_SEPARATOR	'\x1D'
+#define ISO2709_FIELD_SEPARATOR		'\x1E'
+#define ISO2709_IDENTIFIER_DELIMITER	'\x1F'
+
 #pragma pack(push)
 #pragma pack(1)
 
@@ -89,14 +93,6 @@ bool MarcRecord::readIso2709(FILE *marcFile, const char *encoding)
 }
 
 /*
- * Write record to ISO 2709 file.
- */
-bool MarcRecord::writeIso2709(FILE *marcFile, const char *encoding)
-{
-	return true;
-}
-
-/*
  * Parse record from ISO 2709 buffer.
  */
 bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
@@ -111,7 +107,7 @@ bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
 
 	try {
 		/* Copy record label. */
-		memcpy(&label, recordBuf, sizeof(Label));
+		memcpy(&label, recordBuf, sizeof(struct Label));
 
 		/* Get base address of data. */
 		if (sscanf(label.baseAddress, "%05d", &baseAddress) != 1) {
@@ -119,11 +115,11 @@ bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
 		}
 
 		/* Get number of fields. */
-		numFields = (baseAddress - sizeof(Label) - 1) /
-			sizeof(RecordDirectoryEntry);
+		numFields = (baseAddress - sizeof(struct Label) - 1) /
+			sizeof(struct RecordDirectoryEntry);
 
 		/* Parse list of fields. */
-		directoryEntry = (RecordDirectoryEntry *) (recordBuf + sizeof(Label));
+		directoryEntry = (RecordDirectoryEntry *) (recordBuf + sizeof(struct Label));
 		recordData = recordBuf + baseAddress;
 		for (fieldNo = 0; fieldNo < numFields; fieldNo++, directoryEntry++) {
 			/* Parse directory entry. */
@@ -202,4 +198,82 @@ MarcRecord::Field MarcRecord::parseField(std::string fieldTag,
 	}
 
 	return field;
+}
+
+/*
+ * Write record to ISO 2709 file.
+ */
+bool MarcRecord::writeIso2709(FILE *marcFile, const char *encoding)
+{
+	char recordBuf[100000];
+
+	/* Copy record leader to buffer. */
+	memcpy(recordBuf, (char *) &label, sizeof(struct Label));
+
+	/* Calculate base address of data and copy it to record buffer. */
+	unsigned int baseAddress = sizeof(struct Label) + fieldList.size()
+		* sizeof(struct RecordDirectoryEntry) + 1;
+	char baseAddressBuf[6];
+	sprintf(baseAddressBuf, "%05d", baseAddress);
+	memcpy(recordBuf + 12, baseAddressBuf, 5);
+
+	/* Iterate all fields. */
+	char *directoryData = recordBuf + sizeof(struct Label);
+	char *fieldData = recordBuf + baseAddress;
+	for (MarcRecord::FieldIt fieldIt = fieldList.begin();
+		fieldIt != fieldList.end(); fieldIt++)
+	{
+		int fieldLength = 0;
+		if (fieldIt->tag < "010") {
+			/* Copy control field to buffer. */
+			fieldLength = fieldIt->data.size();
+			memcpy(fieldData, fieldIt->data.c_str(), fieldLength);
+			fieldData += fieldLength;
+		} else {
+			/* Copy indicators of data field to buffer. */
+			*(fieldData++) = fieldIt->ind1;
+			*(fieldData++) = fieldIt->ind2;
+			fieldLength += 2;
+
+			/* Iterate all subfields. */
+			for (MarcRecord::SubfieldIt subfieldIt = fieldIt->subfieldList.begin();
+				subfieldIt != fieldIt->subfieldList.end(); subfieldIt++)
+			{
+				int subfieldLength = subfieldIt->data.size();
+
+				/* Copy subfield to buffer. */
+				*(fieldData++) = ISO2709_IDENTIFIER_DELIMITER;
+				*(fieldData++) = subfieldIt->id;
+				memcpy(fieldData, subfieldIt->data.c_str(), subfieldLength);
+				fieldData += subfieldLength;
+				fieldLength += subfieldLength + 2;
+			}
+		}
+
+		/* Set field separator at the end of field. */
+		*(fieldData++) = ISO2709_FIELD_SEPARATOR;
+		fieldLength++;
+
+		/* Fill directory entry (it is safe to do this way because null character
+		   will be overwritten in next iteration and right after the cycle). */
+		sprintf(directoryData, "%.3s%04d%05d", fieldIt->tag.c_str(), fieldLength,
+			(int) (fieldData - recordBuf) - baseAddress - fieldLength);
+		directoryData += sizeof(struct RecordDirectoryEntry);
+	}
+
+	/* Set field separator at the end of directory. */
+	directoryData[0] = ISO2709_FIELD_SEPARATOR;
+	/* Set record separator at the end of record. */
+	*(fieldData++) = ISO2709_RECORD_SEPARATOR;
+
+	/* Calculate directory length and copy it to record buffer (can't use easy way here). */
+	int recordLength = (int) (fieldData - recordBuf);
+	char recordLengthBuf[6];
+	sprintf(recordLengthBuf, "%05d", recordLength);
+	memcpy(recordBuf, recordLengthBuf, 5);
+
+	/* Write record buffer to file. */
+	fwrite(recordBuf, recordLength, 1, marcFile);
+
+	return true;
 }
