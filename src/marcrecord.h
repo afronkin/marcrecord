@@ -45,16 +45,16 @@
 class MarcRecord {
 public:
 	/* Enum of MARC record format variants. */
-	typedef enum {
+	enum FormatVariant {
 		UNIMARC = 1,
 		MARC21 = 2
-	} FormatVariant;
+	};
 
 	/* Enum of error codes. */
-	typedef enum {
+	enum ErrorCode {
 		SUCCESS = 0,
 		ERROR = -1
-	} ErrorCode;
+	};
 
 	#pragma pack(push)
 	#pragma pack(1)
