@@ -69,12 +69,45 @@ int main(int argc, char *argv[])
 			throw 1;
 		}
 
+		/* Close records file. */
+		fclose(marcFile);
+
 		/* Testing 'toString()'. */
 		{
 			printf("Testing 'toString()'.\n");
 
 			std::string textRecord = marcRecord.toString();
 			printf("%s", textRecord.c_str());
+
+			printf("Done.\n\n");
+		}
+
+		/* Testing getLabel(). */
+		{
+			printf("Testing 'getLabel()'.\n");
+
+			MarcRecord::Label recordLabel = marcRecord.getLabel();
+			printf("Record status: %c\n", recordLabel.recordStatus);
+			printf("Record type: %c\n", recordLabel.recordType);
+			printf("Bibliographic level: %c\n", recordLabel.bibliographicLevel);
+
+			printf("Done.\n\n");
+		}
+
+		/* Testing setLabel(). */
+		{
+			printf("Testing 'setLabel()'.\n");
+
+			MarcRecord::Label recordLabel = marcRecord.getLabel();
+			recordLabel.recordStatus = 'x';
+			recordLabel.recordType = 'y';
+			recordLabel.bibliographicLevel = 'z';
+			marcRecord.setLabel(recordLabel);
+
+			MarcRecord::Label newRecordLabel = marcRecord.getLabel();
+			printf("Record status: %c\n", newRecordLabel.recordStatus);
+			printf("Record type: %c\n", newRecordLabel.recordType);
+			printf("Bibliographic level: %c\n", newRecordLabel.bibliographicLevel);
 
 			printf("Done.\n\n");
 		}
@@ -97,8 +130,8 @@ int main(int argc, char *argv[])
 						(*fieldRef)->tag.c_str(),
 						(*fieldRef)->ind1, (*fieldRef)->ind2,
 						(*subfieldRef)->id, (*subfieldRef)->data.c_str());
-// (*fieldRef)->tag = "999";
-// (*subfieldRef)->data = "456";
+					// (*fieldRef)->tag = "999";
+					// (*subfieldRef)->data = "456";
 				}
 			}
 
@@ -131,7 +164,8 @@ int main(int argc, char *argv[])
 			MarcRecord::FieldRef fieldRef = marcRecord.getField("461");
 			MarcRecord::EmbeddedFieldList embeddedFieldList =
 				fieldRef->getEmbeddedFields("801");
-			printf("Found embedded fields: %u\n", (unsigned int) embeddedFieldList.size());
+			printf("Found embedded fields: %u\n",
+				(unsigned int) embeddedFieldList.size());
 			for (MarcRecord::EmbeddedFieldRef subfieldList = embeddedFieldList.begin();
 				subfieldList != embeddedFieldList.end();
 				subfieldList++)
@@ -152,6 +186,7 @@ int main(int argc, char *argv[])
 		/* Testing 'getEmbeddedField()', 'getEmbeddedData()'. */
 		{
 			printf("Testing 'getEmbeddedField()', 'getEmbeddedData()'.\n");
+
 			MarcRecord::FieldRef fieldRef = marcRecord.getField("461");
 			MarcRecord::SubfieldPtrList subfieldList =
 				fieldRef->getEmbeddedField("001");
@@ -165,10 +200,41 @@ int main(int argc, char *argv[])
 				printf("Embedded field 461 <001>: '%s'\n",
 					(*subfieldRef)->getEmbeddedData().c_str());
 			}
+
 			printf("Done.\n\n");
 		}
 
-		fclose(marcFile);
+		/* Testing 'addField()', 'addFieldBefore()',
+		   'addSubfield()', 'addSubfieldBefore()'. */
+		{
+			printf("Testing 'addField()', 'addFieldBefore()', "
+				"'addSubfield()', 'addSubfieldBefore()'.\n");
+
+			MarcRecord newMarcRecord(MarcRecord::UNIMARC);
+			MarcRecord::FieldRef fieldRef = newMarcRecord.addField(
+				MarcRecord::Field("999", '3', '4'));
+			MarcRecord::SubfieldRef subfieldRef = fieldRef->addSubfield(
+				MarcRecord::Subfield('z', "zzz"));
+			fieldRef->addSubfieldBefore(MarcRecord::Subfield('y', "yyy"), subfieldRef);
+			fieldRef = newMarcRecord.addFieldBefore(
+				MarcRecord::Field("998", '1', '2'), fieldRef);
+			fieldRef->addSubfield(MarcRecord::Subfield('a', "aaa"));
+
+			fieldRef = newMarcRecord.getField("999");
+			if (fieldRef == newMarcRecord.nullField()) {
+				throw "field not found";
+			}
+
+			subfieldRef = fieldRef->getSubfield('z');
+			if (subfieldRef == fieldRef->nullSubfield()) {
+				throw "subfield not found";
+			}
+
+			std::string textRecord = newMarcRecord.toString();
+			printf("%s", textRecord.c_str());
+
+			printf("Done.\n\n");
+		}
 	} catch (const char *errorMessage) {
 		if (marcFile != NULL)
 			fclose(marcFile);
@@ -182,4 +248,3 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-

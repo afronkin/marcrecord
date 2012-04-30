@@ -36,9 +36,19 @@
 #include "marcrecord.h"
 
 /*
+ * Constructor.
+ */
+MarcRecord::Subfield::Subfield(char newId, std::string newData)
+{
+	clear();
+	id = newId;
+	data = newData;
+}
+
+/*
  * Clear subfield data.
  */
-void MarcRecord::Subfield::clear()
+void MarcRecord::Subfield::clear(void)
 {
 	id = ' ';
 	data.erase();
@@ -47,7 +57,7 @@ void MarcRecord::Subfield::clear()
 /*
  * Check presence of embedded field.
  */
-bool MarcRecord::Subfield::isEmbedded()
+bool MarcRecord::Subfield::isEmbedded(void)
 {
 	return (id == '1' ? true : false);
 }
@@ -55,7 +65,7 @@ bool MarcRecord::Subfield::isEmbedded()
 /*
  * Get tag of embedded field.
  */
-std::string MarcRecord::Subfield::getEmbeddedTag()
+std::string MarcRecord::Subfield::getEmbeddedTag(void)
 {
 	if (id != '1') {
 		return "";
@@ -67,7 +77,7 @@ std::string MarcRecord::Subfield::getEmbeddedTag()
 /*
  * Get indicator 1 of embedded field.
  */
-char MarcRecord::Subfield::getEmbeddedInd1()
+char MarcRecord::Subfield::getEmbeddedInd1(void)
 {
 	if (id != '1' || data.substr(0, 3) < "010") {
 		return '?';
@@ -79,7 +89,7 @@ char MarcRecord::Subfield::getEmbeddedInd1()
 /*
  * Get indicator 2 of embedded field.
  */
-char MarcRecord::Subfield::getEmbeddedInd2()
+char MarcRecord::Subfield::getEmbeddedInd2(void)
 {
 	if (id != '1' || data.substr(0, 3) < "010") {
 		return '?';
@@ -91,7 +101,7 @@ char MarcRecord::Subfield::getEmbeddedInd2()
 /*
  * Get data of embedded field.
  */
-std::string MarcRecord::Subfield::getEmbeddedData()
+std::string MarcRecord::Subfield::getEmbeddedData(void)
 {
 	if (id != '1' || data.substr(0, 3) >= "010") {
 		return "";
@@ -99,4 +109,3 @@ std::string MarcRecord::Subfield::getEmbeddedData()
 
 	return data.substr(3);
 }
-

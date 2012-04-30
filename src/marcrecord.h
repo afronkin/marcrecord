@@ -33,22 +33,22 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if !defined(MARCREC_H)
-#define MARCREC_H
+#if !defined(MARCRECORD_H)
+#define MARCRECORD_H
 
-#include <string>
 #include <list>
+#include <string>
 
 /*
  * MARC record class.
  */
 class MarcRecord {
 public:
-	/* Enum of MARC record types. */
+	/* Enum of MARC record format variants. */
 	typedef enum {
 		UNIMARC = 1,
 		MARC21 = 2
-	} RecordType;
+	} FormatVariant;
 
 	/* Enum of error codes. */
 	typedef enum {
@@ -60,7 +60,7 @@ public:
 	#pragma pack(1)
 
 	/* Structure of MARC record label. */
-	struct RecordLabel {
+	struct Label {
 		// [ 0] Record length.
 		char recordLength[5];
 		// [ 5] Record status.
@@ -95,16 +95,6 @@ public:
 		char undefined3;
 	};
 
-	/* Structure of record directory entry. */
-	struct RecordDirectoryEntry {
-		// Field tag.
-		char fieldTag[3];
-		// Field length.
-		char fieldLength[4];
-		// Field starting position.
-		char fieldStartingPosition[5];
-	};
-
 	#pragma pack(pop)
 
 	/* MARC field class. */
@@ -131,11 +121,11 @@ public:
 	typedef EmbeddedFieldList::iterator EmbeddedFieldRef;
 
 private:
-	/* Type of record. */
-	RecordType recordType;
+	/* Variant of record format. */
+	FormatVariant formatVariant;
 
 	/* Record label. */
-	RecordLabel label;
+	Label label;
 	/* List of fields. */
 	FieldList fieldList;
 
@@ -150,13 +140,16 @@ private:
 public:
 	/* Constructors and destructor. */
 	MarcRecord();
-	MarcRecord(RecordType newRecordType);
+	MarcRecord(FormatVariant newFormatVariant);
 	~MarcRecord();
 
 	/* Clear record. */
-	void clear();
-	/* Set record type. */
-	void setType(RecordType newRecordType);
+	void clear(void);
+
+	/* Get record format variant. */
+	FormatVariant getFormatVariant(void);
+	/* Set record format variant. */
+	void setFormatVariant(FormatVariant newFormatVariant);
 
 	/* Read record from ISO 2709 file. */
 	bool readIso2709(FILE *marcFile, const char *encoding = "UTF-8");
@@ -165,18 +158,28 @@ public:
 	/* Parse record from ISO 2709 buffer. */
 	bool parseIso2709(const char *recordBuf, const char *encoding = "UTF-8");
 
+	/* Get record label. */
+	Label getLabel(void);
+	/* Set record label. */
+	void setLabel(Label &newLabel);
+
 	/* Get list of fields. */
 	FieldPtrList getFields(std::string fieldTag = "");
 	/* Get field. */
 	FieldRef getField(std::string fieldTag);
 
+	/* Add field to the end of record. */
+	FieldRef addField(Field field);
+	/* Add field to the record before specified field. */
+	FieldRef addFieldBefore(Field field, FieldRef nextFieldRef);
+
 	/* Format record to string for printing. */
-	std::string toString();
+	std::string toString(void);
 	/* Format field to string for printing. */
 	std::string toString(Field field);
 
 	/* Return null field value. */
-	inline FieldRef nullField()
+	inline FieldRef nullField(void)
 	{
 		return fieldList.end();
 	}
@@ -199,6 +202,9 @@ public:
 	SubfieldList subfieldList;
 
 public:
+	/* Constructor. */
+	Field(std::string newTag = "", char newInd1 = ' ', char newInd2 = ' ');
+
 	/* Clear field data. */
 	void clear();
 
@@ -211,6 +217,11 @@ public:
 	EmbeddedFieldList getEmbeddedFields(std::string fieldTag = "");
 	/* Get embedded field. */
 	SubfieldPtrList getEmbeddedField(std::string fieldTag);
+
+	/* Add subfield to the end of field. */
+	SubfieldRef addSubfield(Subfield subfield);
+	/* Add subfield to the field before specified subfield. */
+	SubfieldRef addSubfieldBefore(Subfield subfield, SubfieldRef nextSubfieldRef);
 
 	/* Return null subfield value. */
 	inline SubfieldRef nullSubfield()
@@ -230,19 +241,22 @@ public:
 	std::string data;
 
 public:
+	/* Constructor. */
+	Subfield(char newId = ' ', std::string newData = "");
+
 	/* Clear subfield data. */
-	void clear();
+	void clear(void);
 
 	/* Check presence of embedded field. */
-	bool isEmbedded();
+	bool isEmbedded(void);
 	/* Get tag of embedded field. */
-	std::string getEmbeddedTag();
+	std::string getEmbeddedTag(void);
 	/* Get indicator 1 of embedded field. */
-	char getEmbeddedInd1();
+	char getEmbeddedInd1(void);
 	/* Get indicator 2 of embedded field. */
-	char getEmbeddedInd2();
+	char getEmbeddedInd2(void);
 	/* Get data of embedded field. */
-	std::string getEmbeddedData();
+	std::string getEmbeddedData(void);
 };
 
-#endif /* MARCREC_H */
+#endif /* MARCRECORD_H */

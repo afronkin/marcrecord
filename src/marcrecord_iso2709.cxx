@@ -35,6 +35,21 @@
 
 #include "marcrecord.h"
 
+#pragma pack(push)
+#pragma pack(1)
+
+/* Structure of record directory entry. */
+struct RecordDirectoryEntry {
+	// Field tag.
+	char fieldTag[3];
+	// Field length.
+	char fieldLength[4];
+	// Field starting position.
+	char fieldStartingPosition[5];
+};
+
+#pragma pack(pop)
+
 /*
  * Read record from ISO 2709 file.
  */
@@ -96,7 +111,7 @@ bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
 
 	try {
 		/* Copy record label. */
-		memcpy(&label, recordBuf, sizeof(RecordLabel));
+		memcpy(&label, recordBuf, sizeof(Label));
 
 		/* Get base address of data. */
 		if (sscanf(label.baseAddress, "%05d", &baseAddress) != 1) {
@@ -104,16 +119,18 @@ bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
 		}
 
 		/* Get number of fields. */
-		numFields = (baseAddress - sizeof(RecordLabel) - 1) /
+		numFields = (baseAddress - sizeof(Label) - 1) /
 			sizeof(RecordDirectoryEntry);
 
 		/* Parse list of fields. */
-		directoryEntry = (RecordDirectoryEntry *) (recordBuf + sizeof(RecordLabel));
+		directoryEntry = (RecordDirectoryEntry *) (recordBuf + sizeof(Label));
 		recordData = recordBuf + baseAddress;
 		for (fieldNo = 0; fieldNo < numFields; fieldNo++, directoryEntry++) {
 			/* Parse directory entry. */
 			fieldTag.assign(directoryEntry->fieldTag, 0, 3);
-			if (sscanf(directoryEntry->fieldLength, "%4d%5d", &fieldLength, &fieldStartPos) != 2) {
+			if (sscanf(directoryEntry->fieldLength, "%4d%5d",
+				&fieldLength, &fieldStartPos) != 2)
+			{
 				throw ERROR;
 			}
 

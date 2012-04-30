@@ -47,13 +47,13 @@ int snprintf(std::string &s, size_t n, const char *format, ...);
  */
 MarcRecord::MarcRecord()
 {
-	recordType = UNIMARC;
+	formatVariant = UNIMARC;
 	clear();
 }
 
-MarcRecord::MarcRecord(RecordType newRecordType)
+MarcRecord::MarcRecord(FormatVariant newFormatVariant)
 {
-	setType(newRecordType);
+	setFormatVariant(newFormatVariant);
 	clear();
 }
 
@@ -67,7 +67,7 @@ MarcRecord::~MarcRecord()
 /*
  * Clear record.
  */
-void MarcRecord::clear()
+void MarcRecord::clear(void)
 {
 	/* Clear field list. */
 	fieldList.clear();
@@ -92,11 +92,35 @@ void MarcRecord::clear()
 }
 
 /*
- * Set record type.
+ * Get record format variant.
  */
-void MarcRecord::setType(RecordType newRecordType)
+MarcRecord::FormatVariant MarcRecord::getFormatVariant(void)
 {
-	recordType = newRecordType;
+	return formatVariant;
+}
+
+/*
+ * Set record format variant.
+ */
+void MarcRecord::setFormatVariant(FormatVariant newFormatVariant)
+{
+	formatVariant = newFormatVariant;
+}
+
+/*
+ * Get record label.
+ */
+MarcRecord::Label MarcRecord::getLabel(void)
+{
+	return label;
+}
+
+/*
+ * Set record label.
+ */
+void MarcRecord::setLabel(Label &newLabel)
+{
+	label = newLabel;
 }
 
 /*
@@ -139,9 +163,29 @@ MarcRecord::FieldRef MarcRecord::getField(std::string fieldTag)
 }
 
 /*
+ * Add field to the end of record.
+ */
+MarcRecord::FieldRef MarcRecord::addField(Field field)
+{
+	/* Append field to the list. */
+	FieldRef fieldRef = fieldList.insert(fieldList.end(), field);
+	return fieldRef;
+}
+
+/*
+ * Add field to the record before specified field.
+ */
+MarcRecord::FieldRef MarcRecord::addFieldBefore(Field field, FieldRef nextFieldRef)
+{
+	/* Append field to the list. */
+	FieldRef fieldRef = fieldList.insert(nextFieldRef, field);
+	return fieldRef;
+}
+
+/*
  * Format record to string for printing.
  */
-std::string MarcRecord::toString()
+std::string MarcRecord::toString(void)
 {
 	std::string textRecord = "";
 	MarcRecord::FieldRef fieldRef;
@@ -177,7 +221,7 @@ std::string MarcRecord::toString(Field field)
 		for (subfieldRef = field.subfieldList.begin();
 			subfieldRef != field.subfieldList.end(); subfieldRef++)
 		{
-			if (recordType == UNIMARC && subfieldRef->id == '1') {
+			if (formatVariant == UNIMARC && subfieldRef->id == '1') {
 				/* Print header of embedded field. */
 				snprintf(textField, 4, " $%c ", subfieldRef->id);
 				if (subfieldRef->getEmbeddedTag() < "010") {

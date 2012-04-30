@@ -36,9 +36,20 @@
 #include "marcrecord.h"
 
 /*
+ * Constructor.
+ */
+MarcRecord::Field::Field(std::string newTag, char newInd1, char newInd2)
+{
+	clear();
+	tag = newTag;
+	ind1 = newInd1;
+	ind2 = newInd2;
+}
+
+/*
  * Clear field data.
  */
-void MarcRecord::Field::clear()
+void MarcRecord::Field::clear(void)
 {
 	tag = "";
 	ind1 = ' ';
@@ -150,3 +161,23 @@ MarcRecord::SubfieldPtrList MarcRecord::Field::getEmbeddedField(std::string fiel
 	return embeddedSubfieldList;
 }
 
+/*
+ * Add subfield to the end of field.
+ */
+MarcRecord::SubfieldRef MarcRecord::Field::addSubfield(Subfield subfield)
+{
+	/* Append subfield to the list. */
+	SubfieldRef subfieldRef = subfieldList.insert(subfieldList.end(), subfield);
+	return subfieldRef;
+}
+
+/*
+ * Add subfield to the field before specified subfield.
+ */
+MarcRecord::SubfieldRef MarcRecord::Field::addSubfieldBefore(Subfield subfield,
+	SubfieldRef nextSubfieldRef)
+{
+	/* Append subfield to the list. */
+	SubfieldRef subfieldRef = subfieldList.insert(nextSubfieldRef, subfield);
+	return subfieldRef;
+}
