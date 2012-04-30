@@ -55,47 +55,9 @@ struct RecordDirectoryEntry {
 #pragma pack(pop)
 
 /*
- * Read record from ISO 2709 file.
- */
-bool MarcRecord::readIso2709(FILE *marcFile, const char *encoding)
-{
-	int symbol;
-	char recordBuf[100000];
-	unsigned int recordLen;
-
-	/* Skip possible wrong symbols. */
-	do {
-		symbol = fgetc(marcFile);
-	} while (symbol >= 0 && isdigit(symbol) == 0);
-
-	if (symbol < 0) {
-		return false;
-	}
-
-	/* Read record length. */
-	recordBuf[0] = (char) symbol;
-	if (fread(recordBuf + 1, 1, 4, marcFile) != 4) {
-		return false;
-	}
-
-	/* Parse record length. */
-	if (sscanf(recordBuf, "%5d", &recordLen) != 1) {
-		return false;
-	}
-
-	/* Read record. */
-	if (fread(recordBuf + 5, 1, recordLen - 5, marcFile) != recordLen - 5) {
-		return false;
-	}
-
-	/* Parse record. */
-	return parseIso2709(recordBuf, encoding);
-}
-
-/*
  * Parse record from ISO 2709 buffer.
  */
-bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
+bool MarcRecord::parseRecordIso2709(const char *recordBuf, const char *encoding)
 {
 	unsigned int baseAddress, numFields;
 	RecordDirectoryEntry *directoryEntry;
@@ -131,7 +93,7 @@ bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
 			}
 
 			/* Parse field. */
-			field = parseField(fieldTag,
+			field = parseFieldIso2709(fieldTag,
 				recordData + fieldStartPos, fieldLength, encoding);
 			/* Append field to list. */
 			fieldList.push_back(field);
@@ -147,9 +109,9 @@ bool MarcRecord::parseIso2709(const char *recordBuf, const char *encoding)
 }
 
 /*
- * Parse field.
+ * Parse field from ISO 2709 buffer.
  */
-MarcRecord::Field MarcRecord::parseField(std::string fieldTag,
+MarcRecord::Field MarcRecord::parseFieldIso2709(std::string fieldTag,
 	const char *fieldData, unsigned int fieldLength, const char *encoding)
 {
 	Field field;
@@ -201,9 +163,47 @@ MarcRecord::Field MarcRecord::parseField(std::string fieldTag,
 }
 
 /*
+ * Read record from ISO 2709 file.
+ */
+bool MarcRecord::readIso2709(FILE *inputFile, const char *encoding)
+{
+	int symbol;
+	char recordBuf[100000];
+	unsigned int recordLen;
+
+	/* Skip possible wrong symbols. */
+	do {
+		symbol = fgetc(inputFile);
+	} while (symbol >= 0 && isdigit(symbol) == 0);
+
+	if (symbol < 0) {
+		return false;
+	}
+
+	/* Read record length. */
+	recordBuf[0] = (char) symbol;
+	if (fread(recordBuf + 1, 1, 4, inputFile) != 4) {
+		return false;
+	}
+
+	/* Parse record length. */
+	if (sscanf(recordBuf, "%5d", &recordLen) != 1) {
+		return false;
+	}
+
+	/* Read record. */
+	if (fread(recordBuf + 5, 1, recordLen - 5, inputFile) != recordLen - 5) {
+		return false;
+	}
+
+	/* Parse record. */
+	return parseRecordIso2709(recordBuf, encoding);
+}
+
+/*
  * Write record to ISO 2709 file.
  */
-bool MarcRecord::writeIso2709(FILE *marcFile, const char *encoding)
+bool MarcRecord::writeIso2709(FILE *outputFile, const char *encoding)
 {
 	char recordBuf[100000];
 
@@ -273,7 +273,7 @@ bool MarcRecord::writeIso2709(FILE *marcFile, const char *encoding)
 	memcpy(recordBuf, recordLengthBuf, 5);
 
 	/* Write record buffer to file. */
-	fwrite(recordBuf, recordLength, 1, marcFile);
+	fwrite(recordBuf, recordLength, 1, outputFile);
 
 	return true;
 }

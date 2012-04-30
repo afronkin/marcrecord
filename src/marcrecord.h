@@ -133,8 +133,8 @@ public:
 	ErrorCode errorCode;
 
 private:
-	/* Parse field. */
-	inline Field parseField(std::string fieldTag,
+	/* Parse field from ISO 2709 buffer. */
+	inline Field parseFieldIso2709(std::string fieldTag,
 		const char *fieldData, unsigned int fieldLength, const char *encoding);
 
 public:
@@ -151,12 +151,12 @@ public:
 	/* Set record format variant. */
 	void setFormatVariant(FormatVariant newFormatVariant);
 
-	/* Read record from ISO 2709 file. */
-	bool readIso2709(FILE *marcFile, const char *encoding = "UTF-8");
 	/* Parse record from ISO 2709 buffer. */
-	bool parseIso2709(const char *recordBuf, const char *encoding = "UTF-8");
+	bool parseRecordIso2709(const char *recordBuf, const char *encoding = "UTF-8");
+	/* Read record from ISO 2709 file. */
+	bool readIso2709(FILE *inputFile, const char *encoding = "UTF-8");
 	/* Write record to ISO 2709 file. */
-	bool writeIso2709(FILE *marcFile, const char *encoding = "UTF-8");
+	bool writeIso2709(FILE *outputFile, const char *encoding = "UTF-8");
 
 	/* Get record label. */
 	Label getLabel(void);
