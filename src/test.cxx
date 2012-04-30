@@ -116,22 +116,21 @@ int main(int argc, char *argv[])
 		{
 			printf("Testing 'getFields()', 'getSubfields()'.\n");
 
-			MarcRecord::FieldPtrList fieldList = marcRecord.getFields("801");
-			for (MarcRecord::FieldPtrRef fieldRef = fieldList.begin();
-				fieldRef != fieldList.end();
-				fieldRef++)
+			MarcRecord::FieldRefList fieldList = marcRecord.getFields("801");
+			for (MarcRecord::FieldRefIt fieldIt = fieldList.begin();
+				fieldIt != fieldList.end(); fieldIt++)
 			{
-				MarcRecord::SubfieldPtrList subfieldList =
-					(*fieldRef)->getSubfields('b');
+				MarcRecord::SubfieldRefList subfieldList =
+					(*fieldIt)->getSubfields('b');
 				if (!subfieldList.empty()) {
-					MarcRecord::SubfieldPtrRef subfieldRef =
+					MarcRecord::SubfieldRefIt subfieldIt =
 						subfieldList.begin();
 					printf("%3s [%c%c] $%c %s\n",
-						(*fieldRef)->tag.c_str(),
-						(*fieldRef)->ind1, (*fieldRef)->ind2,
-						(*subfieldRef)->id, (*subfieldRef)->data.c_str());
-					// (*fieldRef)->tag = "999";
-					// (*subfieldRef)->data = "456";
+						(*fieldIt)->tag.c_str(),
+						(*fieldIt)->ind1, (*fieldIt)->ind2,
+						(*subfieldIt)->id, (*subfieldIt)->data.c_str());
+					// (*fieldIt)->tag = "999";
+					// (*subfieldIt)->data = "456";
 				}
 			}
 
@@ -142,18 +141,18 @@ int main(int argc, char *argv[])
 		{
 			printf("Testing 'getField()', 'getSubfield()'.\n");
 
-			MarcRecord::FieldRef fieldRef = marcRecord.getField("210");
-			if (fieldRef == marcRecord.nullField()) {
+			MarcRecord::FieldIt fieldIt = marcRecord.getField("210");
+			if (fieldIt == marcRecord.nullField()) {
 				throw "field not found";
 			}
 
-			MarcRecord::SubfieldRef subfieldRef = fieldRef->getSubfield('d');
-			if (subfieldRef == fieldRef->nullSubfield()) {
+			MarcRecord::SubfieldIt subfieldIt = fieldIt->getSubfield('d');
+			if (subfieldIt == fieldIt->nullSubfield()) {
 				throw "subfield not found";
 			}
 
 			printf("Subfield 210d: '%s'\n",
-				subfieldRef->data.c_str());
+				subfieldIt->data.c_str());
 
 			printf("Done.\n\n");
 		}
@@ -161,22 +160,21 @@ int main(int argc, char *argv[])
 		/* Testing getEmbeddedFields(). */
 		{
 			printf("Testing 'getEmbeddedFields()'.\n");
-			MarcRecord::FieldRef fieldRef = marcRecord.getField("461");
+			MarcRecord::FieldIt fieldIt = marcRecord.getField("461");
 			MarcRecord::EmbeddedFieldList embeddedFieldList =
-				fieldRef->getEmbeddedFields("801");
+				fieldIt->getEmbeddedFields("801");
 			printf("Found embedded fields: %u\n",
 				(unsigned int) embeddedFieldList.size());
-			for (MarcRecord::EmbeddedFieldRef subfieldList = embeddedFieldList.begin();
+			for (MarcRecord::EmbeddedFieldIt subfieldList = embeddedFieldList.begin();
 				subfieldList != embeddedFieldList.end();
 				subfieldList++)
 			{
 				printf("Embedded field 461 <801>:");
-				for (MarcRecord::SubfieldPtrRef subfieldRef = subfieldList->begin();
-					subfieldRef != subfieldList->end();
-					subfieldRef++)
+				for (MarcRecord::SubfieldRefIt subfieldIt = subfieldList->begin();
+					subfieldIt != subfieldList->end(); subfieldIt++)
 				{
 					printf(" $%c '%s'",
-						(*subfieldRef)->id, (*subfieldRef)->data.c_str());
+						(*subfieldIt)->id, (*subfieldIt)->data.c_str());
 				}
 				printf("\n");
 			}
@@ -187,18 +185,18 @@ int main(int argc, char *argv[])
 		{
 			printf("Testing 'getEmbeddedField()', 'getEmbeddedData()'.\n");
 
-			MarcRecord::FieldRef fieldRef = marcRecord.getField("461");
-			MarcRecord::SubfieldPtrList subfieldList =
-				fieldRef->getEmbeddedField("001");
+			MarcRecord::FieldIt fieldIt = marcRecord.getField("461");
+			MarcRecord::SubfieldRefList subfieldList =
+				fieldIt->getEmbeddedField("001");
 			if (subfieldList.empty() == true) {
 				throw "embedded field not found";
 			}
-			for (MarcRecord::SubfieldPtrRef subfieldRef = subfieldList.begin();
-				subfieldRef != subfieldList.end();
-				subfieldRef++)
+			for (MarcRecord::SubfieldRefIt subfieldIt = subfieldList.begin();
+				subfieldIt != subfieldList.end();
+				subfieldIt++)
 			{
 				printf("Embedded field 461 <001>: '%s'\n",
-					(*subfieldRef)->getEmbeddedData().c_str());
+					(*subfieldIt)->getEmbeddedData().c_str());
 			}
 
 			printf("Done.\n\n");
@@ -211,24 +209,45 @@ int main(int argc, char *argv[])
 				"'addSubfield()', 'addSubfieldBefore()'.\n");
 
 			MarcRecord newMarcRecord(MarcRecord::UNIMARC);
-			MarcRecord::FieldRef fieldRef = newMarcRecord.addField(
-				MarcRecord::Field("999", '3', '4'));
-			MarcRecord::SubfieldRef subfieldRef = fieldRef->addSubfield(
-				MarcRecord::Subfield('z', "zzz"));
-			fieldRef->addSubfieldBefore(MarcRecord::Subfield('y', "yyy"), subfieldRef);
-			fieldRef = newMarcRecord.addFieldBefore(
-				MarcRecord::Field("998", '1', '2'), fieldRef);
-			fieldRef->addSubfield(MarcRecord::Subfield('a', "aaa"));
 
-			fieldRef = newMarcRecord.getField("999");
-			if (fieldRef == newMarcRecord.nullField()) {
-				throw "field not found";
-			}
+			MarcRecord::FieldIt fieldIt = newMarcRecord.addField(
+				MarcRecord::Field("997", '3', '4'));
+			MarcRecord::SubfieldIt subfieldIt = fieldIt->addSubfield(
+				MarcRecord::Subfield('c', "ccc"));
+			fieldIt->addSubfieldBefore(subfieldIt, MarcRecord::Subfield('b', "bbb"));
+			fieldIt = newMarcRecord.addFieldBefore(fieldIt,
+				MarcRecord::Field("996", '1', '2'));
+			fieldIt->addSubfield(MarcRecord::Subfield('a', "aaa"));
 
-			subfieldRef = fieldRef->getSubfield('z');
-			if (subfieldRef == fieldRef->nullSubfield()) {
-				throw "subfield not found";
-			}
+			fieldIt = newMarcRecord.addField("999", '3', '4');
+			subfieldIt = fieldIt->addSubfield('n', "nnn");
+			fieldIt->addSubfieldBefore(subfieldIt, 'm', "mmm");
+			fieldIt = newMarcRecord.addFieldBefore(fieldIt, "998", '1', '2');
+			fieldIt->addSubfield(MarcRecord::Subfield('l', "lll"));
+
+			std::string textRecord = newMarcRecord.toString();
+			printf("%s", textRecord.c_str());
+
+			printf("Done.\n\n");
+		}
+
+		/* Testing 'removeField()', 'removeSubfield()'. */
+		{
+			printf("Testing 'removeField()', 'removeSubfield()'.\n");
+
+			MarcRecord newMarcRecord(MarcRecord::UNIMARC);
+			MarcRecord::FieldIt fieldIt;
+			MarcRecord::SubfieldIt subfieldIt;
+
+			fieldIt = newMarcRecord.addField("901", '1', '1');
+			fieldIt->addSubfield('a', "aaa");
+			subfieldIt = fieldIt->addSubfield('b', "bbb");
+			fieldIt->addSubfield('c', "ccc");
+			fieldIt->removeSubfield(subfieldIt);
+
+			fieldIt = newMarcRecord.addField("902", '2', '2');
+			fieldIt->addSubfield('d', "ddd");
+			newMarcRecord.removeField(fieldIt);
 
 			std::string textRecord = newMarcRecord.toString();
 			printf("%s", textRecord.c_str());

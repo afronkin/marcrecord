@@ -126,17 +126,17 @@ void MarcRecord::setLabel(Label &newLabel)
 /*
  * Get list of fields.
  */
-MarcRecord::FieldPtrList MarcRecord::getFields(std::string fieldTag)
+MarcRecord::FieldRefList MarcRecord::getFields(std::string fieldTag)
 {
-	FieldPtrList resultFieldList;
-	FieldRef fieldRef;
+	FieldRefList resultFieldList;
+	FieldIt fieldIt;
 
 	/* Check fields in list. */
-	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
-		fieldRef++)
+	for (fieldIt = fieldList.begin(); fieldIt != fieldList.end();
+		fieldIt++)
 	{
-		if (fieldTag == "" || fieldTag == fieldRef->tag) {
-			resultFieldList.push_back(fieldRef);
+		if (fieldTag == "" || fieldTag == fieldIt->tag) {
+			resultFieldList.push_back(fieldIt);
 		}
 	}
 
@@ -146,16 +146,16 @@ MarcRecord::FieldPtrList MarcRecord::getFields(std::string fieldTag)
 /*
  * Get field.
  */
-MarcRecord::FieldRef MarcRecord::getField(std::string fieldTag)
+MarcRecord::FieldIt MarcRecord::getField(std::string fieldTag)
 {
-	FieldRef fieldRef;
+	FieldIt fieldIt;
 
 	/* Check fields in list. */
-	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end();
-		fieldRef++)
+	for (fieldIt = fieldList.begin(); fieldIt != fieldList.end();
+		fieldIt++)
 	{
-		if (fieldTag == "" || fieldTag == fieldRef->tag) {
-			return fieldRef;
+		if (fieldTag == "" || fieldTag == fieldIt->tag) {
+			return fieldIt;
 		}
 	}
 
@@ -165,21 +165,47 @@ MarcRecord::FieldRef MarcRecord::getField(std::string fieldTag)
 /*
  * Add field to the end of record.
  */
-MarcRecord::FieldRef MarcRecord::addField(Field field)
+MarcRecord::FieldIt MarcRecord::addField(Field field)
 {
 	/* Append field to the list. */
-	FieldRef fieldRef = fieldList.insert(fieldList.end(), field);
-	return fieldRef;
+	FieldIt fieldIt = fieldList.insert(fieldList.end(), field);
+	return fieldIt;
+}
+
+MarcRecord::FieldIt MarcRecord::addField(std::string fieldTag, char fieldInd1, char fieldInd2)
+{
+	/* Append field to the list. */
+	FieldIt fieldIt = fieldList.insert(fieldList.end(),
+		Field(fieldTag, fieldInd1, fieldInd2));
+	return fieldIt;
 }
 
 /*
  * Add field to the record before specified field.
  */
-MarcRecord::FieldRef MarcRecord::addFieldBefore(Field field, FieldRef nextFieldRef)
+MarcRecord::FieldIt MarcRecord::addFieldBefore(FieldIt nextFieldIt, Field field)
 {
 	/* Append field to the list. */
-	FieldRef fieldRef = fieldList.insert(nextFieldRef, field);
-	return fieldRef;
+	FieldIt fieldIt = fieldList.insert(nextFieldIt, field);
+	return fieldIt;
+}
+
+MarcRecord::FieldIt MarcRecord::addFieldBefore(FieldIt nextFieldIt,
+	std::string fieldTag, char fieldInd1, char fieldInd2)
+{
+	/* Append field to the list. */
+	FieldIt fieldIt = fieldList.insert(nextFieldIt,
+		Field(fieldTag, fieldInd1, fieldInd2));
+	return fieldIt;
+}
+
+/*
+ * Remove field from the record.
+ */
+void MarcRecord::removeField(FieldIt fieldIt)
+{
+	/* Remove field from the list. */
+	fieldList.erase(fieldIt);
 }
 
 /*
@@ -188,12 +214,12 @@ MarcRecord::FieldRef MarcRecord::addFieldBefore(Field field, FieldRef nextFieldR
 std::string MarcRecord::toString(void)
 {
 	std::string textRecord = "";
-	MarcRecord::FieldRef fieldRef;
+	MarcRecord::FieldIt fieldIt;
 
 	/* Enumerate all fields. */
-	for (fieldRef = fieldList.begin(); fieldRef != fieldList.end(); fieldRef++) {
+	for (fieldIt = fieldList.begin(); fieldIt != fieldList.end(); fieldIt++) {
 		/* Print field. */
-		textRecord += toString(*fieldRef) + "\n";
+		textRecord += toString(*fieldIt) + "\n";
 	}
 
 	return textRecord;
@@ -205,7 +231,7 @@ std::string MarcRecord::toString(void)
 std::string MarcRecord::toString(Field field)
 {
 	std::string textField = "";
-	MarcRecord::SubfieldRef subfieldRef, embeddedSubfieldRef;
+	MarcRecord::SubfieldIt subfieldIt, embeddedSubfieldIt;
 
 	textField += field.tag;
 
@@ -218,24 +244,24 @@ std::string MarcRecord::toString(Field field)
 		snprintf(textField, 5, " [%c%c]", field.ind1, field.ind2);
 
 		/* Enumerate all subfields. */
-		for (subfieldRef = field.subfieldList.begin();
-			subfieldRef != field.subfieldList.end(); subfieldRef++)
+		for (subfieldIt = field.subfieldList.begin();
+			subfieldIt != field.subfieldList.end(); subfieldIt++)
 		{
-			if (formatVariant == UNIMARC && subfieldRef->id == '1') {
+			if (formatVariant == UNIMARC && subfieldIt->id == '1') {
 				/* Print header of embedded field. */
-				snprintf(textField, 4, " $%c ", subfieldRef->id);
-				if (subfieldRef->getEmbeddedTag() < "010") {
-					textField += "<" + subfieldRef->getEmbeddedTag() + "> "
-						+ subfieldRef->getEmbeddedData();
+				snprintf(textField, 4, " $%c ", subfieldIt->id);
+				if (subfieldIt->getEmbeddedTag() < "010") {
+					textField += "<" + subfieldIt->getEmbeddedTag() + "> "
+						+ subfieldIt->getEmbeddedData();
 				} else {
-					textField += "<" + subfieldRef->getEmbeddedTag() + "> ["
-						+ subfieldRef->getEmbeddedInd1()
-						+ subfieldRef->getEmbeddedInd2() + "]";
+					textField += "<" + subfieldIt->getEmbeddedTag() + "> ["
+						+ subfieldIt->getEmbeddedInd1()
+						+ subfieldIt->getEmbeddedInd2() + "]";
 				}
 			} else {
 				/* Print regular subfield. */
-				snprintf(textField, 4, " $%c ", subfieldRef->id);
-				textField += subfieldRef->data;
+				snprintf(textField, 4, " $%c ", subfieldIt->id);
+				textField += subfieldIt->data;
 			}
 		}
 	}
@@ -264,4 +290,3 @@ int snprintf(std::string &s, size_t n, const char *format, ...)
 
 	return resultCode;
 }
-

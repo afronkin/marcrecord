@@ -104,21 +104,21 @@ public:
 
 	/* List of fields. */
 	typedef std::list<Field> FieldList;
-	typedef FieldList::iterator FieldRef;
+	typedef FieldList::iterator FieldIt;
 	/* List of fields iterators. */
-	typedef std::list<FieldRef> FieldPtrList;
-	typedef FieldPtrList::iterator FieldPtrRef;
+	typedef std::list<FieldIt> FieldRefList;
+	typedef FieldRefList::iterator FieldRefIt;
 
 	/* List of subfields. */
 	typedef std::list<Subfield> SubfieldList;
-	typedef SubfieldList::iterator SubfieldRef;
+	typedef SubfieldList::iterator SubfieldIt;
 	/* List of subfields iterators. */
-	typedef std::list<SubfieldRef> SubfieldPtrList;
-	typedef SubfieldPtrList::iterator SubfieldPtrRef;
+	typedef std::list<SubfieldIt> SubfieldRefList;
+	typedef SubfieldRefList::iterator SubfieldRefIt;
 
 	/* List of embedded fields. */
-	typedef std::list<SubfieldPtrList> EmbeddedFieldList;
-	typedef EmbeddedFieldList::iterator EmbeddedFieldRef;
+	typedef std::list<SubfieldRefList> EmbeddedFieldList;
+	typedef EmbeddedFieldList::iterator EmbeddedFieldIt;
 
 private:
 	/* Variant of record format. */
@@ -164,14 +164,19 @@ public:
 	void setLabel(Label &newLabel);
 
 	/* Get list of fields. */
-	FieldPtrList getFields(std::string fieldTag = "");
+	FieldRefList getFields(std::string fieldTag = "");
 	/* Get field. */
-	FieldRef getField(std::string fieldTag);
+	FieldIt getField(std::string fieldTag);
 
 	/* Add field to the end of record. */
-	FieldRef addField(Field field);
+	FieldIt addField(Field field);
+	FieldIt addField(std::string fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
 	/* Add field to the record before specified field. */
-	FieldRef addFieldBefore(Field field, FieldRef nextFieldRef);
+	FieldIt addFieldBefore(FieldIt nextFieldIt, Field field);
+	FieldIt addFieldBefore(FieldIt nextFieldIt,
+		std::string fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
+	/* Remove field from the record. */
+	void removeField(FieldIt fieldIt);
 
 	/* Format record to string for printing. */
 	std::string toString(void);
@@ -179,7 +184,7 @@ public:
 	std::string toString(Field field);
 
 	/* Return null field value. */
-	inline FieldRef nullField(void)
+	inline FieldIt nullField(void)
 	{
 		return fieldList.end();
 	}
@@ -209,22 +214,27 @@ public:
 	void clear();
 
 	/* Get list of subfields. */
-	SubfieldPtrList getSubfields(char subfieldId = ' ');
+	SubfieldRefList getSubfields(char subfieldId = ' ');
 	/* Get subfield. */
-	SubfieldRef getSubfield(char subfieldId);
+	SubfieldIt getSubfield(char subfieldId);
 
 	/* Get list of embedded fields. */
 	EmbeddedFieldList getEmbeddedFields(std::string fieldTag = "");
 	/* Get embedded field. */
-	SubfieldPtrList getEmbeddedField(std::string fieldTag);
+	SubfieldRefList getEmbeddedField(std::string fieldTag);
 
 	/* Add subfield to the end of field. */
-	SubfieldRef addSubfield(Subfield subfield);
+	SubfieldIt addSubfield(Subfield subfield);
+	SubfieldIt addSubfield(char subfieldId = ' ', std::string subfieldData = "");
 	/* Add subfield to the field before specified subfield. */
-	SubfieldRef addSubfieldBefore(Subfield subfield, SubfieldRef nextSubfieldRef);
+	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt, Subfield subfield);
+	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt,
+		char subfieldId = ' ', std::string subfieldData = "");
+	/* Remove subfield from the field. */
+	void removeSubfield(SubfieldIt subfieldIt);
 
 	/* Return null subfield value. */
-	inline SubfieldRef nullSubfield()
+	inline SubfieldIt nullSubfield()
 	{
 		return subfieldList.end();
 	}

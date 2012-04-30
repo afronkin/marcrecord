@@ -61,15 +61,15 @@ void MarcRecord::Field::clear(void)
 /*
  * Get list of subfields.
  */
-MarcRecord::SubfieldPtrList MarcRecord::Field::getSubfields(char subfieldId)
+MarcRecord::SubfieldRefList MarcRecord::Field::getSubfields(char subfieldId)
 {
-	SubfieldPtrList resultSubfieldList;
-	SubfieldRef subfieldRef;
+	SubfieldRefList resultSubfieldList;
+	SubfieldIt subfieldIt;
 
 	/* Check subfields in list. */
-	for (subfieldRef = subfieldList.begin(); subfieldRef != subfieldList.end(); subfieldRef++) {
-		if (subfieldId == ' ' || subfieldRef->id == subfieldId) {
-			resultSubfieldList.push_back(subfieldRef);
+	for (subfieldIt = subfieldList.begin(); subfieldIt != subfieldList.end(); subfieldIt++) {
+		if (subfieldId == ' ' || subfieldIt->id == subfieldId) {
+			resultSubfieldList.push_back(subfieldIt);
 		}
 	}
 
@@ -79,14 +79,14 @@ MarcRecord::SubfieldPtrList MarcRecord::Field::getSubfields(char subfieldId)
 /*
  * Get subfield.
  */
-MarcRecord::SubfieldRef MarcRecord::Field::getSubfield(char subfieldId)
+MarcRecord::SubfieldIt MarcRecord::Field::getSubfield(char subfieldId)
 {
-	SubfieldRef subfieldRef;
+	SubfieldIt subfieldIt;
 
 	/* Check subfields in list. */
-	for (subfieldRef = subfieldList.begin(); subfieldRef != subfieldList.end(); subfieldRef++) {
-		if (subfieldId == ' ' || subfieldRef->id == subfieldId) {
-			return subfieldRef;
+	for (subfieldIt = subfieldList.begin(); subfieldIt != subfieldList.end(); subfieldIt++) {
+		if (subfieldId == ' ' || subfieldIt->id == subfieldId) {
+			return subfieldIt;
 		}
 	}
 
@@ -99,27 +99,27 @@ MarcRecord::SubfieldRef MarcRecord::Field::getSubfield(char subfieldId)
 MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(std::string fieldTag)
 {
 	EmbeddedFieldList resultFieldList;
-	SubfieldPtrList embeddedSubfieldList;
+	SubfieldRefList embeddedSubfieldList;
 
 	/* Check subfields in list. */
 	embeddedSubfieldList.clear();
-	for (SubfieldRef subfieldRef = subfieldList.begin();
-		subfieldRef != subfieldList.end(); subfieldRef++)
+	for (SubfieldIt subfieldIt = subfieldList.begin();
+		subfieldIt != subfieldList.end(); subfieldIt++)
 	{
-		if (subfieldRef->id == '1') {
+		if (subfieldIt->id == '1') {
 			if (embeddedSubfieldList.empty() == false) {
 				/* Append embedded field to the result list. */
 				resultFieldList.push_back(embeddedSubfieldList);
 				embeddedSubfieldList.clear();
 			}
 
-			if (fieldTag == "" || fieldTag == subfieldRef->getEmbeddedTag()) {
+			if (fieldTag == "" || fieldTag == subfieldIt->getEmbeddedTag()) {
 				/* Append first subfield of embedded field. */
-				embeddedSubfieldList.push_back(subfieldRef);
+				embeddedSubfieldList.push_back(subfieldIt);
 			}
 		} else if (embeddedSubfieldList.empty() == false) {
 			/* Append subfield to the embedded field. */
-			embeddedSubfieldList.push_back(subfieldRef);
+			embeddedSubfieldList.push_back(subfieldIt);
 		}
 	}
 
@@ -134,27 +134,27 @@ MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(std::string f
 /*
  * Get embedded field.
  */
-MarcRecord::SubfieldPtrList MarcRecord::Field::getEmbeddedField(std::string fieldTag)
+MarcRecord::SubfieldRefList MarcRecord::Field::getEmbeddedField(std::string fieldTag)
 {
-	SubfieldPtrList embeddedSubfieldList;
+	SubfieldRefList embeddedSubfieldList;
 
 	/* Check subfields in list. */
 	embeddedSubfieldList.clear();
-	for (SubfieldRef subfieldRef = subfieldList.begin();
-		subfieldRef != subfieldList.end(); subfieldRef++)
+	for (SubfieldIt subfieldIt = subfieldList.begin();
+		subfieldIt != subfieldList.end(); subfieldIt++)
 	{
-		if (subfieldRef->id == '1') {
+		if (subfieldIt->id == '1') {
 			if (embeddedSubfieldList.empty() == false) {
 				break;
 			}
 
-			if (fieldTag == "" || fieldTag == subfieldRef->getEmbeddedTag()) {
+			if (fieldTag == "" || fieldTag == subfieldIt->getEmbeddedTag()) {
 				/* Append first subfield of embedded field. */
-				embeddedSubfieldList.push_back(subfieldRef);
+				embeddedSubfieldList.push_back(subfieldIt);
 			}
 		} else if (embeddedSubfieldList.empty() == false) {
 			/* Append subfield to the embedded field. */
-			embeddedSubfieldList.push_back(subfieldRef);
+			embeddedSubfieldList.push_back(subfieldIt);
 		}
 	}
 
@@ -164,20 +164,46 @@ MarcRecord::SubfieldPtrList MarcRecord::Field::getEmbeddedField(std::string fiel
 /*
  * Add subfield to the end of field.
  */
-MarcRecord::SubfieldRef MarcRecord::Field::addSubfield(Subfield subfield)
+MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(Subfield subfield)
 {
 	/* Append subfield to the list. */
-	SubfieldRef subfieldRef = subfieldList.insert(subfieldList.end(), subfield);
-	return subfieldRef;
+	SubfieldIt subfieldIt = subfieldList.insert(subfieldList.end(), subfield);
+	return subfieldIt;
+}
+
+MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(char subfieldId, std::string subfieldData)
+{
+	/* Append subfield to the list. */
+	SubfieldIt subfieldIt = subfieldList.insert(subfieldList.end(),
+		Subfield(subfieldId, subfieldData));
+	return subfieldIt;
 }
 
 /*
  * Add subfield to the field before specified subfield.
  */
-MarcRecord::SubfieldRef MarcRecord::Field::addSubfieldBefore(Subfield subfield,
-	SubfieldRef nextSubfieldRef)
+MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
+	Subfield subfield)
 {
 	/* Append subfield to the list. */
-	SubfieldRef subfieldRef = subfieldList.insert(nextSubfieldRef, subfield);
-	return subfieldRef;
+	SubfieldIt subfieldIt = subfieldList.insert(nextSubfieldIt, subfield);
+	return subfieldIt;
+}
+
+MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
+	char subfieldId, std::string subfieldData)
+{
+	/* Append subfield to the list. */
+	SubfieldIt subfieldIt = subfieldList.insert(nextSubfieldIt,
+		Subfield(subfieldId, subfieldData));
+	return subfieldIt;
+}
+
+/*
+ * Remove subfield from the field.
+ */
+void MarcRecord::Field::removeSubfield(SubfieldIt subfieldIt)
+{
+	/* Remove subfield from the list. */
+	subfieldList.erase(subfieldIt);
 }
