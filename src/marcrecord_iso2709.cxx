@@ -61,32 +61,35 @@ bool MarcRecord::parseRecordIso2709(const char *recordBuf, const char *encoding)
 {
 	unsigned int baseAddress, numFields;
 	RecordDirectoryEntry *directoryEntry;
-	const char *recordData, *fieldData;
-	int fieldNo;
+	const char *recordData;
+	unsigned int fieldNo;
 	std::string fieldTag;
 	unsigned int fieldLength, fieldStartPos;
 	Field field;
 
 	try {
-		/* Copy record label. */
-		memcpy(&label, recordBuf, sizeof(struct Label));
+		/* Clear current record data. */
+		clear();
+
+		/* Copy record leader. */
+		memcpy(&leader, recordBuf, sizeof(struct Leader));
 
 		/* Get base address of data. */
-		if (sscanf(label.baseAddress, "%05d", &baseAddress) != 1) {
+		if (sscanf(leader.baseAddress, "%05u", &baseAddress) != 1) {
 			throw ERROR;
 		}
 
 		/* Get number of fields. */
-		numFields = (baseAddress - sizeof(struct Label) - 1) /
+		numFields = (baseAddress - sizeof(struct Leader) - 1) /
 			sizeof(struct RecordDirectoryEntry);
 
 		/* Parse list of fields. */
-		directoryEntry = (RecordDirectoryEntry *) (recordBuf + sizeof(struct Label));
+		directoryEntry = (RecordDirectoryEntry *) (recordBuf + sizeof(struct Leader));
 		recordData = recordBuf + baseAddress;
 		for (fieldNo = 0; fieldNo < numFields; fieldNo++, directoryEntry++) {
 			/* Parse directory entry. */
 			fieldTag.assign(directoryEntry->fieldTag, 0, 3);
-			if (sscanf(directoryEntry->fieldLength, "%4d%5d",
+			if (sscanf(directoryEntry->fieldLength, "%4u%5u",
 				&fieldLength, &fieldStartPos) != 2)
 			{
 				throw ERROR;
@@ -116,7 +119,7 @@ MarcRecord::Field MarcRecord::parseFieldIso2709(std::string fieldTag,
 {
 	Field field;
 	Subfield subfield;
-	int symbolPos, subfieldStartPos;
+	unsigned int symbolPos, subfieldStartPos;
 
 	/* Clear field. */
 	/* field.clear(); */
@@ -127,11 +130,13 @@ MarcRecord::Field MarcRecord::parseFieldIso2709(std::string fieldTag,
 	}
 
 	field.tag = fieldTag;
-	if (field.tag < "010" || fieldLength < 2) {
+	if (fieldTag < "010" || fieldLength < 2) {
 		/* Parse control field. */
+		field.type = Field::CONTROLFIELD;
 		field.data.assign(fieldData, fieldLength);
 	} else {
-		/* Parse regular field. */
+		/* Parse data field. */
+		field.type = Field::DATAFIELD;
 		field.ind1 = fieldData[0];
 		field.ind2 = fieldData[1];
 
@@ -187,7 +192,7 @@ bool MarcRecord::readIso2709(FILE *inputFile, const char *encoding)
 	}
 
 	/* Parse record length. */
-	if (sscanf(recordBuf, "%5d", &recordLen) != 1) {
+	if (sscanf(recordBuf, "%5u", &recordLen) != 1) {
 		return false;
 	}
 
@@ -208,17 +213,17 @@ bool MarcRecord::writeIso2709(FILE *outputFile, const char *encoding)
 	char recordBuf[100000];
 
 	/* Copy record leader to buffer. */
-	memcpy(recordBuf, (char *) &label, sizeof(struct Label));
+	memcpy(recordBuf, (char *) &leader, sizeof(struct Leader));
 
 	/* Calculate base address of data and copy it to record buffer. */
-	unsigned int baseAddress = sizeof(struct Label) + fieldList.size()
+	unsigned int baseAddress = sizeof(struct Leader) + fieldList.size()
 		* sizeof(struct RecordDirectoryEntry) + 1;
 	char baseAddressBuf[6];
 	sprintf(baseAddressBuf, "%05d", baseAddress);
 	memcpy(recordBuf + 12, baseAddressBuf, 5);
 
 	/* Iterate all fields. */
-	char *directoryData = recordBuf + sizeof(struct Label);
+	char *directoryData = recordBuf + sizeof(struct Leader);
 	char *fieldData = recordBuf + baseAddress;
 	for (MarcRecord::FieldIt fieldIt = fieldList.begin();
 		fieldIt != fieldList.end(); fieldIt++)

@@ -38,6 +38,11 @@
 
 #include <list>
 #include <string>
+#include <vector>
+
+#if defined(MARCRECORD_MARCXML)
+#include <expat.h>
+#endif /* MARCRECORD_MARCXML */
 
 /*
  * MARC record class.
@@ -59,8 +64,8 @@ public:
 	#pragma pack(push)
 	#pragma pack(1)
 
-	/* Structure of MARC record label. */
-	struct Label {
+	/* Structure of MARC record leader. */
+	struct Leader {
 		// [ 0] Record length.
 		char recordLength[5];
 		// [ 5] Record status.
@@ -123,14 +128,13 @@ public:
 private:
 	/* Variant of record format. */
 	FormatVariant formatVariant;
+	/* Flag of null-value record (for handling errors and events). */
+	bool nullFlag;
 
-	/* Record label. */
-	Label label;
+	/* Record leader. */
+	Leader leader;
 	/* List of fields. */
 	FieldList fieldList;
-
-public:
-	ErrorCode errorCode;
 
 private:
 	/* Parse field from ISO 2709 buffer. */
@@ -146,6 +150,11 @@ public:
 	/* Clear record. */
 	void clear(void);
 
+	/* Set flag of null-value record. */
+	void setNull(bool nullFlag = true);
+	/* Get flag of null-value record. */
+	bool isNull();
+
 	/* Get record format variant. */
 	FormatVariant getFormatVariant(void);
 	/* Set record format variant. */
@@ -158,10 +167,11 @@ public:
 	/* Write record to ISO 2709 file. */
 	bool writeIso2709(FILE *outputFile, const char *encoding = "UTF-8");
 
-	/* Get record label. */
-	Label getLabel(void);
-	/* Set record label. */
-	void setLabel(Label &newLabel);
+	/* Get record leader. */
+	Leader getLeader(void);
+	/* Set record leader. */
+	void setLeader(Leader &leader);
+	void setLeader(std::string leaderData = "");
 
 	/* Get list of fields. */
 	FieldRefList getFields(std::string fieldTag = "");
@@ -170,18 +180,19 @@ public:
 
 	/* Add field to the end of record. */
 	FieldIt addField(Field field);
-	FieldIt addField(std::string fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
+	FieldIt addControlField(std::string fieldTag = "", std::string fieldData = "");
+	FieldIt addDataField(std::string fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
 	/* Add field to the record before specified field. */
 	FieldIt addFieldBefore(FieldIt nextFieldIt, Field field);
-	FieldIt addFieldBefore(FieldIt nextFieldIt,
+	FieldIt addControlFieldBefore(FieldIt nextFieldIt,
+		std::string fieldTag = "", std::string fieldData = "");
+	FieldIt addDataFieldBefore(FieldIt nextFieldIt,
 		std::string fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
 	/* Remove field from the record. */
 	void removeField(FieldIt fieldIt);
 
 	/* Format record to string for printing. */
 	std::string toString(void);
-	/* Format field to string for printing. */
-	std::string toString(Field field);
 
 	/* Return null field value. */
 	inline FieldIt nullField(void)
@@ -195,6 +206,15 @@ public:
  */
 class MarcRecord::Field {
 public:
+	/* Types of field. */
+	enum Type {
+		CONTROLFIELD,
+		DATAFIELD
+	};
+
+public:
+	/* Type of field. */
+	enum Type type;
 	/* Field tag. */
 	std::string tag;
 	/* Indicator 1. */
@@ -207,8 +227,9 @@ public:
 	SubfieldList subfieldList;
 
 public:
-	/* Constructor. */
-	Field(std::string newTag = "", char newInd1 = ' ', char newInd2 = ' ');
+	/* Constructors. */
+	Field(std::string tag = "", std::string data = "");
+	Field(std::string tag, char ind1, char ind2);
 
 	/* Clear field data. */
 	void clear();
@@ -238,6 +259,9 @@ public:
 	{
 		return subfieldList.end();
 	}
+
+	/* Format field to string for printing. */
+	std::string toString();
 };
 
 /*
@@ -268,5 +292,62 @@ public:
 	/* Get data of embedded field. */
 	std::string getEmbeddedData(void);
 };
+
+#if defined(MARCRECORD_MARCXML)
+
+/*
+ * MARCXML records reader.
+ */
+class MarcXmlReader {
+public:
+	/* Exception class for events and errors handling. */
+	class Exception {
+	public:
+		enum ErrorCode { ERROR_XML } errorCode;
+		std::string errorMessage;
+
+		Exception(enum ErrorCode errorCode, std::string errorMessage)
+		{
+			this->errorCode = errorCode;
+			this->errorMessage = errorMessage;
+		}
+	};
+
+	/* XML parser state structure definition. */
+	struct XmlParserState {
+		XML_Parser xmlParser;
+		bool done;
+		bool paused;
+		unsigned int level;
+		std::vector<std::string> tags;
+		MarcRecord *record;
+		MarcRecord::Field *field;
+		std::string characterData;
+	};
+
+protected:
+	/* Input MARCXML file. */
+	FILE *inputFile;
+	/* Encoding of input MARCXML file. */
+	std::string inputEncoding;
+
+	/* XML parser. */
+	XML_Parser xmlParser;
+	/* XML parser state. */
+	struct XmlParserState parserState;
+	/* Record buffer. */
+	char buffer[4096];
+
+public:
+	/* Constructor. */
+	MarcXmlReader(FILE *inputFile = NULL, const char *inputEncoding = "UTF-8");
+	/* Destructor. */
+	~MarcXmlReader();
+
+	/* Read next record from MARCXML file. */
+	MarcRecord next(void);
+};
+
+#endif /* MARCRECORD_MARCXML */
 
 #endif /* MARCRECORD_H */

@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
 	// setlocale(LC_CTYPE, "en_US.UTF-8");
 
 	/* Parse arguments. */
-	if (argc < 3) {
-		fprintf(stdout, "Error: source and destination files must be specified.\n");
+	if (argc < 2) {
+		fprintf(stdout, "Error: source ISO 2709 file must be specified.\n");
 		return 1;
 	}
 	const char *marcFileName = argv[1];
@@ -82,32 +82,30 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing getLabel(). */
 		{
-			printf("Testing 'getLabel()'.\n");
+			printf("Testing 'getLeader()'.\n");
 
-			MarcRecord::Label recordLabel = marcRecord.getLabel();
-			printf("Record status: %c\n", recordLabel.recordStatus);
-			printf("Record type: %c\n", recordLabel.recordType);
-			printf("Bibliographic level: %c\n", recordLabel.bibliographicLevel);
+			MarcRecord::Leader recordLeader = marcRecord.getLeader();
+			printf("Record status: %c\n", recordLeader.recordStatus);
+			printf("Record type: %c\n", recordLeader.recordType);
+			printf("Bibliographic level: %c\n", recordLeader.bibliographicLevel);
 
 			printf("Done.\n\n");
 		}
 
-		/* Testing setLabel(). */
 		{
-			printf("Testing 'setLabel()'.\n");
+			printf("Testing 'setLeader()'.\n");
 
-			MarcRecord::Label recordLabel = marcRecord.getLabel();
-			recordLabel.recordStatus = 'x';
-			recordLabel.recordType = 'y';
-			recordLabel.bibliographicLevel = 'z';
-			marcRecord.setLabel(recordLabel);
+			MarcRecord::Leader recordLeader = marcRecord.getLeader();
+			recordLeader.recordStatus = 'x';
+			recordLeader.recordType = 'y';
+			recordLeader.bibliographicLevel = 'z';
+			marcRecord.setLeader(recordLeader);
 
-			MarcRecord::Label newRecordLabel = marcRecord.getLabel();
-			printf("Record status: %c\n", newRecordLabel.recordStatus);
-			printf("Record type: %c\n", newRecordLabel.recordType);
-			printf("Bibliographic level: %c\n", newRecordLabel.bibliographicLevel);
+			MarcRecord::Leader newRecordLeader = marcRecord.getLeader();
+			printf("Record status: %c\n", newRecordLeader.recordStatus);
+			printf("Record type: %c\n", newRecordLeader.recordType);
+			printf("Bibliographic level: %c\n", newRecordLeader.bibliographicLevel);
 
 			printf("Done.\n\n");
 		}
@@ -202,8 +200,6 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing 'addField()', 'addFieldBefore()',
-		   'addSubfield()', 'addSubfieldBefore()'. */
 		{
 			printf("Testing 'addField()', 'addFieldBefore()', "
 				"'addSubfield()', 'addSubfieldBefore()'.\n");
@@ -219,10 +215,10 @@ int main(int argc, char *argv[])
 				MarcRecord::Field("996", '1', '2'));
 			fieldIt->addSubfield(MarcRecord::Subfield('a', "aaa"));
 
-			fieldIt = newMarcRecord.addField("999", '3', '4');
+			fieldIt = newMarcRecord.addDataField("999", '3', '4');
 			subfieldIt = fieldIt->addSubfield('n', "nnn");
 			fieldIt->addSubfieldBefore(subfieldIt, 'm', "mmm");
-			fieldIt = newMarcRecord.addFieldBefore(fieldIt, "998", '1', '2');
+			fieldIt = newMarcRecord.addDataFieldBefore(fieldIt, "998", '1', '2');
 			fieldIt->addSubfield(MarcRecord::Subfield('l', "lll"));
 
 			std::string textRecord = newMarcRecord.toString();
@@ -239,13 +235,13 @@ int main(int argc, char *argv[])
 			MarcRecord::FieldIt fieldIt;
 			MarcRecord::SubfieldIt subfieldIt;
 
-			fieldIt = newMarcRecord.addField("901", '1', '1');
+			fieldIt = newMarcRecord.addDataField("901", '1', '1');
 			fieldIt->addSubfield('a', "aaa");
 			subfieldIt = fieldIt->addSubfield('b', "bbb");
 			fieldIt->addSubfield('c', "ccc");
 			fieldIt->removeSubfield(subfieldIt);
 
-			fieldIt = newMarcRecord.addField("902", '2', '2');
+			fieldIt = newMarcRecord.addDataField("902", '2', '2');
 			fieldIt->addSubfield('d', "ddd");
 			newMarcRecord.removeField(fieldIt);
 
@@ -259,7 +255,7 @@ int main(int argc, char *argv[])
 		{
 			printf("Testing 'writeIso2709()'.\n");
 
-			FILE *outputFile = fopen(argv[2], "wb");
+			FILE *outputFile = fopen("test.iso", "wb");
 			if (outputFile == NULL) {
 				throw "can't open destination file";
 			}
@@ -268,25 +264,23 @@ int main(int argc, char *argv[])
 			MarcRecord::FieldIt fieldIt;
 
 			newMarcRecord.clear();
-			fieldIt = newMarcRecord.addField("001");
-			fieldIt->data = "12345";
-			fieldIt = newMarcRecord.addField("200", '0', '1');
+			fieldIt = newMarcRecord.addControlField("001", "12345");
+			fieldIt = newMarcRecord.addDataField("200", '0', '1');
 			fieldIt->addSubfield('a', "abc");
 			fieldIt->addSubfield('b', "defg");
-			fieldIt = newMarcRecord.addField("899", '2', '3');
+			fieldIt = newMarcRecord.addDataField("899", '2', '3');
 			fieldIt->addSubfield('c', "123");
 			fieldIt->addSubfield('d', "12345");
 			fieldIt->addSubfield('e', "1234567");
-			fieldIt = newMarcRecord.addField("899", '2', '3');
+			fieldIt = newMarcRecord.addDataField("899", '2', '3');
 			fieldIt->addSubfield('c', "987");
 			fieldIt->addSubfield('d', "98765");
 			fieldIt->addSubfield('e', "9876543");
 			newMarcRecord.writeIso2709(outputFile, "utf-8");
 
 			newMarcRecord.clear();
-			fieldIt = newMarcRecord.addField("001");
-			fieldIt->data = "abcde";
-			fieldIt = newMarcRecord.addField("201", '0', '1');
+			fieldIt = newMarcRecord.addControlField("001", "abcde");
+			fieldIt = newMarcRecord.addDataField("201", '0', '1');
 			fieldIt->addSubfield('a', "123");
 			fieldIt->addSubfield('b', "456");
 			newMarcRecord.writeIso2709(outputFile, "utf-8");
@@ -295,11 +289,38 @@ int main(int argc, char *argv[])
 
 			printf("Done.\n\n");
 		}
+
+		{
+			printf("Testing 'MarcXmlReader'.\n");
+
+			marcFile = fopen("test.xml", "rb");
+			if (marcFile == NULL) {
+				throw "can't open MARCXML file";
+			}
+
+			MarcXmlReader marcXmlReader(marcFile);
+			while (true) {
+				MarcRecord marcRecord = marcXmlReader.next();
+				if (marcRecord.isNull()) {
+					break;
+				}
+
+				std::string textRecord = marcRecord.toString();
+				printf("%s", textRecord.c_str());
+			}
+
+			fclose(marcFile);
+
+			printf("Done.\n\n");
+		}
 	} catch (const char *errorMessage) {
 		if (marcFile != NULL)
 			fclose(marcFile);
 
 		fprintf(stdout, "Error: %s.\n", errorMessage);
+		return 1;
+	} catch (MarcXmlReader::Exception &e) {
+		fprintf(stdout, "Error: %s.\n", e.errorMessage.c_str());
 		return 1;
 	}
 

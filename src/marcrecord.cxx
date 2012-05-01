@@ -69,26 +69,50 @@ MarcRecord::~MarcRecord()
  */
 void MarcRecord::clear(void)
 {
+	/* Clear null-value record flag. */
+	nullFlag = false;
+
 	/* Clear field list. */
 	fieldList.clear();
 
-	/* Reset record label. */
-	memset(label.recordLength, ' ', sizeof(label.recordLength));
-	label.recordStatus = 'n';
-	label.recordType = 'a';
-	label.bibliographicLevel = 'm';
-	label.hierarchicalLevel = ' ';
-	label.undefined1 = ' ';
-	label.indicatorLength = '2';
-	label.subfieldIdLength = '2';
-	memset(label.baseAddress, ' ', sizeof(label.baseAddress));
-	label.encodingLevel = ' ';
-	label.cataloguingForm = ' ';
-	label.undefined2 = ' ';
-	label.lengthOfFieldLength = '4';
-	label.startingPositionLength = '5';
-	label.implementationDefinedLength = '0';
-	label.undefined3 = ' ';
+	/* Reset record leader. */
+	memset(leader.recordLength, ' ', sizeof(leader.recordLength));
+	leader.recordStatus = 'n';
+	leader.recordType = 'a';
+	leader.bibliographicLevel = 'm';
+	leader.hierarchicalLevel = ' ';
+	leader.undefined1 = ' ';
+	leader.indicatorLength = '2';
+	leader.subfieldIdLength = '2';
+	memset(leader.baseAddress, ' ', sizeof(leader.baseAddress));
+	leader.encodingLevel = ' ';
+	leader.cataloguingForm = ' ';
+	leader.undefined2 = ' ';
+	leader.lengthOfFieldLength = '4';
+	leader.startingPositionLength = '5';
+	leader.implementationDefinedLength = '0';
+	leader.undefined3 = ' ';
+}
+
+/*
+ * Set flag of null-value record.
+ */
+void MarcRecord::setNull(bool nullFlag)
+{
+	/* Clear record when set null flag to true. */
+	if (nullFlag) {
+		clear();
+	}
+
+	this->nullFlag = nullFlag;
+}
+
+/*
+ * Get flag of null-value record.
+ */
+bool MarcRecord::isNull()
+{
+	return nullFlag;
 }
 
 /*
@@ -108,19 +132,25 @@ void MarcRecord::setFormatVariant(FormatVariant newFormatVariant)
 }
 
 /*
- * Get record label.
+ * Get record leader.
  */
-MarcRecord::Label MarcRecord::getLabel(void)
+MarcRecord::Leader MarcRecord::getLeader(void)
 {
-	return label;
+	return leader;
 }
 
 /*
- * Set record label.
+ * Set record leader.
  */
-void MarcRecord::setLabel(Label &newLabel)
+void MarcRecord::setLeader(Leader &leader)
 {
-	label = newLabel;
+	this->leader = leader;
+}
+
+void MarcRecord::setLeader(std::string leaderData)
+{
+	memcpy((void *) &leader, leaderData.c_str(),
+		std::min(sizeof(struct Leader), leaderData.size()));
 }
 
 /*
@@ -172,11 +202,17 @@ MarcRecord::FieldIt MarcRecord::addField(Field field)
 	return fieldIt;
 }
 
-MarcRecord::FieldIt MarcRecord::addField(std::string fieldTag, char fieldInd1, char fieldInd2)
+MarcRecord::FieldIt MarcRecord::addControlField(std::string fieldTag, std::string fieldData)
 {
 	/* Append field to the list. */
-	FieldIt fieldIt = fieldList.insert(fieldList.end(),
-		Field(fieldTag, fieldInd1, fieldInd2));
+	FieldIt fieldIt = fieldList.insert(fieldList.end(), Field(fieldTag, fieldData));
+	return fieldIt;
+}
+
+MarcRecord::FieldIt MarcRecord::addDataField(std::string fieldTag, char fieldInd1, char fieldInd2)
+{
+	/* Append field to the list. */
+	FieldIt fieldIt = fieldList.insert(fieldList.end(), Field(fieldTag, fieldInd1, fieldInd2));
 	return fieldIt;
 }
 
@@ -190,12 +226,19 @@ MarcRecord::FieldIt MarcRecord::addFieldBefore(FieldIt nextFieldIt, Field field)
 	return fieldIt;
 }
 
-MarcRecord::FieldIt MarcRecord::addFieldBefore(FieldIt nextFieldIt,
+MarcRecord::FieldIt MarcRecord::addControlFieldBefore(FieldIt nextFieldIt,
+	std::string fieldTag, std::string fieldData)
+{
+	/* Append field to the list. */
+	FieldIt fieldIt = fieldList.insert(nextFieldIt, Field(fieldTag, fieldData));
+	return fieldIt;
+}
+
+MarcRecord::FieldIt MarcRecord::addDataFieldBefore(FieldIt nextFieldIt,
 	std::string fieldTag, char fieldInd1, char fieldInd2)
 {
 	/* Append field to the list. */
-	FieldIt fieldIt = fieldList.insert(nextFieldIt,
-		Field(fieldTag, fieldInd1, fieldInd2));
+	FieldIt fieldIt = fieldList.insert(nextFieldIt, Field(fieldTag, fieldInd1, fieldInd2));
 	return fieldIt;
 }
 
@@ -216,77 +259,11 @@ std::string MarcRecord::toString(void)
 	std::string textRecord = "";
 	MarcRecord::FieldIt fieldIt;
 
-	/* Enumerate all fields. */
+	/* Iterate all fields. */
 	for (fieldIt = fieldList.begin(); fieldIt != fieldList.end(); fieldIt++) {
 		/* Print field. */
-		textRecord += toString(*fieldIt) + "\n";
+		textRecord += fieldIt->toString() + "\n";
 	}
 
 	return textRecord;
-}
-
-/*
- * Format field to string for printing.
- */
-std::string MarcRecord::toString(Field field)
-{
-	std::string textField = "";
-	MarcRecord::SubfieldIt subfieldIt, embeddedSubfieldIt;
-
-	textField += field.tag;
-
-	if (field.tag < "010") {
-		/* Print control field. */
-		textField += " ";
-		textField += field.data.c_str();
-	} else {
-		/* Print header of regular field. */
-		snprintf(textField, 5, " [%c%c]", field.ind1, field.ind2);
-
-		/* Enumerate all subfields. */
-		for (subfieldIt = field.subfieldList.begin();
-			subfieldIt != field.subfieldList.end(); subfieldIt++)
-		{
-			if (formatVariant == UNIMARC && subfieldIt->id == '1') {
-				/* Print header of embedded field. */
-				snprintf(textField, 4, " $%c ", subfieldIt->id);
-				if (subfieldIt->getEmbeddedTag() < "010") {
-					textField += "<" + subfieldIt->getEmbeddedTag() + "> "
-						+ subfieldIt->getEmbeddedData();
-				} else {
-					textField += "<" + subfieldIt->getEmbeddedTag() + "> ["
-						+ subfieldIt->getEmbeddedInd1()
-						+ subfieldIt->getEmbeddedInd2() + "]";
-				}
-			} else {
-				/* Print regular subfield. */
-				snprintf(textField, 4, " $%c ", subfieldIt->id);
-				textField += subfieldIt->data;
-			}
-		}
-	}
-
-	return textField;
-}
-
-/*
- * Print formatted output to std::string.
- */
-int snprintf(std::string &s, size_t n, const char *format, ...)
-{
-	va_list ap;
-	char *buf;
-	int resultCode;
-
-	buf = (char *) malloc(n + 1);
-	va_start(ap, format);
-	resultCode = vsnprintf(buf, n + 1, format, ap);
-	va_end(ap);
-
-	if (resultCode >= 0) {
-		s.append(buf);
-	}
-	free(buf);
-
-	return resultCode;
 }

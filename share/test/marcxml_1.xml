@@ -1,0 +1,1496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+  <record>
+    <leader>01947nam0 2200361 i 450 </leader>
+    <controlfield tag="001">TEST\0000029968</controlfield>
+    <controlfield tag="005">20101213172919.8</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-17-054537-7</subfield>
+      <subfield code="b">АСТ (С.:ПС)</subfield>
+    </datafield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-271-21641-1</subfield>
+      <subfield code="b">Астрель</subfield>
+    </datafield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-17-055490-4</subfield>
+      <subfield code="b">АСТ (C.:ПС-2)</subfield>
+      <subfield code="9">7000</subfield>
+    </datafield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-271-21854-5</subfield>
+      <subfield code="b">Астрель</subfield>
+      <subfield code="d">225.24</subfield>
+      <subfield code="9">7000</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">IZD\AST\2007\864039</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20081218d2008####u##y0rusy0189####са</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">y###z###|||a|</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">r</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Любовь в седьмом вагоне</subfield>
+      <subfield code="e">[рассказы]</subfield>
+      <subfield code="f">Ольга Славникова</subfield>
+      <subfield code="g">[предисл. авт.]</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Москва</subfield>
+      <subfield code="c">АСТ</subfield>
+      <subfield code="c">Астрель</subfield>
+      <subfield code="d">2008</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">284, [2] с.</subfield>
+      <subfield code="d">21</subfield>
+    </datafield>
+    <datafield tag="327" ind1="1" ind2=" ">
+      <subfield code="a">Содерж.: Русская пуля; Норковая шапка В.И. Падерина; Вещество; Статуя командора; Тайна кошки; Старик и смерч; Под покровом Моцарта; Восьмой шар; Сестры Черепановы; Любовь в седьмом вагоне</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">Ольга Славникова - известная романистка, лауреат премии &quot;Русский Букер&quot; представлена здесь как прекрасная рассказчица. Истории, вошедшие в сборник, увлекательны и разнообразны: love story, детектив, фантастика, лубок... И все они объединены темой железной дороги, неиссякаемым источником сюжетов и характеров. Главное, говорит автор, будьте готовы заглянуть за пределы обыденной действительности, не важно - читаете ли вы эту книгу, сидя дома в удобном кресле или посматриваете в окно на пейзаж, мимо которого мчится скорый поезд...</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Русская художественная литература</subfield>
+      <subfield code="z">20 в.</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">84(2=Рус)6</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Славникова</subfield>
+      <subfield code="b">О. А.</subfield>
+      <subfield code="g">Ольга Александровна</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">ЛИБНЕТ</subfield>
+      <subfield code="c">20081007</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">ЦУНБ Москва</subfield>
+      <subfield code="c">20081029</subfield>
+      <subfield code="2">rusmarc</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="2">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20081218</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="830" ind1=" " ind2=" ">
+      <subfield code="a">CODE_OF_LIBNET\000013843</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000017743</subfield>
+      <subfield code="x">2070853</subfield>
+      <subfield code="9">225.24</subfield>
+      <subfield code="i">С47</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000021853</subfield>
+      <subfield code="x">2075488</subfield>
+      <subfield code="9">247.61</subfield>
+      <subfield code="i">С47</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000021860</subfield>
+      <subfield code="x">2075489</subfield>
+      <subfield code="9">247.61</subfield>
+      <subfield code="i">С47</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Однотомник.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>01244nam0 2200349 i 450 </leader>
+    <controlfield tag="001">TEST\0000029960</controlfield>
+    <controlfield tag="005">20101214172613.5</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-9691-0371-9</subfield>
+      <subfield code="b">в пер.</subfield>
+      <subfield code="d">300.29</subfield>
+      <subfield code="9">3000</subfield>
+    </datafield>
+    <datafield tag="021" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">2008-81356</subfield>
+      <subfield code="9">4729</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">RU\NLR\bibl\1301578</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20081218d2008####u##y0rusy0189####са</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">с###z###|||a|</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">r</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Пятьдесят лет в раю</subfield>
+      <subfield code="e">роман без масок</subfield>
+      <subfield code="f">Руслан Киреев</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Москва</subfield>
+      <subfield code="c">Время</subfield>
+      <subfield code="d">2008</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">622, [1] с.</subfield>
+      <subfield code="c">портр.</subfield>
+      <subfield code="d">21</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">На обл.: Финалист Национальной литературной премии &quot;Большая книга&quot; - 2008</subfield>
+    </datafield>
+    <datafield tag="512" ind1="1" ind2=" ">
+      <subfield code="a">50 лет в раю</subfield>
+      <subfield code="e"> роман без масок</subfield>
+    </datafield>
+    <datafield tag="606" ind1="1" ind2=" ">
+      <subfield code="3">RU\NLR\auth\66496</subfield>
+      <subfield code="a">Русская советская литература</subfield>
+      <subfield code="j">Воспоминания, записки и т.п.</subfield>
+      <subfield code="2">nlr_sh</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Русская художественная литература</subfield>
+      <subfield code="z">20 в.</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Воспоминания и записки</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">84(2=Рус)6</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Киреев</subfield>
+      <subfield code="b">Р. Т.</subfield>
+      <subfield code="g">Руслан Тимофеевич</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">NLR</subfield>
+      <subfield code="c">20081202</subfield>
+      <subfield code="g">RCR</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">NLR</subfield>
+      <subfield code="c">20081202</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="2">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20081218</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="830" ind1=" " ind2=" ">
+      <subfield code="a">авт. по кн.</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000030104</subfield>
+      <subfield code="x">2071889</subfield>
+      <subfield code="9">369.60</subfield>
+      <subfield code="i">К43</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000017738</subfield>
+      <subfield code="x">2070848</subfield>
+      <subfield code="9">300.29</subfield>
+      <subfield code="i">К43</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Однотомник.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>01896nam0 2200337 i 450 </leader>
+    <controlfield tag="001">TEST\0000029966</controlfield>
+    <controlfield tag="005">20091125102007.2</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-17-054584-1</subfield>
+      <subfield code="b">АСТ</subfield>
+    </datafield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-271-21331-1</subfield>
+      <subfield code="b">Астрель</subfield>
+      <subfield code="d">270.65</subfield>
+      <subfield code="9">20000</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">IZD\AST\2007\851448</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20081218d2008####u##y0rusy0189####са</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">y###z###|||a|</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">r</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Сахарный Кремль</subfield>
+      <subfield code="e">[роман]</subfield>
+      <subfield code="f">Владимир Сорокин</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Москва</subfield>
+      <subfield code="c">АСТ</subfield>
+      <subfield code="c">Астрель</subfield>
+      <subfield code="d">2008</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">347, [2] с.</subfield>
+      <subfield code="d">21</subfield>
+    </datafield>
+    <datafield tag="330" ind1=" " ind2=" ">
+      <subfield code="a">&quot;Государыня идет по Кремлю, обозревая его и трогая себя. Сердце ее бьется радостно и оглушительно. Ей так хорошо, что она постанывает от радости при каждом шаге. Стоны становятся все громче, государыня начинает издавать резкие, восторженные звуки. Отразившись от ослепительно белых кремлевских стен, вскрики возвращаются к ней в виде причудливого эха. Она вскрикивает и взвизгивает все сильнее. И вдруг обнаруживает в себе удивительную новую возможность, чудесный дар, проснувшийся в теле: ее помолодевшее, подтянувшееся горло может петь. Да и как петь! Не просто, как все поют, а мощно, высоко, чисто, беря любые ноты. Государыня пробует свое обновленное горло, заставляя его издавать самые причудливые звуки. Горло повинуется ей. Голос ее звенит в Кремле&quot;.</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Русская художественная литература</subfield>
+      <subfield code="z">20 в.</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">84(2=Рус)6</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Сорокин</subfield>
+      <subfield code="b">В. Г.</subfield>
+      <subfield code="g">Владимир Г.</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">ЛИБНЕТ</subfield>
+      <subfield code="c">20080828</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">ЦУНБ Москва</subfield>
+      <subfield code="c">20080930</subfield>
+      <subfield code="2">rusmarc</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="2">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20081218</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="830" ind1=" " ind2=" ">
+      <subfield code="a">CODE_OF_LIBNET\000011744</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000017740</subfield>
+      <subfield code="x">2070850</subfield>
+      <subfield code="9">270.65</subfield>
+      <subfield code="i">С654</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000021757</subfield>
+      <subfield code="x">2074925</subfield>
+      <subfield code="9">268.25</subfield>
+      <subfield code="i">С654</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000022805</subfield>
+      <subfield code="x">2076236</subfield>
+      <subfield code="9">297.95</subfield>
+      <subfield code="i">С654</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000022806</subfield>
+      <subfield code="x">2076237</subfield>
+      <subfield code="9">297.95</subfield>
+      <subfield code="i">С654</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Однотомник.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>01199nam0 2200337 i 450 </leader>
+    <controlfield tag="001">TEST\0000029840</controlfield>
+    <controlfield tag="005">20110218134141.9</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">5-721113-05-1</subfield>
+      <subfield code="d">115.00</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">DGPB\BIBL\0000049981</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">EL/0000189626</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20081217d2002####u##y0rusy0189####ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">y###e###|||||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">r</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Краткий русско-японский [фонетико-иероглифический] словарь</subfield>
+      <subfield code="e">[около 10000</subfield>
+      <subfield code="f">сост. К.В. Иванов]</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">[Обнинск</subfield>
+      <subfield code="c">б. и.</subfield>
+      <subfield code="d">2002]</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">312 с.</subfield>
+      <subfield code="d">15</subfield>
+    </datafield>
+    <datafield tag="606" ind1=" " ind2=" ">
+      <subfield code="3">RU\NLR\AUTH\661312627</subfield>
+      <subfield code="a">Русский язык</subfield>
+      <subfield code="x">Словари</subfield>
+      <subfield code="x">Японский язык</subfield>
+      <subfield code="2">nlr_sh</subfield>
+    </datafield>
+    <datafield tag="610" ind1="0" ind2=" ">
+      <subfield code="a">Русско-японские словари</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">81.754.42-4</subfield>
+      <subfield code="v">LBC/RL</subfield>
+      <subfield code="2">rubbk</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Иванов</subfield>
+      <subfield code="b">К. В.</subfield>
+      <subfield code="4">220</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Донская ГПБ</subfield>
+      <subfield code="c">20061005</subfield>
+      <subfield code="g">RCR</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Донская ГПБ</subfield>
+      <subfield code="c">20061005</subfield>
+      <subfield code="2">rusmarc</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="2">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20080916</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="830" ind1=" " ind2=" ">
+      <subfield code="a">Библиограф Рябоконь</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">ИО</subfield>
+      <subfield code="x">2061849</subfield>
+      <subfield code="9">115.00</subfield>
+      <subfield code="p">000008446</subfield>
+      <subfield code="i">К786</subfield>
+      <subfield code="j">81.754.42я2</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">ИО</subfield>
+      <subfield code="x">2069267</subfield>
+      <subfield code="9">150.00</subfield>
+      <subfield code="p">000015899</subfield>
+      <subfield code="i">К786</subfield>
+      <subfield code="j">81.754.42я2</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">ИО</subfield>
+      <subfield code="x">2069268</subfield>
+      <subfield code="9">150.00</subfield>
+      <subfield code="p">000015903</subfield>
+      <subfield code="i">К786</subfield>
+      <subfield code="j">81.754.42я2</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Однотомник.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>01515nam0 2200349 i 450 </leader>
+    <controlfield tag="001">TEST\0000029969</controlfield>
+    <controlfield tag="005">20110228170639.5</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-699-30532-2</subfield>
+      <subfield code="b">в пер.</subfield>
+      <subfield code="d">283.57</subfield>
+      <subfield code="9">150100</subfield>
+    </datafield>
+    <datafield tag="021" ind1=" " ind2=" ">
+      <subfield code="a">РКП</subfield>
+      <subfield code="b">08-79433</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">RSL-KNO-004130513</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20081218d2008####u##y0rusy0189####са</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">y###z###|||a|</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">r</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">П5. Прощальные песни политических пигмеев пиндостана</subfield>
+      <subfield code="f">Виктор Пелевин</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Москва</subfield>
+      <subfield code="c">Эксмо</subfield>
+      <subfield code="d">2008</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">287 с.</subfield>
+      <subfield code="d">20</subfield>
+    </datafield>
+    <datafield tag="517" ind1="1" ind2=" ">
+      <subfield code="a">Прощальные песни политических пигмеев пиндостана</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Филологические науки. Художественная литература -- Российская Федерация -- Русская литература -- с сер. 50-х гг. 20 в. -- Произведения художественной литературы -- Художественная проза -- Романы. Повести. Рассказы -- Фантастические и мистические романы, повести, рассказы. Романы ужасов</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Русская художественная литература</subfield>
+      <subfield code="z">20 в.</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">84(2=Рус)6</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Пелевин</subfield>
+      <subfield code="b">В. О.</subfield>
+      <subfield code="f">1962-</subfield>
+      <subfield code="g">Виктор Олегович</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">РКП</subfield>
+      <subfield code="c">20081010</subfield>
+      <subfield code="g">rcr</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">РГБ</subfield>
+      <subfield code="c">20081010</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="2">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20081218</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000017739</subfield>
+      <subfield code="x">2070849</subfield>
+      <subfield code="9">283.57</subfield>
+      <subfield code="i">П246</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000021688</subfield>
+      <subfield code="x">2074918</subfield>
+      <subfield code="9">293.22</subfield>
+      <subfield code="i">П246</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000025195</subfield>
+      <subfield code="x">2078485</subfield>
+      <subfield code="9">312.60</subfield>
+      <subfield code="i">П246</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">АБ</subfield>
+      <subfield code="p">000025196</subfield>
+      <subfield code="x">2078486</subfield>
+      <subfield code="9">312.60</subfield>
+      <subfield code="i">П246</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">ОЧ</subfield>
+      <subfield code="p">000025197</subfield>
+      <subfield code="x">2078487</subfield>
+      <subfield code="9">312.60</subfield>
+      <subfield code="i">П246</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Однотомник.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>01472nam0 2200397 i 450 </leader>
+    <controlfield tag="001">TEST\0000030011</controlfield>
+    <controlfield tag="005">20101119120012.8</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">5-7695-3271-8</subfield>
+      <subfield code="b">в пер.</subfield>
+      <subfield code="d">100.00</subfield>
+      <subfield code="9">7000</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">EL/0000127891</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20081219d2006####u##y0rusy0189####са</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">a###j###|||||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">r</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Статистика</subfield>
+      <subfield code="e">учебник</subfield>
+      <subfield code="e">для студентов образовательных учреждений среднего профессионального образования</subfield>
+      <subfield code="f">[В.С. Мхитарян  и др.]</subfield>
+      <subfield code="g">под ред. В.С. Мхитаряна</subfield>
+    </datafield>
+    <datafield tag="205" ind1=" " ind2=" ">
+      <subfield code="a">5-е изд., стер.</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Москва</subfield>
+      <subfield code="c">Академия</subfield>
+      <subfield code="d">2006</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">271, [1] с.</subfield>
+      <subfield code="c">ил.</subfield>
+      <subfield code="d">22</subfield>
+    </datafield>
+    <datafield tag="225" ind1="1" ind2=" ">
+      <subfield code="a">Среднее профессиональное образование</subfield>
+      <subfield code="i">Экономика и управление</subfield>
+    </datafield>
+    <datafield tag="225" ind1="1" ind2=" ">
+      <subfield code="a">Учебник</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Авт. указаны на обороте тит. л.</subfield>
+    </datafield>
+    <datafield tag="320" ind1=" " ind2=" ">
+      <subfield code="a">Библиогр.: с. 270 (11 назв.)</subfield>
+    </datafield>
+    <datafield tag="606" ind1="1" ind2=" ">
+      <subfield code="a">Статистика</subfield>
+      <subfield code="j">Учебные издания для среднего профессионального образования</subfield>
+      <subfield code="2">nlr-sh</subfield>
+      <subfield code="3">RU\NLR\auth\66114905</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Статистика</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Экономическая статистика</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Учебники и пособия</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">60.60я7</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">65.051я7</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="701" ind1=" " ind2="1">
+      <subfield code="a">Мхитарян</subfield>
+      <subfield code="b">В. С.</subfield>
+      <subfield code="g">Владимир Сергеевич</subfield>
+    </datafield>
+    <datafield tag="701" ind1=" " ind2="1">
+      <subfield code="a">Дуброва</subfield>
+      <subfield code="b">Т. А.</subfield>
+      <subfield code="g">Татьяна Абрамовна</subfield>
+    </datafield>
+    <datafield tag="701" ind1=" " ind2="1">
+      <subfield code="a">Минашкин</subfield>
+      <subfield code="b">В. Г.</subfield>
+      <subfield code="g">Виталий Григорьевич</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">НБР Саха</subfield>
+      <subfield code="c">20070605</subfield>
+      <subfield code="g">rcr</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">НБР Саха</subfield>
+      <subfield code="c">20070605</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="2">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20081008</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">ОЧ</subfield>
+      <subfield code="x">2057969</subfield>
+      <subfield code="9">100.00</subfield>
+      <subfield code="p">000004443</subfield>
+      <subfield code="i">С78</subfield>
+      <subfield code="j">60.6я7</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Однотомник.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>01540nam0 2200409 i 450 </leader>
+    <controlfield tag="001">TEST\0000029127</controlfield>
+    <controlfield tag="005">20081222102046.9</controlfield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-89658-033-1</subfield>
+    </datafield>
+    <datafield tag="010" ind1=" " ind2=" ">
+      <subfield code="a">978-5-94789-232-1</subfield>
+      <subfield code="b">в пер.</subfield>
+      <subfield code="d">150.00</subfield>
+      <subfield code="9">500</subfield>
+    </datafield>
+    <datafield tag="021" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">2008-6917</subfield>
+      <subfield code="9">374</subfield>
+    </datafield>
+    <datafield tag="035" ind1=" " ind2=" ">
+      <subfield code="a">RU\NLR\bibl\1204992</subfield>
+    </datafield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20081210d2007####u##y0rusy0189####са</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+      <subfield code="d">eng</subfield>
+      <subfield code="e">eng</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">a###z###|||||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">r</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Тепловодообмен в мерзлотных ландшафтах Восточной Сибири и его факторы</subfield>
+      <subfield code="f">отв. ред. А.Г. Георгиади, А.Н. Золотокрылин</subfield>
+      <subfield code="g">Рос. акад. наук, Ин-т географии, Ин-т мерзлотоведения им. акад. П.И. Мельникова Сиб. отд-ния</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">М.</subfield>
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Триада</subfield>
+      <subfield code="d">2007</subfield>
+    </datafield>
+    <datafield tag="215" ind1=" " ind2=" ">
+      <subfield code="a">575 [1] с.</subfield>
+      <subfield code="c">ил.</subfield>
+      <subfield code="d">22</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Рез. на англ. яз.</subfield>
+    </datafield>
+    <datafield tag="320" ind1=" " ind2=" ">
+      <subfield code="a">Библиогр.: с. 461-480 (279 назв.), с. 561-564 (61 назв.)</subfield>
+    </datafield>
+    <datafield tag="606" ind1="1" ind2=" ">
+      <subfield code="3">RU\NLR\auth\661489963</subfield>
+      <subfield code="a">Мерзлотные ландшафты</subfield>
+      <subfield code="x">Тепловлагообмен</subfield>
+      <subfield code="y">Сибирь Восточная</subfield>
+      <subfield code="2">nlr_sh</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Ландшафты географические</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Геосистемы</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Вечная мерзлота</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Восточная Сибирь</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">26.821.2</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">26.328</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Георгиади</subfield>
+      <subfield code="b">А. Г.</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Золотокрылин</subfield>
+      <subfield code="b">А. Н.</subfield>
+      <subfield code="g">Александр Николаевич</subfield>
+    </datafield>
+    <datafield tag="712" ind1="0" ind2="2">
+      <subfield code="3">RU\NLR\auth\889953196</subfield>
+      <subfield code="a">Институт географии</subfield>
+      <subfield code="c">Москва</subfield>
+      <subfield code="4">570</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">NLR</subfield>
+      <subfield code="c">20080326</subfield>
+      <subfield code="g">RCR</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">NLR</subfield>
+      <subfield code="c">20080326</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="2">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20081119</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="830" ind1=" " ind2=" ">
+      <subfield code="a">Авт. по ЭК.</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+      <subfield code="b">КХ</subfield>
+      <subfield code="p">000016237</subfield>
+      <subfield code="x">2068828</subfield>
+      <subfield code="9">150.00</subfield>
+      <subfield code="j">26.82</subfield>
+      <subfield code="i">Т343</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Однотомник.</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>02059nam2 2200373 i 450 </leader>
+    <controlfield tag="001">RU\TOUNB\BIBL\111661</controlfield>
+    <controlfield tag="005">20111003134001.2</controlfield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20110624e20111891u##y0rusy0102####ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">ab##i###|||||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">s</subfield>
+    </datafield>
+    <datafield tag="135" ind1=" " ind2=" ">
+      <subfield code="a">drbz#nnnanaba</subfield>
+    </datafield>
+    <datafield tag="139" ind1=" " ind2=" ">
+      <subfield code="a">czz</subfield>
+      <subfield code="x">pdf</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Бежецкий уезд</subfield>
+      <subfield code="f">[предисл.: И. Петрункевич, Б. Недзялковский]</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="d">2011</subfield>
+    </datafield>
+    <datafield tag="230" ind1=" " ind2=" ">
+      <subfield code="a">Электрон. текст. данные (144 Мб, 191 файлов)</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Загл. с экрана</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Оригинал хранится в Тверской ОУНБ</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Воспроизведение изд.:Сборник статистических сведений о Тверской губернии. Т. 6, вып. 1: Бежецкий уезд / Статистический отдел Тверской губернской земской управы. - Издание Тверскаго губернскаго земства. - Москва: Типо-литография Т-ва Кушнерев и К, 1891. - 185 с., [10] л. цв. карт.: ил., табл.; 32 см</subfield>
+    </datafield>
+    <datafield tag="337" ind1=" " ind2=" ">
+      <subfield code="a">Режим доступа: http://docs.library.tver.ru/kraevedenie/stat_sborniki/bejecky_uezd</subfield>
+    </datafield>
+    <datafield tag="455" ind1=" " ind2="0">
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений о Тверской губернии. Т. 6, вып. 1: Бежецкий уезд</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Москва</subfield>
+      <subfield code="c">Типо-литография Т-ва Кушнерев и К</subfield>
+      <subfield code="d">1891</subfield>
+      <subfield code="1">71102</subfield>
+      <subfield code="a">Тверская губернская земская управа</subfield>
+      <subfield code="b">Статистический отдел</subfield>
+    </datafield>
+    <datafield tag="461" ind1=" " ind2="0">
+      <subfield code="1">001RU\TOUNB\BIBL\93598</subfield>
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений по Тверской губернии</subfield>
+      <subfield code="b">Электронный ресурс</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="v">Т. 6, вып. 1</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Тестовая библиотека</subfield>
+      <subfield code="d">2011</subfield>
+      <subfield code="1">801 0</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+      <subfield code="g">PSBO</subfield>
+      <subfield code="1">801 1</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+    </datafield>
+    <datafield tag="607" ind1=" " ind2=" ">
+      <subfield code="2">Тестовая библиотека</subfield>
+      <subfield code="a">Бежецкий уезд</subfield>
+      <subfield code="x">Народное хозяйство</subfield>
+      <subfield code="x">Статистика</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Бежецкий район (Тверская область)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Бежецкий уезд</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="9">LBC/RL</subfield>
+      <subfield code="2">rubbk</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Петрункевич</subfield>
+      <subfield code="b">И.</subfield>
+      <subfield code="4">080</subfield>
+    </datafield>
+    <datafield tag="702" ind1=" " ind2="1">
+      <subfield code="a">Недзялковский</subfield>
+      <subfield code="b">Б.</subfield>
+      <subfield code="4">080</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110624</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110624</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2=" ">
+      <subfield code="u">http://docs.library.tver.ru/kraevedenie/stat_sborniki/bejecky_uezd</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Полтотекстовый электронн. ресурс(том, вып., часть)</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>02197nam0 2200397 i 450 </leader>
+    <controlfield tag="001">RU\TOUNB\BIBL\114650</controlfield>
+    <controlfield tag="005">20111003133848.6</controlfield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20110719e20111909u##y0rusy0102####ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">a###z###|||||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">s</subfield>
+    </datafield>
+    <datafield tag="135" ind1=" " ind2=" ">
+      <subfield code="a">drbz#nnnanaba</subfield>
+    </datafield>
+    <datafield tag="139" ind1=" " ind2=" ">
+      <subfield code="a">czz</subfield>
+      <subfield code="x">pdf</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Город Кашин, его история, святыни и достопримечательности</subfield>
+      <subfield code="b">Электронный ресурс</subfield>
+      <subfield code="e">(с кратким житием благоверной кн. Анны)</subfield>
+      <subfield code="e">ко дню торжеств в честь св. бл. кн. Анны историко-археологический путеводитель по городу с 13-ю рисунками</subfield>
+      <subfield code="f">священник Иоанн Завьялов</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Тестовая библиотека</subfield>
+      <subfield code="d">2011</subfield>
+    </datafield>
+    <datafield tag="230" ind1=" " ind2=" ">
+      <subfield code="a">Электронн. текст. данные (77,1 Мб, 116 файлов)</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Загл. с экрана</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Оригинал хранится в Тверской ОУНБ</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Воспроизведение изд.: Город Кашин, его история, святыни и достопримечательности:(с кратким житием благоверной кн. Анны: ко дню торжеств в честь св. бл. кн. Анны историко-археологический путеводитель по городу с 13-ю рисунками / священник Иоанн Завьялов. - Санкт-Петербург: Тип. "Колокол", 1909.- 111, [1] с.:ил.; 21 см</subfield>
+    </datafield>
+    <datafield tag="337" ind1=" " ind2=" ">
+      <subfield code="a">Режим доступа: http://docs.library.tver.ru/kraevedenie/gorod_kashin_istoria_sviatini</subfield>
+    </datafield>
+    <datafield tag="455" ind1=" " ind2="0">
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Город Кашин, его история, святыни и достопримечательности</subfield>
+      <subfield code="e">(с кратким житием благоверной кн. Анны)</subfield>
+      <subfield code="e">ко дню торжеств в честь св. бл. кн. Анны историко-археологический путеводитель по городу с 13-ю рисунками</subfield>
+      <subfield code="f">священник Иоанн Завьялов</subfield>
+      <subfield code="1">700 1</subfield>
+      <subfield code="a">Завьялов</subfield>
+      <subfield code="b">И.</subfield>
+      <subfield code="g">Иоанн</subfield>
+      <subfield code="c">священник</subfield>
+    </datafield>
+    <datafield tag="600" ind1=" " ind2="1">
+      <subfield code="2">nlr_sh1</subfield>
+      <subfield code="3">RU\NLR\AUTH\661237397</subfield>
+      <subfield code="a">Анна Кашинская</subfield>
+      <subfield code="c">св.</subfield>
+      <subfield code="f">1278 - 1368</subfield>
+    </datafield>
+    <datafield tag="607" ind1=" " ind2=" ">
+      <subfield code="2">nlr_sh</subfield>
+      <subfield code="3">RU\NLR\AUTH\661280027</subfield>
+      <subfield code="a">Кашин, г. (Тверская обл.)</subfield>
+      <subfield code="x">История</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Тверская область</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Кашин (город)</subfield>
+      <subfield code="x">История</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Православная Церковь русская</subfield>
+      <subfield code="x">Агиография</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Анна Кашинская</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">63.3(2Р-4Тв)</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="a">86.372.24-3</subfield>
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="700" ind1=" " ind2="1">
+      <subfield code="a">Завьялов</subfield>
+      <subfield code="b">И.</subfield>
+      <subfield code="g">Иоанн</subfield>
+      <subfield code="c">священник</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110719</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110719</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2=" ">
+      <subfield code="u">http://docs.library.tver.ru/kraevedenie/gorod_kashin_istoria_sviatini</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Полнотекстовый электронный ресурс. Однотомник</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>02075nam2 2200349 i 450 </leader>
+    <controlfield tag="001">RU\TOUNB\BIBL\115240</controlfield>
+    <controlfield tag="005">20111003123617.5</controlfield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20110725e20111899u##y0rusy0102####ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">ab##i###|||||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">s</subfield>
+    </datafield>
+    <datafield tag="135" ind1=" " ind2=" ">
+      <subfield code="a">drbz#nnnanaba</subfield>
+    </datafield>
+    <datafield tag="139" ind1=" " ind2=" ">
+      <subfield code="a">czz</subfield>
+      <subfield code="x">pdf</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Корчевской уезд</subfield>
+      <subfield code="b">Электронный ресурс</subfield>
+      <subfield code="e">описание уезда (текст) с 3 схематическими картами - почвенной, гипсометрической и геологической</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="d">2011</subfield>
+    </datafield>
+    <datafield tag="230" ind1=" " ind2=" ">
+      <subfield code="a">Электрон. текст. данные (141 Мб, 180 файлов)</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Загл. с экрана</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Оригинал хранится в Тверской ОУНБ</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Воспроизведение изд.: Сборник статистических сведений по Тверской губернии. Т. 9, вып. 1: Корчевской уезд / Статистический отдел Тверской губернской  земской управы. - Издание Тверскаго губернскаго земства. - Тверь : Типография Губернского Правления, 1899. -  173, [1] с., [2] л. цв. карт.: табл.; 32 см</subfield>
+    </datafield>
+    <datafield tag="327" ind1="0" ind2=" ">
+      <subfield code="a">Режим доступа: http://docs.library.tver.ru/kraevedenie/stat_sborniki/korchevskoi_uezd</subfield>
+    </datafield>
+    <datafield tag="455" ind1=" " ind2="1">
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений о Тверской губернии. Т. 9, вып. 1: Корчевской уезд</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Типография Губернского Правления</subfield>
+      <subfield code="d">1899</subfield>
+      <subfield code="1">71102</subfield>
+      <subfield code="a">Тверская губернская земская управа</subfield>
+      <subfield code="b">Статистический отдел</subfield>
+    </datafield>
+    <datafield tag="461" ind1=" " ind2="0">
+      <subfield code="1">001RU\TOUNB\BIBL\93598</subfield>
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений по Тверской губернии</subfield>
+      <subfield code="b">Электронный ресурс</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="v">Т. 9, вып. 1</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Тестовая библиотека</subfield>
+      <subfield code="d">2011</subfield>
+      <subfield code="1">801 0</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+      <subfield code="g">PSBO</subfield>
+      <subfield code="1">801 1</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+    </datafield>
+    <datafield tag="607" ind1=" " ind2=" ">
+      <subfield code="2">Тестовая библиотека</subfield>
+      <subfield code="a">Корчевской уезд</subfield>
+      <subfield code="x">Народное хозяйство</subfield>
+      <subfield code="x">Статистика</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Конаковский район (Тверская область)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Корчевской уезд</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110725</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110725</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2=" ">
+      <subfield code="u">http://docs.library.tver.ru/kraevedenie/stat_sborniki/korchevskoi_uezd</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Полтотекстовый электронн. ресурс(том, вып., часть)</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>02045nam2 2200349 i 450 </leader>
+    <controlfield tag="001">RU\TOUNB\BIBL\115264</controlfield>
+    <controlfield tag="005">20110726114045.7</controlfield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20110725e20111893u##y0rusy0102####ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">b###i###|||||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">s</subfield>
+    </datafield>
+    <datafield tag="135" ind1=" " ind2=" ">
+      <subfield code="a">drbz#nnnanaba</subfield>
+    </datafield>
+    <datafield tag="139" ind1=" " ind2=" ">
+      <subfield code="a">czz</subfield>
+      <subfield code="x">pdf</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Корчевской уезд</subfield>
+      <subfield code="b">Электронный ресурс</subfield>
+      <subfield code="e">таблицы, примечания к ним и карта уезда</subfield>
+      <subfield code="f">[предисл. В. Покровский]</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="d">2011</subfield>
+    </datafield>
+    <datafield tag="230" ind1=" " ind2=" ">
+      <subfield code="a">Электрон. текст. данные (263 Мб, 230 файлов)</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Загл. с экрана</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Оригинал хранится в Тверской ОУНБ</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Воспроизведение изд.: Сборник статистических сведений по Тверской губернии. Т. 9, вып. 2: Корчевской уезд / Статистический отдел Тверской губернской  земской управы. - Издание Тверскаго губернскаго земства. - Тверь : Типография Губернского Правления, 1893. -  327 с. разд. паг., [1] л. цв. карт.; 32 см</subfield>
+    </datafield>
+    <datafield tag="327" ind1="0" ind2=" ">
+      <subfield code="a">Режим доступа: http://docs.library.tver.ru/kraevedenie/stat_sborniki/korchevskoi_uezd2</subfield>
+    </datafield>
+    <datafield tag="455" ind1=" " ind2="1">
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений о Тверской губернии. Т. 9, вып. 2: Корчевской уезд</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Типография Губернского Правления</subfield>
+      <subfield code="d">1893</subfield>
+      <subfield code="1">71102</subfield>
+      <subfield code="a">Тверская губернская земская управа</subfield>
+      <subfield code="b">Статистический отдел</subfield>
+    </datafield>
+    <datafield tag="461" ind1=" " ind2="0">
+      <subfield code="1">001RU\TOUNB\BIBL\93598</subfield>
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений по Тверской губернии</subfield>
+      <subfield code="b">Электронный ресурс</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="v">Т 9, вып. 2</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Тестовая библиотека</subfield>
+      <subfield code="d">2011</subfield>
+      <subfield code="1">801 0</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+      <subfield code="g">PSBO</subfield>
+      <subfield code="1">801 1</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+    </datafield>
+    <datafield tag="607" ind1=" " ind2=" ">
+      <subfield code="2">Тестовая библиотека</subfield>
+      <subfield code="a">Корчевской уезд</subfield>
+      <subfield code="x">Народное хозяйство</subfield>
+      <subfield code="x">Статистика</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Конаковский район (Тверская область)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Корчевской уезд</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110725</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110725</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2=" ">
+      <subfield code="u">http://docs.library.tver.ru/kraevedenie/stat_sborniki/korchevskoi_uezd2</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Полтотекстовый электронн. ресурс(том, вып., часть)</subfield>
+    </datafield>
+  </record>
+  <record>
+    <leader>02076nam2 2200361 i 450 </leader>
+    <controlfield tag="001">RU\TOUNB\BIBL\115293</controlfield>
+    <controlfield tag="005">20111003133919.3</controlfield>
+    <datafield tag="100" ind1=" " ind2=" ">
+      <subfield code="a">20110725e20111891u##y0rusy0102####ca</subfield>
+    </datafield>
+    <datafield tag="101" ind1="0" ind2=" ">
+      <subfield code="a">rus</subfield>
+    </datafield>
+    <datafield tag="102" ind1=" " ind2=" ">
+      <subfield code="a">RU</subfield>
+    </datafield>
+    <datafield tag="105" ind1=" " ind2=" ">
+      <subfield code="a">y###i###||1||</subfield>
+    </datafield>
+    <datafield tag="106" ind1=" " ind2=" ">
+      <subfield code="a">s</subfield>
+    </datafield>
+    <datafield tag="135" ind1=" " ind2=" ">
+      <subfield code="a">drbz#nnnanaba</subfield>
+    </datafield>
+    <datafield tag="139" ind1=" " ind2=" ">
+      <subfield code="a">czz</subfield>
+      <subfield code="x">pdf</subfield>
+    </datafield>
+    <datafield tag="200" ind1="1" ind2=" ">
+      <subfield code="a">Бежецкий уезд</subfield>
+      <subfield code="e">таблицы сведений об экономическом положении крестьянских селений и частновладельческого хозяйства</subfield>
+    </datafield>
+    <datafield tag="210" ind1=" " ind2=" ">
+      <subfield code="d">2011</subfield>
+    </datafield>
+    <datafield tag="230" ind1=" " ind2=" ">
+      <subfield code="a">Электрон. текст. данные (252 Мб, 212 файлов)</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Загл. с экрана</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Оригинал хранится в Тверской ОУНБ</subfield>
+    </datafield>
+    <datafield tag="300" ind1=" " ind2=" ">
+      <subfield code="a">Воспроизведение изд.:Сборник статистических сведений о Тверской губернии. Т. 6, вып. 2: Бежецкий уезд / Статистический отдел Тверской губернской земской управы. - Издание Тверскаго губернскаго земства. - Москва: Типо-Литография Ф. С. Муравьева, 1891. - 261, 71 с.; 32 см</subfield>
+    </datafield>
+    <datafield tag="320" ind1=" " ind2=" ">
+      <subfield code="a">Алф. указ. населенных мест Бежецкого уезда: с. 55-69</subfield>
+    </datafield>
+    <datafield tag="337" ind1=" " ind2=" ">
+      <subfield code="a">Режим доступа: http://docs.library.tver.ru/kraevedenie/stat_sborniki/bejecky_uezd2</subfield>
+    </datafield>
+    <datafield tag="455" ind1=" " ind2="0">
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений о Тверской губернии. Т. 6, вып. 1: Бежецкий уезд</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Москва</subfield>
+      <subfield code="c">Типо-Литография Ф. С. Муравьева</subfield>
+      <subfield code="d">1891</subfield>
+      <subfield code="1">71102</subfield>
+      <subfield code="a">Тверская губернская земская управа</subfield>
+      <subfield code="b">Статистический отдел</subfield>
+    </datafield>
+    <datafield tag="461" ind1=" " ind2="0">
+      <subfield code="1">001RU\TOUNB\BIBL\93598</subfield>
+      <subfield code="1">2001 </subfield>
+      <subfield code="a">Сборник статистических сведений по Тверской губернии</subfield>
+      <subfield code="b">Электронный ресурс</subfield>
+      <subfield code="f">Статистический отдел Тверской губернской земской управы</subfield>
+      <subfield code="v">Т. 6, вып. 2</subfield>
+      <subfield code="1">210  </subfield>
+      <subfield code="a">Тверь</subfield>
+      <subfield code="c">Тестовая библиотека</subfield>
+      <subfield code="d">2011</subfield>
+      <subfield code="1">801 0</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+      <subfield code="g">PSBO</subfield>
+      <subfield code="1">801 1</subfield>
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110324</subfield>
+    </datafield>
+    <datafield tag="607" ind1=" " ind2=" ">
+      <subfield code="2">Тестовая библиотека</subfield>
+      <subfield code="a">Бежецкий уезд</subfield>
+      <subfield code="x">Народное хозяйство</subfield>
+      <subfield code="x">Статистика</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Бежецкий район (Тверская область)</subfield>
+    </datafield>
+    <datafield tag="610" ind1="1" ind2=" ">
+      <subfield code="a">Бежецкий уезд</subfield>
+    </datafield>
+    <datafield tag="686" ind1=" " ind2=" ">
+      <subfield code="2">rubbk</subfield>
+      <subfield code="9">LBC/RL</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="0">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110624</subfield>
+      <subfield code="g">PSBO</subfield>
+    </datafield>
+    <datafield tag="801" ind1=" " ind2="1">
+      <subfield code="a">RU</subfield>
+      <subfield code="b">Тестовая библиотека</subfield>
+      <subfield code="c">20110624</subfield>
+    </datafield>
+    <datafield tag="856" ind1="4" ind2=" ">
+      <subfield code="u">http://docs.library.tver.ru/kraevedenie/stat_sborniki/bejecky_uezd2</subfield>
+    </datafield>
+    <datafield tag="899" ind1=" " ind2=" ">
+      <subfield code="a">Тестовая библиотека</subfield>
+    </datafield>
+    <datafield tag="909" ind1=" " ind2=" ">
+      <subfield code="a">Полтотекстовый электронн. ресурс(том, вып., часть)</subfield>
+    </datafield>
+  </record>
+</collection>
