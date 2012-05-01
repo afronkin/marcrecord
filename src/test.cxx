@@ -72,7 +72,6 @@ int main(int argc, char *argv[])
 		/* Close records file. */
 		fclose(marcFile);
 
-		/* Testing 'toString()'. */
 		{
 			printf("Testing 'toString()'.\n");
 
@@ -110,7 +109,6 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing getFields(), getSubfields(). */
 		{
 			printf("Testing 'getFields()', 'getSubfields()'.\n");
 
@@ -135,7 +133,6 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing getField(), getSubfield(). */
 		{
 			printf("Testing 'getField()', 'getSubfield()'.\n");
 
@@ -155,7 +152,6 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing getEmbeddedFields(). */
 		{
 			printf("Testing 'getEmbeddedFields()'.\n");
 			MarcRecord::FieldIt fieldIt = marcRecord.getField("461");
@@ -179,7 +175,6 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing 'getEmbeddedField()', 'getEmbeddedData()'. */
 		{
 			printf("Testing 'getEmbeddedField()', 'getEmbeddedData()'.\n");
 
@@ -227,7 +222,6 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing 'removeField()', 'removeSubfield()'. */
 		{
 			printf("Testing 'removeField()', 'removeSubfield()'.\n");
 
@@ -251,7 +245,6 @@ int main(int argc, char *argv[])
 			printf("Done.\n\n");
 		}
 
-		/* Testing 'writeIso2709()'. */
 		{
 			printf("Testing 'writeIso2709()'.\n");
 
