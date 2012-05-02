@@ -4,7 +4,8 @@ OBJS=marcrecord.o marcrecord_field.o marcrecord_iso2709.o marcrecord_subfield.o 
 PROGRAM=test
 
 CXX=g++
-CXXFLAGS=-g -Wall -Wextra -pedantic -DMARCXML -I$(SRC_DIR)
+CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long \
+  -DMARCXML -I$(SRC_DIR)
 LDFLAGS=
 LIBS=-lm -lexpat
 
