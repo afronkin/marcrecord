@@ -33,7 +33,9 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#include <string>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "marcrecord_tools.h"
 
 /*
@@ -57,3 +59,40 @@ int snprintf(std::string &s, size_t n, const char *format, ...)
 
 	return resultCode;
 }
+
+/*
+ * Serialize XML string.
+ */
+std::string serialize_xml(std::string &s)
+{
+	std::string dest = "";
+
+	/* Copy characters from source sting to destination string, replace special characters. */
+	for (std::string::iterator it = s.begin(); it != s.end(); it++) {
+		unsigned char c = *it;
+
+		switch (c) {
+		case '"':
+			dest.append("&quot;");
+			break;
+		case '&':
+			dest.append("&amp;");
+			break;
+		case '\'':
+			dest.append("&apos;");
+			break;
+		case '<':
+			dest.append("&lt;");
+			break;
+		case '>':
+			dest.append("&gt;");
+			break;
+		default:
+			dest += c;
+			break;
+		}
+	}
+
+	return dest;
+}
+

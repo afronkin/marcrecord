@@ -40,10 +40,6 @@
 #include <string>
 #include <vector>
 
-#if defined(MARCRECORD_MARCXML)
-#include <expat.h>
-#endif /* MARCRECORD_MARCXML */
-
 /*
  * MARC record class.
  */
@@ -107,6 +103,11 @@ public:
 	/* MARC subfield class. */
 	class Subfield;
 
+	/* MARCXML reader class. */
+	friend class MarcXmlReader;
+	/* MARCXML writer class. */
+	friend class MarcXmlWriter;
+
 	/* List of fields. */
 	typedef std::list<Field> FieldList;
 	typedef FieldList::iterator FieldIt;
@@ -128,8 +129,6 @@ public:
 private:
 	/* Variant of record format. */
 	FormatVariant formatVariant;
-	/* Flag of null-value record (for handling errors and events). */
-	bool nullFlag;
 
 	/* Record leader. */
 	Leader leader;
@@ -149,11 +148,6 @@ public:
 
 	/* Clear record. */
 	void clear(void);
-
-	/* Set flag of null-value record. */
-	void setNull(bool nullFlag = true);
-	/* Get flag of null-value record. */
-	bool isNull();
 
 	/* Get record format variant. */
 	FormatVariant getFormatVariant(void);
@@ -234,6 +228,11 @@ public:
 	/* Clear field data. */
 	void clear();
 
+	/* Get data of control field. */
+	std::string & getData(void);
+	/* Set data of control field. */
+	void setData(std::string &data);
+
 	/* Get list of subfields. */
 	SubfieldRefList getSubfields(char subfieldId = ' ');
 	/* Get subfield. */
@@ -281,6 +280,11 @@ public:
 	/* Clear subfield data. */
 	void clear(void);
 
+	/* Get data of subfield. */
+	std::string & getData(void);
+	/* Set data of subfield. */
+	void setData(std::string &data);
+
 	/* Check presence of embedded field. */
 	bool isEmbedded(void);
 	/* Get tag of embedded field. */
@@ -292,62 +296,5 @@ public:
 	/* Get data of embedded field. */
 	std::string getEmbeddedData(void);
 };
-
-#if defined(MARCRECORD_MARCXML)
-
-/*
- * MARCXML records reader.
- */
-class MarcXmlReader {
-public:
-	/* Exception class for events and errors handling. */
-	class Exception {
-	public:
-		enum ErrorCode { ERROR_XML } errorCode;
-		std::string errorMessage;
-
-		Exception(enum ErrorCode errorCode, std::string errorMessage)
-		{
-			this->errorCode = errorCode;
-			this->errorMessage = errorMessage;
-		}
-	};
-
-	/* XML parser state structure definition. */
-	struct XmlParserState {
-		XML_Parser xmlParser;
-		bool done;
-		bool paused;
-		unsigned int level;
-		std::vector<std::string> tags;
-		MarcRecord *record;
-		MarcRecord::Field *field;
-		std::string characterData;
-	};
-
-protected:
-	/* Input MARCXML file. */
-	FILE *inputFile;
-	/* Encoding of input MARCXML file. */
-	std::string inputEncoding;
-
-	/* XML parser. */
-	XML_Parser xmlParser;
-	/* XML parser state. */
-	struct XmlParserState parserState;
-	/* Record buffer. */
-	char buffer[4096];
-
-public:
-	/* Constructor. */
-	MarcXmlReader(FILE *inputFile = NULL, const char *inputEncoding = "UTF-8");
-	/* Destructor. */
-	~MarcXmlReader();
-
-	/* Read next record from MARCXML file. */
-	MarcRecord next(void);
-};
-
-#endif /* MARCRECORD_MARCXML */
 
 #endif /* MARCRECORD_H */

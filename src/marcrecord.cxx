@@ -69,9 +69,6 @@ MarcRecord::~MarcRecord()
  */
 void MarcRecord::clear(void)
 {
-	/* Clear null-value record flag. */
-	nullFlag = false;
-
 	/* Clear field list. */
 	fieldList.clear();
 
@@ -92,27 +89,6 @@ void MarcRecord::clear(void)
 	leader.startingPositionLength = '5';
 	leader.implementationDefinedLength = '0';
 	leader.undefined3 = ' ';
-}
-
-/*
- * Set flag of null-value record.
- */
-void MarcRecord::setNull(bool nullFlag)
-{
-	/* Clear record when set null flag to true. */
-	if (nullFlag) {
-		clear();
-	}
-
-	this->nullFlag = nullFlag;
-}
-
-/*
- * Get flag of null-value record.
- */
-bool MarcRecord::isNull()
-{
-	return nullFlag;
 }
 
 /*

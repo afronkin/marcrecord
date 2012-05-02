@@ -1,11 +1,10 @@
 SRC_DIR=../src
-OBJS=marcrecord.o marcrecord_field.o marcrecord_iso2709.o \
-  marcrecord_marcxml.o marcrecord_subfield.o marcrecord_tools.o test.o
+OBJS=marcrecord.o marcrecord_field.o marcrecord_iso2709.o marcrecord_subfield.o \
+  marcrecord_tools.o marcxml_reader.o marcxml_writer.o test.o
 PROGRAM=test
 
 CXX=g++
-CXXFLAGS=-g -Wall -Wextra -pedantic -Wmissing-prototypes -DMARCRECORD_MARCXML \
-  -I$(SRC_DIR)
+CXXFLAGS=-g -Wall -Wextra -pedantic -DMARCXML -I$(SRC_DIR)
 LDFLAGS=
 LIBS=-lm -lexpat
 
@@ -20,7 +19,7 @@ $(PROGRAM): $(OBJS)
 	@echo $@ done.
 
 clean:
-	rm -f $(PROGRAM) $(OBJS) *.iso
+	rm -f $(PROGRAM) $(OBJS) *.iso *.xml
 	@echo $@ done.
 
 verify:

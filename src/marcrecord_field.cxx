@@ -70,6 +70,22 @@ void MarcRecord::Field::clear(void)
 }
 
 /*
+ * Get data of control field.
+ */
+std::string & MarcRecord::Field::getData(void)
+{
+	return data;
+}
+
+/*
+ * Set data of control field.
+ */
+void MarcRecord::Field::setData(std::string &data)
+{
+	this->data = data;
+}
+
+/*
  * Format field to string.
  */
 std::string MarcRecord::Field::toString(void)

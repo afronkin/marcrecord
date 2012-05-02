@@ -34,9 +34,12 @@
 /* Version: 2.0 (27 Feb 2011) */
 
 #include <locale.h>
-#include <wchar.h>
 #include <stdio.h>
+#include <wchar.h>
+
 #include "marcrecord.h"
+#include "marcxml_reader.h"
+#include "marcxml_writer.h"
 
 /*
  * Main function.
@@ -284,6 +287,24 @@ int main(int argc, char *argv[])
 		}
 
 		{
+			printf("Testing 'MarcXmlWriter'.\n");
+
+			marcFile = fopen("test.xml", "wb");
+			if (marcFile == NULL) {
+				throw "can't open MARCXML file";
+			}
+
+			MarcXmlWriter marcXmlWriter(marcFile, "WINDOWS-1251");
+			marcXmlWriter.writeHeader();
+			marcXmlWriter.write(marcRecord);
+			marcXmlWriter.writeFooter();
+
+			fclose(marcFile);
+
+			printf("Done.\n\n");
+		}
+
+		{
 			printf("Testing 'MarcXmlReader'.\n");
 
 			marcFile = fopen("test.xml", "rb");
@@ -292,14 +313,9 @@ int main(int argc, char *argv[])
 			}
 
 			MarcXmlReader marcXmlReader(marcFile);
-			while (true) {
-				MarcRecord marcRecord = marcXmlReader.next();
-				if (marcRecord.isNull()) {
-					break;
-				}
-
-				std::string textRecord = marcRecord.toString();
-				printf("%s", textRecord.c_str());
+			MarcRecord marcRecord;
+			while (marcXmlReader.next(marcRecord)) {
+				printf("%s", marcRecord.toString().c_str());
 			}
 
 			fclose(marcFile);

@@ -33,6 +33,8 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
+#include <stdio.h>
+#include <string.h>
 #include "marcrecord.h"
 
 #define ISO2709_RECORD_SEPARATOR	'\x1D'

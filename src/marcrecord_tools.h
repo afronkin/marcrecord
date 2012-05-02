@@ -36,7 +36,11 @@
 #if !defined(MARCRECORD_TOOLS_H)
 #define MARCRECORD_TOOLS_H
 
+#include <string>
+
 /* Print formatted output to std::string. */
 int snprintf(std::string &s, size_t n, const char *format, ...);
+/* Serialize XML string. */
+std::string serialize_xml(std::string &s);
 
 #endif /* MARCRECORD_TOOLS_H */

@@ -33,95 +33,37 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
+#if defined(MARCXML)
+
+#if !defined(MARCXML_WRITER_H)
+#define MARCXML_WRITER_H
+
+#include <string>
 #include "marcrecord.h"
 
 /*
- * Constructor.
+ * MARCXML records writer.
  */
-MarcRecord::Subfield::Subfield(char newId, std::string newData)
-{
-	clear();
-	id = newId;
-	data = newData;
-}
+class MarcXmlWriter {
+protected:
+	/* Output MARCXML file. */
+	FILE *outputFile;
+	/* Encoding of output MARCXML file. */
+	std::string outputEncoding;
 
-/*
- * Clear subfield data.
- */
-void MarcRecord::Subfield::clear(void)
-{
-	id = ' ';
-	data.erase();
-}
+public:
+	/* Constructor. */
+	MarcXmlWriter(FILE *outputFile = NULL, const char *outputEncoding = NULL);
+	/* Destructor. */
+	~MarcXmlWriter();
 
-/*
- * Get data of subfield.
- */
-std::string & MarcRecord::Subfield::getData(void)
-{
-	return data;
-}
+	/* Write header to MARCXML file. */
+	void writeHeader(void);
+	/* Write footer to MARCXML file. */
+	void writeFooter(void);
+	/* Write record to MARCXML file. */
+	void write(MarcRecord &record);
+};
 
-/*
- * Set data of subfield.
- */
-void MarcRecord::Subfield::setData(std::string &data)
-{
-	this->data = data;
-}
-
-/*
- * Check presence of embedded field.
- */
-bool MarcRecord::Subfield::isEmbedded(void)
-{
-	return (id == '1' ? true : false);
-}
-
-/*
- * Get tag of embedded field.
- */
-std::string MarcRecord::Subfield::getEmbeddedTag(void)
-{
-	if (id != '1') {
-		return "";
-	}
-
-	return data.substr(0, 3);
-}
-
-/*
- * Get indicator 1 of embedded field.
- */
-char MarcRecord::Subfield::getEmbeddedInd1(void)
-{
-	if (id != '1' || data.substr(0, 3) < "010") {
-		return '?';
-	}
-
-	return data[3];
-}
-
-/*
- * Get indicator 2 of embedded field.
- */
-char MarcRecord::Subfield::getEmbeddedInd2(void)
-{
-	if (id != '1' || data.substr(0, 3) < "010") {
-		return '?';
-	}
-
-	return data[4];
-}
-
-/*
- * Get data of embedded field.
- */
-std::string MarcRecord::Subfield::getEmbeddedData(void)
-{
-	if (id != '1' || data.substr(0, 3) >= "010") {
-		return "";
-	}
-
-	return data.substr(3);
-}
+#endif /* MARCXML_WRITER_H */
+#endif /* MARCXML */

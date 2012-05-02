@@ -33,95 +33,69 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
+#if defined(MARCXML)
+
+#if !defined(MARCXML_READER_H)
+#define MARCXML_READER_H
+
+#include <string>
 #include "marcrecord.h"
 
-/*
- * Constructor.
- */
-MarcRecord::Subfield::Subfield(char newId, std::string newData)
-{
-	clear();
-	id = newId;
-	data = newData;
-}
+#include <expat.h>
 
 /*
- * Clear subfield data.
+ * MARCXML records reader.
  */
-void MarcRecord::Subfield::clear(void)
-{
-	id = ' ';
-	data.erase();
-}
+class MarcXmlReader {
+public:
+	/* Exception class for events and errors handling. */
+	class Exception {
+	public:
+		enum ErrorCode { ERROR_XML } errorCode;
+		std::string errorMessage;
 
-/*
- * Get data of subfield.
- */
-std::string & MarcRecord::Subfield::getData(void)
-{
-	return data;
-}
+		Exception(enum ErrorCode errorCode, std::string errorMessage)
+		{
+			this->errorCode = errorCode;
+			this->errorMessage = errorMessage;
+		}
+	};
 
-/*
- * Set data of subfield.
- */
-void MarcRecord::Subfield::setData(std::string &data)
-{
-	this->data = data;
-}
+	/* XML parser state structure definition. */
+	struct XmlParserState {
+		XML_Parser xmlParser;
+		bool done;
+		bool paused;
+		std::string parentTag;
 
-/*
- * Check presence of embedded field.
- */
-bool MarcRecord::Subfield::isEmbedded(void)
-{
-	return (id == '1' ? true : false);
-}
+		MarcRecord *record;
+		MarcRecord::FieldIt fieldIt;
+		MarcRecord::SubfieldIt subfieldIt;
+		std::string characterData;
+	};
 
-/*
- * Get tag of embedded field.
- */
-std::string MarcRecord::Subfield::getEmbeddedTag(void)
-{
-	if (id != '1') {
-		return "";
-	}
+protected:
+	/* Input MARCXML file. */
+	FILE *inputFile;
+	/* Encoding of input MARCXML file. */
+	std::string inputEncoding;
 
-	return data.substr(0, 3);
-}
+	/* XML parser. */
+	XML_Parser xmlParser;
+	/* XML parser state. */
+	struct XmlParserState parserState;
+	/* Record buffer. */
+	char buffer[4096];
 
-/*
- * Get indicator 1 of embedded field.
- */
-char MarcRecord::Subfield::getEmbeddedInd1(void)
-{
-	if (id != '1' || data.substr(0, 3) < "010") {
-		return '?';
-	}
+public:
+	/* Constructor. */
+	MarcXmlReader(FILE *inputFile = NULL, const char *inputEncoding = NULL);
+	/* Destructor. */
+	~MarcXmlReader();
 
-	return data[3];
-}
+	/* Read next record from MARCXML file. */
+	bool next(MarcRecord &);
+};
 
-/*
- * Get indicator 2 of embedded field.
- */
-char MarcRecord::Subfield::getEmbeddedInd2(void)
-{
-	if (id != '1' || data.substr(0, 3) < "010") {
-		return '?';
-	}
-
-	return data[4];
-}
-
-/*
- * Get data of embedded field.
- */
-std::string MarcRecord::Subfield::getEmbeddedData(void)
-{
-	if (id != '1' || data.substr(0, 3) >= "010") {
-		return "";
-	}
-
-	return data.substr(3);
-}
+#endif /* MARCXML_READER_H */
+#endif /* MARCXML */
