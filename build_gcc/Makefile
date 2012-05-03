@@ -5,7 +5,7 @@ PROGRAM=test
 
 CXX=g++
 CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long \
-  -DMARCXML -I$(SRC_DIR)
+  -DMARCRECORD_MARCXML -I$(SRC_DIR)
 LDFLAGS=
 LIBS=-lm -lexpat
 

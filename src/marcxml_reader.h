@@ -33,7 +33,7 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if defined(MARCXML)
+#if defined(MARCRECORD_MARCXML)
 
 #if !defined(MARCXML_READER_H)
 #define MARCXML_READER_H
@@ -98,4 +98,4 @@ public:
 };
 
 #endif /* MARCXML_READER_H */
-#endif /* MARCXML */
+#endif /* MARCRECORD_MARCXML */

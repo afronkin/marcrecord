@@ -33,7 +33,7 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if defined(MARCXML)
+#if defined(MARCRECORD_MARCXML)
 
 #if !defined(MARCXML_WRITER_H)
 #define MARCXML_WRITER_H
@@ -66,4 +66,4 @@ public:
 };
 
 #endif /* MARCXML_WRITER_H */
-#endif /* MARCXML */
+#endif /* MARCRECORD_MARCXML */

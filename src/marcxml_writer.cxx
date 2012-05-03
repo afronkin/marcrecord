@@ -33,7 +33,7 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if defined(MARCXML)
+#if defined(MARCRECORD_MARCXML)
 
 #include <stdio.h>
 
@@ -131,4 +131,4 @@ void MarcXmlWriter::write(MarcRecord &record)
 	fputs("  </record>\n", outputFile);
 }
 
-#endif /* MARCXML */
+#endif /* MARCRECORD_MARCXML */

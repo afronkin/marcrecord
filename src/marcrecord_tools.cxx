@@ -95,4 +95,3 @@ std::string serialize_xml(std::string &s)
 
 	return dest;
 }
-

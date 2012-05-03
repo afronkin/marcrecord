@@ -280,7 +280,9 @@ bool MarcRecord::writeIso2709(FILE *outputFile, const char *encoding)
 	memcpy(recordBuf, recordLengthBuf, 5);
 
 	/* Write record buffer to file. */
-	fwrite(recordBuf, recordLength, 1, outputFile);
+	if (fwrite(recordBuf, recordLength, 1, outputFile) != 1) {
+		return false;
+	}
 
 	return true;
 }
