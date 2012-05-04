@@ -38,9 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "marcrecord.h"
-
-/* Print formatted output to std::string. */
-int snprintf(std::string &s, size_t n, const char *format, ...);
+#include "marcrecord_tools.h"
 
 /*
  * Constructor.
@@ -51,9 +49,9 @@ MarcRecord::MarcRecord()
 	clear();
 }
 
-MarcRecord::MarcRecord(FormatVariant newFormatVariant)
+MarcRecord::MarcRecord(FormatVariant formatVariant)
 {
-	setFormatVariant(newFormatVariant);
+	setFormatVariant(formatVariant);
 	clear();
 }
 
@@ -102,9 +100,9 @@ MarcRecord::FormatVariant MarcRecord::getFormatVariant(void)
 /*
  * Set record format variant.
  */
-void MarcRecord::setFormatVariant(FormatVariant newFormatVariant)
+void MarcRecord::setFormatVariant(FormatVariant formatVariant)
 {
-	formatVariant = newFormatVariant;
+	this->formatVariant = formatVariant;
 }
 
 /*
@@ -118,12 +116,12 @@ MarcRecord::Leader MarcRecord::getLeader(void)
 /*
  * Set record leader.
  */
-void MarcRecord::setLeader(Leader &leader)
+void MarcRecord::setLeader(const Leader &leader)
 {
 	this->leader = leader;
 }
 
-void MarcRecord::setLeader(std::string leaderData)
+void MarcRecord::setLeader(const std::string &leaderData)
 {
 	memcpy((void *) &leader, leaderData.c_str(),
 		std::min(sizeof(struct Leader), leaderData.size()));
@@ -132,7 +130,7 @@ void MarcRecord::setLeader(std::string leaderData)
 /*
  * Get list of fields.
  */
-MarcRecord::FieldRefList MarcRecord::getFields(std::string fieldTag)
+MarcRecord::FieldRefList MarcRecord::getFields(const std::string &fieldTag)
 {
 	FieldRefList resultFieldList;
 	FieldIt fieldIt;
@@ -152,7 +150,7 @@ MarcRecord::FieldRefList MarcRecord::getFields(std::string fieldTag)
 /*
  * Get field.
  */
-MarcRecord::FieldIt MarcRecord::getField(std::string fieldTag)
+MarcRecord::FieldIt MarcRecord::getField(const std::string &fieldTag)
 {
 	FieldIt fieldIt;
 
@@ -171,21 +169,23 @@ MarcRecord::FieldIt MarcRecord::getField(std::string fieldTag)
 /*
  * Add field to the end of record.
  */
-MarcRecord::FieldIt MarcRecord::addField(Field field)
+MarcRecord::FieldIt MarcRecord::addField(const Field &field)
 {
 	/* Append field to the list. */
 	FieldIt fieldIt = fieldList.insert(fieldList.end(), field);
 	return fieldIt;
 }
 
-MarcRecord::FieldIt MarcRecord::addControlField(std::string fieldTag, std::string fieldData)
+MarcRecord::FieldIt MarcRecord::addControlField(const std::string &fieldTag,
+	const std::string &fieldData)
 {
 	/* Append field to the list. */
 	FieldIt fieldIt = fieldList.insert(fieldList.end(), Field(fieldTag, fieldData));
 	return fieldIt;
 }
 
-MarcRecord::FieldIt MarcRecord::addDataField(std::string fieldTag, char fieldInd1, char fieldInd2)
+MarcRecord::FieldIt MarcRecord::addDataField(const std::string &fieldTag,
+	char fieldInd1, char fieldInd2)
 {
 	/* Append field to the list. */
 	FieldIt fieldIt = fieldList.insert(fieldList.end(), Field(fieldTag, fieldInd1, fieldInd2));
@@ -195,7 +195,7 @@ MarcRecord::FieldIt MarcRecord::addDataField(std::string fieldTag, char fieldInd
 /*
  * Add field to the record before specified field.
  */
-MarcRecord::FieldIt MarcRecord::addFieldBefore(FieldIt nextFieldIt, Field field)
+MarcRecord::FieldIt MarcRecord::addFieldBefore(FieldIt nextFieldIt, const Field &field)
 {
 	/* Append field to the list. */
 	FieldIt fieldIt = fieldList.insert(nextFieldIt, field);
@@ -203,7 +203,7 @@ MarcRecord::FieldIt MarcRecord::addFieldBefore(FieldIt nextFieldIt, Field field)
 }
 
 MarcRecord::FieldIt MarcRecord::addControlFieldBefore(FieldIt nextFieldIt,
-	std::string fieldTag, std::string fieldData)
+	const std::string &fieldTag, const std::string &fieldData)
 {
 	/* Append field to the list. */
 	FieldIt fieldIt = fieldList.insert(nextFieldIt, Field(fieldTag, fieldData));
@@ -211,7 +211,7 @@ MarcRecord::FieldIt MarcRecord::addControlFieldBefore(FieldIt nextFieldIt,
 }
 
 MarcRecord::FieldIt MarcRecord::addDataFieldBefore(FieldIt nextFieldIt,
-	std::string fieldTag, char fieldInd1, char fieldInd2)
+	const std::string &fieldTag, char fieldInd1, char fieldInd2)
 {
 	/* Append field to the list. */
 	FieldIt fieldIt = fieldList.insert(nextFieldIt, Field(fieldTag, fieldInd1, fieldInd2));

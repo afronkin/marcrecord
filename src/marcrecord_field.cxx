@@ -39,7 +39,7 @@
 /*
  * Constructor.
  */
-MarcRecord::Field::Field(std::string tag, std::string data)
+MarcRecord::Field::Field(const std::string &tag, const std::string &data)
 {
 	clear();
 	type = CONTROLFIELD;
@@ -47,7 +47,7 @@ MarcRecord::Field::Field(std::string tag, std::string data)
 	this->data = data;
 }
 
-MarcRecord::Field::Field(std::string tag, char ind1, char ind2)
+MarcRecord::Field::Field(const std::string &tag, char ind1, char ind2)
 {
 	clear();
 	type = DATAFIELD;
@@ -80,7 +80,7 @@ std::string & MarcRecord::Field::getData(void)
 /*
  * Set data of control field.
  */
-void MarcRecord::Field::setData(std::string &data)
+void MarcRecord::Field::setData(const std::string &data)
 {
 	this->data = data;
 }
@@ -163,7 +163,7 @@ MarcRecord::SubfieldIt MarcRecord::Field::getSubfield(char subfieldId)
 /*
  * Get list of embedded fields.
  */
-MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(std::string fieldTag)
+MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(const std::string &fieldTag)
 {
 	EmbeddedFieldList resultFieldList;
 	SubfieldRefList embeddedSubfieldList;
@@ -201,7 +201,7 @@ MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(std::string f
 /*
  * Get embedded field.
  */
-MarcRecord::SubfieldRefList MarcRecord::Field::getEmbeddedField(std::string fieldTag)
+MarcRecord::SubfieldRefList MarcRecord::Field::getEmbeddedField(const std::string &fieldTag)
 {
 	SubfieldRefList embeddedSubfieldList;
 
@@ -231,14 +231,15 @@ MarcRecord::SubfieldRefList MarcRecord::Field::getEmbeddedField(std::string fiel
 /*
  * Add subfield to the end of field.
  */
-MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(Subfield subfield)
+MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(const Subfield &subfield)
 {
 	/* Append subfield to the list. */
 	SubfieldIt subfieldIt = subfieldList.insert(subfieldList.end(), subfield);
 	return subfieldIt;
 }
 
-MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(char subfieldId, std::string subfieldData)
+MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(char subfieldId,
+	const std::string &subfieldData)
 {
 	/* Append subfield to the list. */
 	SubfieldIt subfieldIt = subfieldList.insert(subfieldList.end(),
@@ -250,7 +251,7 @@ MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(char subfieldId, std::stri
  * Add subfield to the field before specified subfield.
  */
 MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
-	Subfield subfield)
+	const Subfield &subfield)
 {
 	/* Append subfield to the list. */
 	SubfieldIt subfieldIt = subfieldList.insert(nextSubfieldIt, subfield);
@@ -258,7 +259,7 @@ MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfi
 }
 
 MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
-	char subfieldId, std::string subfieldData)
+	char subfieldId, const std::string &subfieldData)
 {
 	/* Append subfield to the list. */
 	SubfieldIt subfieldIt = subfieldList.insert(nextSubfieldIt,

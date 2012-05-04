@@ -38,11 +38,11 @@
 /*
  * Constructor.
  */
-MarcRecord::Subfield::Subfield(char newId, std::string newData)
+MarcRecord::Subfield::Subfield(char id, const std::string &data)
 {
 	clear();
-	id = newId;
-	data = newData;
+	this->id = id;
+	this->data = data;
 }
 
 /*
@@ -65,7 +65,7 @@ std::string & MarcRecord::Subfield::getData(void)
 /*
  * Set data of subfield.
  */
-void MarcRecord::Subfield::setData(std::string &data)
+void MarcRecord::Subfield::setData(const std::string &data)
 {
 	this->data = data;
 }

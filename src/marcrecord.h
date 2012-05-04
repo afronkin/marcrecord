@@ -137,13 +137,13 @@ private:
 
 private:
 	/* Parse field from ISO 2709 buffer. */
-	inline Field parseFieldIso2709(std::string fieldTag,
+	inline Field parseFieldIso2709(const std::string &fieldTag,
 		const char *fieldData, unsigned int fieldLength, const char *encoding);
 
 public:
 	/* Constructors and destructor. */
 	MarcRecord();
-	MarcRecord(FormatVariant newFormatVariant);
+	MarcRecord(FormatVariant formatVariant);
 	~MarcRecord();
 
 	/* Clear record. */
@@ -152,7 +152,7 @@ public:
 	/* Get record format variant. */
 	FormatVariant getFormatVariant(void);
 	/* Set record format variant. */
-	void setFormatVariant(FormatVariant newFormatVariant);
+	void setFormatVariant(FormatVariant formatVariant);
 
 	/* Parse record from ISO 2709 buffer. */
 	bool parseRecordIso2709(const char *recordBuf, const char *encoding = "UTF-8");
@@ -164,24 +164,26 @@ public:
 	/* Get record leader. */
 	Leader getLeader(void);
 	/* Set record leader. */
-	void setLeader(Leader &leader);
-	void setLeader(std::string leaderData = "");
+	void setLeader(const Leader &leader);
+	void setLeader(const std::string &leaderData = "");
 
 	/* Get list of fields. */
-	FieldRefList getFields(std::string fieldTag = "");
+	FieldRefList getFields(const std::string &fieldTag = "");
 	/* Get field. */
-	FieldIt getField(std::string fieldTag);
+	FieldIt getField(const std::string &fieldTag);
 
 	/* Add field to the end of record. */
-	FieldIt addField(Field field);
-	FieldIt addControlField(std::string fieldTag = "", std::string fieldData = "");
-	FieldIt addDataField(std::string fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
+	FieldIt addField(const Field &field);
+	FieldIt addControlField(const std::string &fieldTag = "",
+		const std::string &fieldData = "");
+	FieldIt addDataField(const std::string &fieldTag = "",
+		char fieldInd1 = ' ', char fieldInd2 = ' ');
 	/* Add field to the record before specified field. */
-	FieldIt addFieldBefore(FieldIt nextFieldIt, Field field);
+	FieldIt addFieldBefore(FieldIt nextFieldIt, const Field &field);
 	FieldIt addControlFieldBefore(FieldIt nextFieldIt,
-		std::string fieldTag = "", std::string fieldData = "");
+		const std::string &fieldTag = "", const std::string &fieldData = "");
 	FieldIt addDataFieldBefore(FieldIt nextFieldIt,
-		std::string fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
+		const std::string &fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
 	/* Remove field from the record. */
 	void removeField(FieldIt fieldIt);
 
@@ -222,8 +224,8 @@ public:
 
 public:
 	/* Constructors. */
-	Field(std::string tag = "", std::string data = "");
-	Field(std::string tag, char ind1, char ind2);
+	Field(const std::string &tag = "", const std::string &data = "");
+	Field(const std::string &tag, char ind1, char ind2);
 
 	/* Clear field data. */
 	void clear();
@@ -231,7 +233,7 @@ public:
 	/* Get data of control field. */
 	std::string & getData(void);
 	/* Set data of control field. */
-	void setData(std::string &data);
+	void setData(const std::string &data);
 
 	/* Get list of subfields. */
 	SubfieldRefList getSubfields(char subfieldId = ' ');
@@ -239,17 +241,17 @@ public:
 	SubfieldIt getSubfield(char subfieldId);
 
 	/* Get list of embedded fields. */
-	EmbeddedFieldList getEmbeddedFields(std::string fieldTag = "");
+	EmbeddedFieldList getEmbeddedFields(const std::string &fieldTag = "");
 	/* Get embedded field. */
-	SubfieldRefList getEmbeddedField(std::string fieldTag);
+	SubfieldRefList getEmbeddedField(const std::string &fieldTag);
 
 	/* Add subfield to the end of field. */
-	SubfieldIt addSubfield(Subfield subfield);
-	SubfieldIt addSubfield(char subfieldId = ' ', std::string subfieldData = "");
+	SubfieldIt addSubfield(const Subfield &subfield);
+	SubfieldIt addSubfield(char subfieldId = ' ', const std::string &subfieldData = "");
 	/* Add subfield to the field before specified subfield. */
-	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt, Subfield subfield);
+	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt, const Subfield &subfield);
 	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt,
-		char subfieldId = ' ', std::string subfieldData = "");
+		char subfieldId = ' ', const std::string &subfieldData = "");
 	/* Remove subfield from the field. */
 	void removeSubfield(SubfieldIt subfieldIt);
 
@@ -275,7 +277,7 @@ public:
 
 public:
 	/* Constructor. */
-	Subfield(char newId = ' ', std::string newData = "");
+	Subfield(char id = ' ', const std::string &data = "");
 
 	/* Clear subfield data. */
 	void clear(void);
@@ -283,7 +285,7 @@ public:
 	/* Get data of subfield. */
 	std::string & getData(void);
 	/* Set data of subfield. */
-	void setData(std::string &data);
+	void setData(const std::string &data);
 
 	/* Check presence of embedded field. */
 	bool isEmbedded(void);

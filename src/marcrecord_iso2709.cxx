@@ -116,7 +116,7 @@ bool MarcRecord::parseRecordIso2709(const char *recordBuf, const char *encoding)
 /*
  * Parse field from ISO 2709 buffer.
  */
-MarcRecord::Field MarcRecord::parseFieldIso2709(std::string fieldTag,
+MarcRecord::Field MarcRecord::parseFieldIso2709(const std::string &fieldTag,
 	const char *fieldData, unsigned int fieldLength, const char *encoding)
 {
 	Field field;
