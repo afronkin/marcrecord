@@ -1,5 +1,5 @@
 SRC_DIR=../src
-OBJS=marcrecord.o marcrecord_field.o marcrecord_iso2709.o marcrecord_subfield.o \
+OBJS=marc_reader.o marc_writer.o marcrecord.o marcrecord_field.o marcrecord_subfield.o \
   marcrecord_tools.o marcxml_reader.o marcxml_writer.o test.o
 PROGRAM=test
 
@@ -24,7 +24,7 @@ clean:
 	@echo $@ done.
 
 verify:
-	./$(PROGRAM) ../share/test/rusmarc_2.iso | iconv -f cp1251 -t utf-8 | less
+	./$(PROGRAM) | more
 	@echo $@ done.
 
 %.o: $(SRC_DIR)/%.cxx

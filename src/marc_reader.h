@@ -33,37 +33,38 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if defined(MARCRECORD_MARCXML)
-
-#if !defined(MARCXML_WRITER_H)
-#define MARCXML_WRITER_H
+#if !defined(MARC_READER_H)
+#define MARC_READER_H
 
 #include <string>
 #include "marcrecord.h"
 
 /*
- * MARCXML records writer.
+ * MARC (ISO 2709) records reader.
  */
-class MarcXmlWriter {
+class MarcReader {
 protected:
-	/* Output MARCXML file. */
-	FILE *outputFile;
-	/* Encoding of output MARCXML file. */
-	std::string outputEncoding;
+	/* Input ISO 2709 file. */
+	FILE *inputFile;
+	/* Encoding of input ISO 2709 file. */
+	std::string inputEncoding;
+
+private:
+	/* Parse field from ISO 2709 buffer. */
+	inline MarcRecord::Field parseField(const std::string &fieldTag,
+		const char *fieldData, unsigned int fieldLength);
 
 public:
 	/* Constructor. */
-	MarcXmlWriter(FILE *outputFile = NULL, const char *outputEncoding = NULL);
+	MarcReader(FILE *inputFile = NULL, const char *inputEncoding = NULL);
 	/* Destructor. */
-	~MarcXmlWriter();
+	~MarcReader();
 
-	/* Write header to MARCXML file. */
-	void writeHeader(void);
-	/* Write footer to MARCXML file. */
-	void writeFooter(void);
-	/* Write record to MARCXML file. */
-	bool write(MarcRecord &record);
+	/* Read next record from MARCXML file. */
+	bool next(MarcRecord &record);
+
+	/* Parse record from ISO 2709 buffer. */
+	bool parseRecord(const char *recordBuf, MarcRecord &record);
 };
 
-#endif /* MARCXML_WRITER_H */
-#endif /* MARCRECORD_MARCXML */
+#endif /* MARC_READER_H */

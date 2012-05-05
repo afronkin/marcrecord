@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "marcrecord.h"
+#include "marc_writer.h"
 
 #define ISO2709_RECORD_SEPARATOR	'\x1D'
 #define ISO2709_FIELD_SEPARATOR		'\x1E'
@@ -57,178 +58,44 @@ struct RecordDirectoryEntry {
 #pragma pack(pop)
 
 /*
- * Parse record from ISO 2709 buffer.
+ * Constructor.
  */
-bool MarcRecord::parseRecordIso2709(const char *recordBuf, const char *encoding)
+MarcWriter::MarcWriter(FILE *outputFile, const char *outputEncoding)
 {
-	unsigned int baseAddress, numFields;
-	RecordDirectoryEntry *directoryEntry;
-	const char *recordData;
-	unsigned int fieldNo;
-	std::string fieldTag;
-	unsigned int fieldLength, fieldStartPos;
-	Field field;
-
-	try {
-		/* Clear current record data. */
-		clear();
-
-		/* Copy record leader. */
-		memcpy(&leader, recordBuf, sizeof(struct Leader));
-
-		/* Get base address of data. */
-		if (sscanf(leader.baseAddress, "%05u", &baseAddress) != 1) {
-			throw ERROR;
-		}
-
-		/* Get number of fields. */
-		numFields = (baseAddress - sizeof(struct Leader) - 1) /
-			sizeof(struct RecordDirectoryEntry);
-
-		/* Parse list of fields. */
-		directoryEntry = (RecordDirectoryEntry *) (recordBuf + sizeof(struct Leader));
-		recordData = recordBuf + baseAddress;
-		for (fieldNo = 0; fieldNo < numFields; fieldNo++, directoryEntry++) {
-			/* Parse directory entry. */
-			fieldTag.assign(directoryEntry->fieldTag, 0, 3);
-			if (sscanf(directoryEntry->fieldLength, "%4u%5u",
-				&fieldLength, &fieldStartPos) != 2)
-			{
-				throw ERROR;
-			}
-
-			/* Parse field. */
-			field = parseFieldIso2709(fieldTag,
-				recordData + fieldStartPos, fieldLength, encoding);
-			/* Append field to list. */
-			fieldList.push_back(field);
-		}
-	} catch (int errorCode) {
-		if (errorCode != 0) {
-			clear();
-			return false;
-		}
-	}
-
-	return true;
+	/* Initialize output stream parameters. */
+	this->outputFile = outputFile == NULL ? stdout : outputFile;
+	this->outputEncoding = outputEncoding == NULL ? "" : outputEncoding;
 }
 
 /*
- * Parse field from ISO 2709 buffer.
+ * Destructor.
  */
-MarcRecord::Field MarcRecord::parseFieldIso2709(const std::string &fieldTag,
-	const char *fieldData, unsigned int fieldLength, const char *encoding)
+MarcWriter::~MarcWriter()
 {
-	Field field;
-	Subfield subfield;
-	unsigned int symbolPos, subfieldStartPos;
-
-	/* Clear field. */
-	/* field.clear(); */
-
-	/* Adjust field length. */
-	if (fieldData[fieldLength - 1] == '\x1E') {
-		fieldLength--;
-	}
-
-	field.tag = fieldTag;
-	if (fieldTag < "010" || fieldLength < 2) {
-		/* Parse control field. */
-		field.type = Field::CONTROLFIELD;
-		field.data.assign(fieldData, fieldLength);
-	} else {
-		/* Parse data field. */
-		field.type = Field::DATAFIELD;
-		field.ind1 = fieldData[0];
-		field.ind2 = fieldData[1];
-
-		/* Parse list of subfields. */
-		subfieldStartPos = 0;
-		for (symbolPos = 2; symbolPos <= fieldLength; symbolPos++) {
-			/* Skip symbols of subfield data. */
-			if (fieldData[symbolPos] != '\x1F' && symbolPos != fieldLength) {
-				continue;
-			}
-
-			if (symbolPos > 2) {
-				/* Parse regular subfield. */
-				subfield.clear();
-				subfield.id = fieldData[subfieldStartPos + 1];
-				subfield.data.assign(
-					fieldData + subfieldStartPos + 2,
-					symbolPos - subfieldStartPos - 2);
-
-				/* Append subfield to list. */
-				field.subfieldList.push_back(subfield);
-			}
-
-			subfieldStartPos = symbolPos;
-		}
-	}
-
-	return field;
-}
-
-/*
- * Read record from ISO 2709 file.
- */
-bool MarcRecord::readIso2709(FILE *inputFile, const char *encoding)
-{
-	int symbol;
-	char recordBuf[100000];
-	unsigned int recordLen;
-
-	/* Skip possible wrong symbols. */
-	do {
-		symbol = fgetc(inputFile);
-	} while (symbol >= 0 && isdigit(symbol) == 0);
-
-	if (symbol < 0) {
-		return false;
-	}
-
-	/* Read record length. */
-	recordBuf[0] = (char) symbol;
-	if (fread(recordBuf + 1, 1, 4, inputFile) != 4) {
-		return false;
-	}
-
-	/* Parse record length. */
-	if (sscanf(recordBuf, "%5u", &recordLen) != 1) {
-		return false;
-	}
-
-	/* Read record. */
-	if (fread(recordBuf + 5, 1, recordLen - 5, inputFile) != recordLen - 5) {
-		return false;
-	}
-
-	/* Parse record. */
-	return parseRecordIso2709(recordBuf, encoding);
 }
 
 /*
  * Write record to ISO 2709 file.
  */
-bool MarcRecord::writeIso2709(FILE *outputFile, const char *encoding)
+bool MarcWriter::write(MarcRecord &record)
 {
 	char recordBuf[100000];
 
 	/* Copy record leader to buffer. */
-	memcpy(recordBuf, (char *) &leader, sizeof(struct Leader));
+	memcpy(recordBuf, (char *) &record.leader, sizeof(struct MarcRecord::Leader));
 
 	/* Calculate base address of data and copy it to record buffer. */
-	unsigned int baseAddress = sizeof(struct Leader) + fieldList.size()
+	unsigned int baseAddress = sizeof(struct MarcRecord::Leader) + record.fieldList.size()
 		* sizeof(struct RecordDirectoryEntry) + 1;
 	char baseAddressBuf[6];
 	sprintf(baseAddressBuf, "%05d", baseAddress);
 	memcpy(recordBuf + 12, baseAddressBuf, 5);
 
 	/* Iterate all fields. */
-	char *directoryData = recordBuf + sizeof(struct Leader);
+	char *directoryData = recordBuf + sizeof(struct MarcRecord::Leader);
 	char *fieldData = recordBuf + baseAddress;
-	for (MarcRecord::FieldIt fieldIt = fieldList.begin();
-		fieldIt != fieldList.end(); fieldIt++)
+	for (MarcRecord::FieldIt fieldIt = record.fieldList.begin();
+		fieldIt != record.fieldList.end(); fieldIt++)
 	{
 		int fieldLength = 0;
 		if (fieldIt->tag < "010") {

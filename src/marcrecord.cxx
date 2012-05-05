@@ -232,13 +232,17 @@ void MarcRecord::removeField(FieldIt fieldIt)
  */
 std::string MarcRecord::toString(void)
 {
-	std::string textRecord = "";
-	MarcRecord::FieldIt fieldIt;
+	/* Print leader. */
+	std::string textRecord = "Leader: [";
+	textRecord.append((const char *) &leader, sizeof(struct Leader));
+	textRecord += "]";
 
 	/* Iterate all fields. */
-	for (fieldIt = fieldList.begin(); fieldIt != fieldList.end(); fieldIt++) {
+	for (MarcRecord::FieldIt fieldIt = fieldList.begin();
+		fieldIt != fieldList.end(); fieldIt++)
+	{
 		/* Print field. */
-		textRecord += fieldIt->toString() + "\n";
+		textRecord += "\n" + fieldIt->toString();
 	}
 
 	return textRecord;

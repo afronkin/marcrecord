@@ -87,7 +87,7 @@ void MarcXmlWriter::writeFooter(void)
 /*
  * Write record to MARCXML file.
  */
-void MarcXmlWriter::write(MarcRecord &record)
+bool MarcXmlWriter::write(MarcRecord &record)
 {
 	/* Write tag '<record>'. */
 	fputs("  <record>\n", outputFile);
@@ -129,6 +129,8 @@ void MarcXmlWriter::write(MarcRecord &record)
 
 	/* Write tag '<record>'. */
 	fputs("  </record>\n", outputFile);
+
+	return true;
 }
 
 #endif /* MARCRECORD_MARCXML */

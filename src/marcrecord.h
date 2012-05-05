@@ -103,10 +103,17 @@ public:
 	/* MARC subfield class. */
 	class Subfield;
 
+	/* MARC (ISO 2709) reader class. */
+	friend class MarcReader;
+	/* MARC (ISO 2709) writer class. */
+	friend class MarcWriter;
+
+#if defined(MARCRECORD_MARCXML)
 	/* MARCXML reader class. */
 	friend class MarcXmlReader;
 	/* MARCXML writer class. */
 	friend class MarcXmlWriter;
+#endif /* MARCRECORD_MARCXML */
 
 	/* List of fields. */
 	typedef std::list<Field> FieldList;
@@ -135,11 +142,6 @@ private:
 	/* List of fields. */
 	FieldList fieldList;
 
-private:
-	/* Parse field from ISO 2709 buffer. */
-	inline Field parseFieldIso2709(const std::string &fieldTag,
-		const char *fieldData, unsigned int fieldLength, const char *encoding);
-
 public:
 	/* Constructors and destructor. */
 	MarcRecord();
@@ -153,13 +155,6 @@ public:
 	FormatVariant getFormatVariant(void);
 	/* Set record format variant. */
 	void setFormatVariant(FormatVariant formatVariant);
-
-	/* Parse record from ISO 2709 buffer. */
-	bool parseRecordIso2709(const char *recordBuf, const char *encoding = "UTF-8");
-	/* Read record from ISO 2709 file. */
-	bool readIso2709(FILE *inputFile, const char *encoding = "UTF-8");
-	/* Write record to ISO 2709 file. */
-	bool writeIso2709(FILE *outputFile, const char *encoding = "UTF-8");
 
 	/* Get record leader. */
 	Leader getLeader(void);

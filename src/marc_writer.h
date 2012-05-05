@@ -33,37 +33,30 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if defined(MARCRECORD_MARCXML)
-
-#if !defined(MARCXML_WRITER_H)
-#define MARCXML_WRITER_H
+#if !defined(MARC_WRITER_H)
+#define MARC_WRITER_H
 
 #include <string>
 #include "marcrecord.h"
 
 /*
- * MARCXML records writer.
+ * MARC (ISO 2709) records writer.
  */
-class MarcXmlWriter {
+class MarcWriter {
 protected:
-	/* Output MARCXML file. */
+	/* Output ISO 2709 file. */
 	FILE *outputFile;
-	/* Encoding of output MARCXML file. */
+	/* Encoding of output ISO 2709 file. */
 	std::string outputEncoding;
 
 public:
 	/* Constructor. */
-	MarcXmlWriter(FILE *outputFile = NULL, const char *outputEncoding = NULL);
+	MarcWriter(FILE *outputFile = NULL, const char *outputEncoding = NULL);
 	/* Destructor. */
-	~MarcXmlWriter();
+	~MarcWriter();
 
-	/* Write header to MARCXML file. */
-	void writeHeader(void);
-	/* Write footer to MARCXML file. */
-	void writeFooter(void);
-	/* Write record to MARCXML file. */
+	/* Write record to ISO 2709 file. */
 	bool write(MarcRecord &record);
 };
 
-#endif /* MARCXML_WRITER_H */
-#endif /* MARCRECORD_MARCXML */
+#endif /* MARC_WRITER_H */
