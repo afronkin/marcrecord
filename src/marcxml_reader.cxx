@@ -39,7 +39,10 @@
 
 #include "marcrecord.h"
 #include "marcxml_reader.h"
+
+#if defined(MARCRECORD_EXPAT_UTF8)
 #include "marcxml_reader_encodings.h"
+#endif /* MARCRECORD_EXPAT_UTF8 */
 
 /* XML start element handler for expat library. */
 void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML_Char **atts);
@@ -175,10 +178,13 @@ static int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, 
 	(void) (data);
 
 	if (strcmp(encoding, "windows-1251") == 0 || strcmp(encoding, "WINDOWS-1251") == 0) {
-		/* memcpy(info->map, expatEncodingWindows1251, sizeof(int) * 256); */
+#if defined(MARCRECORD_EXPAT_UTF8)
+		memcpy(info->map, expatEncodingWindows1251, sizeof(int) * 256);
+#else
 		for (int i = 0; i < 256; i++) {
 			info->map[i] = i;
 		}
+#endif /* MARCRECORD_EXPAT_UTF8 */
 
 		info->data = NULL;
 		info->convert = NULL;
