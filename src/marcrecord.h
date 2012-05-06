@@ -107,13 +107,10 @@ public:
 	friend class MarcReader;
 	/* MARC (ISO 2709) writer class. */
 	friend class MarcWriter;
-
-#if defined(MARCRECORD_MARCXML)
 	/* MARCXML reader class. */
 	friend class MarcXmlReader;
 	/* MARCXML writer class. */
 	friend class MarcXmlWriter;
-#endif /* MARCRECORD_MARCXML */
 
 	/* List of fields. */
 	typedef std::list<Field> FieldList;

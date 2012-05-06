@@ -33,8 +33,6 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if defined(MARCRECORD_MARCXML)
-
 #include <stdio.h>
 #include <string>
 #include <string.h>
@@ -177,7 +175,11 @@ static int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, 
 	(void) (data);
 
 	if (strcmp(encoding, "windows-1251") == 0 || strcmp(encoding, "WINDOWS-1251") == 0) {
-		memcpy(info->map, expatEncodingWindows1251, sizeof(int) * 256);
+		/* memcpy(info->map, expatEncodingWindows1251, sizeof(int) * 256); */
+		for (int i = 0; i < 256; i++) {
+			info->map[i] = i;
+		}
+
 		info->data = NULL;
 		info->convert = NULL;
 		info->release = NULL;
@@ -262,5 +264,3 @@ bool MarcXmlReader::next(MarcRecord &record)
 
 	return true;
 }
-
-#endif /* MARCRECORD_MARCXML */

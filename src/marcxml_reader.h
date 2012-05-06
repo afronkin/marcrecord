@@ -33,15 +33,12 @@
 
 /* Version: 2.0 (27 Feb 2011) */
 
-#if defined(MARCRECORD_MARCXML)
-
 #if !defined(MARCXML_READER_H)
 #define MARCXML_READER_H
 
 #include <string>
 #include "marcrecord.h"
-
-#include <expat.h>
+#include "expat/expat.h"
 
 /*
  * MARCXML records reader.
@@ -98,4 +95,3 @@ public:
 };
 
 #endif /* MARCXML_READER_H */
-#endif /* MARCRECORD_MARCXML */

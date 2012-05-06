@@ -67,8 +67,8 @@ MarcRecord createRecord1(void)
 	fieldIt = record.addDataField("463", '1', '0');
 	fieldIt->addSubfield('1', "001xyz");
 	fieldIt->addSubfield('1', "30012");
-	fieldIt->addSubfield('a', "ijk");
-	fieldIt->addSubfield('b', "lmn");
+	fieldIt->addSubfield('a', "\xD0\xA2\xD0\xB5\xD1\x81\xD1\x82");
+	fieldIt->addSubfield('b', "\xCF\xF0\xEE\xE2\xE5\xF0\xEA\xE0");
 	fieldIt = record.addDataField("899", '2', '3');
 	fieldIt->addSubfield('c', "123");
 	fieldIt->addSubfield('d', "12345");
