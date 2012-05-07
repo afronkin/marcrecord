@@ -70,6 +70,22 @@ void MarcRecord::Field::clear(void)
 }
 
 /*
+ * Return true if file type is controlfield.
+ */
+bool MarcRecord::Field::isControlField()
+{
+	return (type == CONTROLFIELD);
+}
+
+/*
+ * Return true if file type is datafield.
+ */
+bool MarcRecord::Field::isDataField()
+{
+	return (type == DATAFIELD);
+}
+
+/*
  * Get data of control field.
  */
 std::string & MarcRecord::Field::getData(void)

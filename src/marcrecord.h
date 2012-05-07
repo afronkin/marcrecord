@@ -222,6 +222,11 @@ public:
 	/* Clear field data. */
 	void clear();
 
+	/* Return true if file type is controlfield. */
+	bool isControlField();
+	/* Return true if file type is datafield. */
+	bool isDataField();
+
 	/* Get data of control field. */
 	std::string & getData(void);
 	/* Set data of control field. */
