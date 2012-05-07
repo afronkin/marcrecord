@@ -450,10 +450,15 @@ bool test10(void)
 		/* Initialize MARC reader. */
 		MarcReader marcReader(inputFile);
 
-		/* Read record. */
+		/* Read records. */
 		MarcRecord record(MarcRecord::UNIMARC);
-		if (!marcReader.next(record)) {
-			throw "can't read MARC record from file";
+		while (marcReader.next(record)) {
+			printf("%s\n", record.toString().c_str());
+		}
+
+		/* Check error code. */
+		if (marcReader.getErrorCode() != MarcReader::END_OF_FILE) {
+			throw marcReader.getErrorMessage().c_str();
 		}
 
 		/* Close ISO 2709 file. */
@@ -489,10 +494,10 @@ bool test11(void)
 			throw "can't open output file";
 		}
 
-		/* Initialize MARC writer. */
+		/* Initialize MARCXML writer. */
 		MarcXmlWriter marcXmlWriter(outputFile, "WINDOWS-1251");
 
-		/* Write MARC records to ISO 2709 file. */
+		/* Write MARC records to MARCXML file. */
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		marcXmlWriter.writeHeader();
@@ -501,7 +506,7 @@ bool test11(void)
 		}
 		marcXmlWriter.writeFooter();
 
-		/* Close ISO 2709 file. */
+		/* Close MARCXML file. */
 		fclose(outputFile);
 	} catch (const char *errorMessage) {
 		/* Close files. */
@@ -528,7 +533,7 @@ bool test12(void)
 	printf("Testing MarcXmlReader.\n");
 
 	try {
-		/* Open ISO 2709 file. */
+		/* Open MARCXML file. */
 		inputFile = fopen("test2.xml", "rb");
 		if (inputFile == NULL) {
 			throw "can't open input file";
@@ -543,7 +548,12 @@ bool test12(void)
 			printf("%s\n", record.toString().c_str());
 		}
 
-		/* Close ISO 2709 file. */
+		/* Check error code. */
+		if (marcXmlReader.getErrorCode() != MarcXmlReader::END_OF_FILE) {
+			throw marcXmlReader.getErrorMessage().c_str();
+		}
+
+		/* Close MARCXML file. */
 		fclose(inputFile);
 	} catch (const char *errorMessage) {
 		/* Close files. */

@@ -14,7 +14,7 @@ LDFLAGS=
 LIBS=-lm
 
 .PHONY: all clean verify
-.SUFFIXES: .cxx .o
+.SUFFIXES: .cxx .c .o
 
 all: $(PROGRAM)
 	@echo $@ done.

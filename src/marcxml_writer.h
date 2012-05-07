@@ -55,6 +55,11 @@ public:
 	/* Destructor. */
 	~MarcXmlWriter();
 
+	/* Open output file. */
+	void open(FILE *outputFile, const char *outputEncoding = NULL);
+	/* Close output file. */
+	void close(void);
+
 	/* Write header to MARCXML file. */
 	void writeHeader(void);
 	/* Write footer to MARCXML file. */

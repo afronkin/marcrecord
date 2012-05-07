@@ -62,9 +62,13 @@ struct RecordDirectoryEntry {
  */
 MarcWriter::MarcWriter(FILE *outputFile, const char *outputEncoding)
 {
-	/* Initialize output stream parameters. */
-	this->outputFile = outputFile == NULL ? stdout : outputFile;
-	this->outputEncoding = outputEncoding == NULL ? "" : outputEncoding;
+	if (outputFile) {
+		/* Open output file. */
+		open(outputFile, outputEncoding);
+	} else {
+		/* Clear object state. */
+		close();
+	}
 }
 
 /*
@@ -72,6 +76,28 @@ MarcWriter::MarcWriter(FILE *outputFile, const char *outputEncoding)
  */
 MarcWriter::~MarcWriter()
 {
+	/* Close output file. */
+	close();
+}
+
+/*
+ * Open output file.
+ */
+void MarcWriter::open(FILE *outputFile, const char *outputEncoding)
+{
+	/* Initialize output stream parameters. */
+	this->outputFile = outputFile == NULL ? stdout : outputFile;
+	this->outputEncoding = outputEncoding == NULL ? "" : outputEncoding;
+}
+
+/*
+ * Close output file.
+ */
+void MarcWriter::close(void)
+{
+	/* Clear output stream parameters. */
+	this->outputFile = NULL;
+	this->outputEncoding = "";
 }
 
 /*

@@ -55,6 +55,11 @@ public:
 	/* Destructor. */
 	~MarcWriter();
 
+	/* Open output file. */
+	void open(FILE *outputFile, const char *outputEncoding = NULL);
+	/* Close output file. */
+	void close(void);
+
 	/* Write record to ISO 2709 file. */
 	bool write(MarcRecord &record);
 };
