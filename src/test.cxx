@@ -214,7 +214,7 @@ bool test4(void)
 		}
 
 		/* Print subfield value. */
-		printf("Subfield 200b: '%s'\n", subfieldIt->data.c_str());
+		printf("Subfield 200b: '%s'\n", subfieldIt->m_data.c_str());
 	} catch (const char *errorMessage) {
 		/* Print error message. */
 		printf("Error: %s.\n", errorMessage);
@@ -241,8 +241,8 @@ bool test5(void)
 			fieldIt != fieldList.end(); fieldIt++)
 		{
 			/* Print tag and indicators of field. */
-			printf("%3s [%c%c]", (*fieldIt)->tag.c_str(),
-				(*fieldIt)->ind1, (*fieldIt)->ind2);
+			printf("%3s [%c%c]", (*fieldIt)->m_tag.c_str(),
+				(*fieldIt)->m_ind1, (*fieldIt)->m_ind2);
 
 			/* Get list of specified subfields from field. */
 			MarcRecord::SubfieldRefList subfieldList = (*fieldIt)->getSubfields('e');
@@ -252,7 +252,7 @@ bool test5(void)
 					subfieldIt != subfieldList.end();  subfieldIt++)
 				{
 					printf(" $%c %s",
-						(*subfieldIt)->id, (*subfieldIt)->data.c_str());
+						(*subfieldIt)->m_id, (*subfieldIt)->m_data.c_str());
 				}
 				printf("\n");
 			}
@@ -330,7 +330,7 @@ bool test7(void)
 				subfieldIt != subfieldList->end(); subfieldIt++)
 			{
 				printf(" $%c '%s'",
-					(*subfieldIt)->id, (*subfieldIt)->data.c_str());
+					(*subfieldIt)->m_id, (*subfieldIt)->m_data.c_str());
 			}
 			printf("\n");
 		}

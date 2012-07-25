@@ -1,30 +1,35 @@
-PROG_NAME=test
-
-OBJS=marcrecord.o marcrecord_field.o marcrecord_subfield.o test.o
-MODULES=
-VPATH=../src
+SRC_DIR=../src
+OBJS=marc_reader.o marc_writer.o marcrecord.o marcrecord_field.o marcrecord_subfield.o \
+  marcrecord_tools.o marcxml_reader.o marcxml_writer.o test.o xmlparse.o xmlrole.o xmltok.o
+PROGRAM=test
 
 CXX=CC
-CXXFLAGS=-g -O2
+CXXFLAGS=-O2 -I$(SRC_DIR) -I$(SRC_DIR)/expat
+CC=cc
+CFLAGS=-O2 -I$(SRC_DIR)/expat -DHAVE_EXPAT_CONFIG_H
 LDFLAGS=
-LIBS=
+LIBS=-lm
 
-.PHONY: all clean
-.SUFFIXES: .cxx .o
+.PHONY: all clean verify
+.SUFFIXES: .cxx .c .o
 
-all: $(PROG_NAME)
+all: $(PROGRAM)
 	@echo $@ done.
 
-$(PROG_NAME): $(OBJS) $(MODULES)
-	$(CXX) *.o $(LDFLAGS) $(LIBS) -o $@
+$(PROGRAM): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 	@echo $@ done.
 
 clean:
-	rm -f $(PROG_NAME) *.o
+	rm -f $(PROGRAM) $(OBJS) *.iso *.xml
 	@echo $@ done.
 
-%.o: %.cxx
+verify:
+	./$(PROGRAM) | more
+	@echo $@ done.
+
+%.o: $(SRC_DIR)/%.cxx
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-module.%:
-	make -f Makefile.$*
+%.o: $(SRC_DIR)/expat/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
