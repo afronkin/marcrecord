@@ -5,13 +5,13 @@ PROGRAM=test
 
 CXX=g++
 CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long \
-  -I$(SRC_DIR) -I$(SRC_DIR)/expat
+  -I$(SRC_DIR) -I$(SRC_DIR)/expat -DMARCRECORD_USE_UTF8
 CC=gcc
-CFLAGS=-O2 -Wall -ansi -pedantic -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes \
+CFLAGS_EXPAT=-O2 -Wall -ansi -pedantic -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes \
   -Wold-style-definition -Wwrite-strings -Wno-long-long -I$(SRC_DIR)/expat \
-  -DHAVE_EXPAT_CONFIG_H
+  -DHAVE_EXPAT_CONFIG_H -DMARCRECORD_USE_UTF8
 LDFLAGS=
-LIBS=-lm
+LIBS=-lm -liconv
 
 .PHONY: all clean verify
 .SUFFIXES: .cxx .c .o
@@ -35,4 +35,4 @@ verify:
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 %.o: $(SRC_DIR)/expat/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS_EXPAT) -c $< -o $@
