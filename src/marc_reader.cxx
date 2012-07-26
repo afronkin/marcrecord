@@ -287,7 +287,6 @@ bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRec
 
 			/* Parse directory entry. */
 			std::string fieldTag(directoryEntry->fieldTag, 0, 3);
-			// fieldTag.assign(directoryEntry->fieldTag, 0, 3);
 			unsigned int fieldLength, fieldStartPos;
 			if (sscanf(directoryEntry->fieldLength, "%4u%5u",
 				&fieldLength, &fieldStartPos) != 2)

@@ -94,6 +94,8 @@ MarcRecord createRecord2(void)
 	fieldIt = record.addDataField("201", '0', '1');
 	fieldIt->addSubfield('a', "123");
 	fieldIt->addSubfield('b', "456");
+	fieldIt = record.addDataField("901", 'æ', '@');
+	fieldIt->addSubfield('ô', "789");
 
 	return record;
 }
@@ -122,9 +124,9 @@ bool test1(void)
 	
 		/* Print content of new record. */
 		printf("%s\n", record.toString().c_str());
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -144,9 +146,9 @@ bool test2(void)
 
 		/* Convert MARC record to string. */
 		printf("%s\n", record.toString().c_str());
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -181,9 +183,9 @@ bool test3(void)
 		printf("Record status: %c\n", leader.recordStatus);
 		printf("Record type: %c\n", leader.recordType);
 		printf("Bibliographic level: %c\n", leader.bibliographicLevel);
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -204,20 +206,20 @@ bool test4(void)
 		/* Get specified field. */
 		MarcRecord::FieldIt fieldIt = record.getField("200");
 		if (fieldIt == record.nullField()) {
-			throw "field not found";
+			throw std::string("field not found");
 		}
 
 		/* Get specified subfield from field. */
 		MarcRecord::SubfieldIt subfieldIt = fieldIt->getSubfield('b');
 		if (subfieldIt == fieldIt->nullSubfield()) {
-			throw "subfield not found";
+			throw std::string("subfield not found");
 		}
 
 		/* Print subfield value. */
 		printf("Subfield 200b: '%s'\n", subfieldIt->m_data.c_str());
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -257,9 +259,9 @@ bool test5(void)
 				printf("\n");
 			}
 		}
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -280,13 +282,13 @@ bool test6(void)
 		/* Get specified field. */
 		MarcRecord::FieldIt fieldIt = record.getField("463");
 		if (fieldIt == record.nullField()) {
-			throw "field not found";
+			throw std::string("field not found");
 		}
 
 		/* Get specified embedded control field. */
 		MarcRecord::SubfieldRefList subfieldList = fieldIt->getEmbeddedField("001");
 		if (subfieldList.empty()) {
-			throw "embedded field not found";
+			throw std::string("embedded field not found");
 		}
 
 		/* Print subfields of embedded control field*/
@@ -296,9 +298,9 @@ bool test6(void)
 			printf("Embedded field 461 <001>: '%s'\n",
 				(*subfieldIt)->getEmbeddedData().c_str());
 		}
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -334,9 +336,9 @@ bool test7(void)
 			}
 			printf("\n");
 		}
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -357,7 +359,7 @@ bool test8(void)
 		/* Get specified field. */
 		MarcRecord::FieldIt fieldIt = record.getField("461");
 		if (fieldIt == record.nullField()) {
-			throw "field not found";
+			throw std::string("field not found");
 		}
 
 		/* Remove field. */
@@ -366,11 +368,11 @@ bool test8(void)
 		/* Get specified subfield. */
 		fieldIt = record.getField("899");
 		if (fieldIt == record.nullField()) {
-			throw "field not found";
+			throw std::string("field not found");
 		}
 		MarcRecord::SubfieldIt subfieldIt = fieldIt->getSubfield('c');
 		if (subfieldIt == fieldIt->nullSubfield()) {
-			throw "subfield not found";
+			throw std::string("subfield not found");
 		}
 
 		/* Remove subfield. */
@@ -378,9 +380,9 @@ bool test8(void)
 
 		/* Print content of record. */
 		printf("%s\n", record.toString().c_str());
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -401,7 +403,7 @@ bool test9(void)
 		/* Open ISO 2709 file. */
 		outputFile = fopen("test1.iso", "wb");
 		if (outputFile == NULL) {
-			throw "can't open output file";
+			throw std::string("can't open output file");
 		}
 
 		/* Initialize MARC writer. */
@@ -411,19 +413,19 @@ bool test9(void)
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		if (!marcWriter.write(record1) || !marcWriter.write(record2)) {
-			throw "can't write MARC record to file";
+			throw std::string("can't write MARC record to file");
 		}
 
 		/* Close ISO 2709 file. */
 		fclose(outputFile);
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Close files. */
 		if (outputFile) {
 			fclose(outputFile);
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -444,7 +446,7 @@ bool test10(void)
 		/* Open ISO 2709 file. */
 		inputFile = fopen("test1.iso", "rb");
 		if (inputFile == NULL) {
-			throw "can't open input file";
+			throw std::string("can't open input file");
 		}
 
 		/* Initialize MARC reader. */
@@ -458,19 +460,19 @@ bool test10(void)
 
 		/* Check error code. */
 		if (marcReader.getErrorCode() != MarcReader::END_OF_FILE) {
-			throw marcReader.getErrorMessage().c_str();
+			throw marcReader.getErrorMessage();
 		}
 
 		/* Close ISO 2709 file. */
 		fclose(inputFile);
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Close files. */
 		if (inputFile) {
 			fclose(inputFile);
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -483,39 +485,42 @@ bool test10(void)
 
 bool test11(void)
 {
-	FILE *outputFile = NULL;
+	FILE *inputFile = NULL;
 
-	printf("Testing MarcXmlWriter.\n");
+	printf("Testing MarcReader with specified encoding and autocorrection.\n");
 
 	try {
-		/* Open MARCXML file. */
-		outputFile = fopen("test2.xml", "wb");
-		if (outputFile == NULL) {
-			throw "can't open output file";
+		/* Open ISO 2709 file. */
+		inputFile = fopen("test1.iso", "rb");
+		if (inputFile == NULL) {
+			throw std::string("can't open input file");
 		}
 
-		/* Initialize MARCXML writer. */
-		MarcXmlWriter marcXmlWriter(outputFile, "WINDOWS-1251");
+		/* Initialize MARC reader. */
+		MarcReader marcReader(inputFile, "CP1251");
+		marcReader.setAutoCorrectionMode(true);
 
-		/* Write MARC records to MARCXML file. */
-		MarcRecord record1 = createRecord1();
-		MarcRecord record2 = createRecord2();
-		marcXmlWriter.writeHeader();
-		if (!marcXmlWriter.write(record1) || !marcXmlWriter.write(record2)) {
-			throw "can't write MARCXML record to file";
+		/* Read records. */
+		MarcRecord record(MarcRecord::UNIMARC);
+		while (marcReader.next(record)) {
+			printf("%s\n", record.toString().c_str());
 		}
-		marcXmlWriter.writeFooter();
 
-		/* Close MARCXML file. */
-		fclose(outputFile);
-	} catch (const char *errorMessage) {
+		/* Check error code. */
+		if (marcReader.getErrorCode() != MarcReader::END_OF_FILE) {
+			throw marcReader.getErrorMessage();
+		}
+
+		/* Close ISO 2709 file. */
+		fclose(inputFile);
+	} catch (std::string errorMessage) {
 		/* Close files. */
-		if (outputFile) {
-			fclose(outputFile);
+		if (inputFile) {
+			fclose(inputFile);
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -528,6 +533,51 @@ bool test11(void)
 
 bool test12(void)
 {
+	FILE *outputFile = NULL;
+
+	printf("Testing MarcXmlWriter.\n");
+
+	try {
+		/* Open MARCXML file. */
+		outputFile = fopen("test2.xml", "wb");
+		if (outputFile == NULL) {
+			throw std::string("can't open output file");
+		}
+
+		/* Initialize MARCXML writer. */
+		MarcXmlWriter marcXmlWriter(outputFile, "WINDOWS-1251");
+
+		/* Write MARC records to MARCXML file. */
+		MarcRecord record1 = createRecord1();
+		MarcRecord record2 = createRecord2();
+		marcXmlWriter.writeHeader();
+		if (!marcXmlWriter.write(record1) || !marcXmlWriter.write(record2)) {
+			throw std::string("can't write MARCXML record to file");
+		}
+		marcXmlWriter.writeFooter();
+
+		/* Close MARCXML file. */
+		fclose(outputFile);
+	} catch (std::string errorMessage) {
+		/* Close files. */
+		if (outputFile) {
+			fclose(outputFile);
+		}
+
+		/* Print error message. */
+		printf("Error: %s.\n\n", errorMessage.c_str());
+
+		return false;
+	}
+
+	/* Print status. */
+	printf("ok\n\n");
+
+	return true;
+}
+
+bool test13(void)
+{
 	FILE *inputFile = NULL;
 
 	printf("Testing MarcXmlReader.\n");
@@ -536,7 +586,7 @@ bool test12(void)
 		/* Open MARCXML file. */
 		inputFile = fopen("test2.xml", "rb");
 		if (inputFile == NULL) {
-			throw "can't open input file";
+			throw std::string("can't open input file");
 		}
 
 		/* Initialize MARCXML reader. */
@@ -550,19 +600,19 @@ bool test12(void)
 
 		/* Check error code. */
 		if (marcXmlReader.getErrorCode() != MarcXmlReader::END_OF_FILE) {
-			throw marcXmlReader.getErrorMessage().c_str();
+			throw marcXmlReader.getErrorMessage();
 		}
 
 		/* Close MARCXML file. */
 		fclose(inputFile);
-	} catch (const char *errorMessage) {
+	} catch (std::string errorMessage) {
 		/* Close files. */
 		if (inputFile) {
 			fclose(inputFile);
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n", errorMessage);
+		printf("Error: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
@@ -578,10 +628,24 @@ bool test12(void)
  */
 int main(void)
 {
+	bool result = true;
+
 	/* Execute tests. */
-	if (!test1() || !test2() || !test3() || !test4() || !test5() || !test6() || !test7()
-		|| !test8() || !test9() || !test10() || !test11() || !test12())
-	{
+	result &= test1();
+	result &= test2();
+	result &= test3();
+	result &= test4();
+	result &= test5();
+	result &= test6();
+	result &= test7();
+	result &= test8();
+	result &= test9();
+	result &= test10();
+	result &= test11();
+	result &= test12();
+	result &= test13();
+
+	if (!result) {
 		printf("Tests failed.\n");
 		return 1;
 	}
