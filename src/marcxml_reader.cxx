@@ -56,7 +56,7 @@ int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, XML_Enc
 MarcXmlReader::MarcXmlReader(FILE *inputFile, const char *inputEncoding)
 {
 	/* Clear member variables. */
-	m_autoCorrectMode = false;
+	m_autoCorrectionMode = false;
 
 	if (inputFile) {
 		/* Open input file and initialize parser. */
@@ -96,9 +96,9 @@ std::string & MarcXmlReader::getErrorMessage(void)
 /*
  * Set automatic error correction mode.
  */
-void MarcXmlReader::setAutoCorrectMode(bool autoCorrectMode)
+void MarcXmlReader::setAutoCorrectionMode(bool autoCorrectionMode)
 {
-	m_autoCorrectMode = autoCorrectMode;
+	m_autoCorrectionMode = autoCorrectionMode;
 }
 
 /*

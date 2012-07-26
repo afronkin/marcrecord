@@ -65,7 +65,7 @@ protected:
 	iconv_t m_iconvDesc;
 
 	/* Automatic error correction mode. */
-	bool m_autoCorrectMode;
+	bool m_autoCorrectionMode;
 
 private:
 	/* Parse field from ISO 2709 buffer. */
@@ -84,7 +84,7 @@ public:
 	std::string & getErrorMessage(void);
 
 	/* Set automatic error correction mode. */
-	void setAutoCorrectMode(bool autoCorrectMode = true);
+	void setAutoCorrectionMode(bool autoCorrectionMode = true);
 
 	/* Open input file. */
 	bool open(FILE *inputFile, const char *inputEncoding = NULL);
