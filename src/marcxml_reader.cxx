@@ -331,20 +331,16 @@ void XMLCALL marcXmlCharacterData(void *userData, const XML_Char *s, int len)
 int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, XML_Encoding *info)
 {
 	(void) (data);
-
-#if !defined(MARCRECORD_USE_UTF8)
-	for (int i = 0; i < 256; i++) {
-		info->map[i] = i;
-	}
-#else
 	iconv_t iconvDesc = (iconv_t) -1;
 	unsigned char iconvBuf[8];
 
+	/* Initialize iconv. */
 	iconvDesc = iconv_open("UTF-16BE", encoding);
 	if (iconvDesc == (iconv_t) -1) {
 		return XML_STATUS_ERROR;
 	}
 
+	/* Generate conversion table for unknown encoding. */
 	unsigned char i = 0;
 	do {
 		char *src = (char *) &i;
@@ -364,9 +360,10 @@ int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, XML_Enc
 		}
 	} while (i++ < 255);
 
+	/* Finalize iconv. */
 	iconv_close(iconvDesc);
-#endif /* MARCRECORD_USE_UTF8 */
 
+	/* Initialize rest of encoding information. */
 	info->data = NULL;
 	info->convert = NULL;
 	info->release = NULL;
