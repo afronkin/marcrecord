@@ -61,7 +61,7 @@ protected:
 	FILE *m_inputFile;
 	/* Encoding of input ISO 2709 file. */
 	std::string m_inputEncoding;
-	/* Iconv descriptor for recoding input file. */
+	/* Iconv descriptor for input encoding. */
 	iconv_t m_iconvDesc;
 
 	/* Automatic error correction mode. */

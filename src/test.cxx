@@ -31,8 +31,6 @@
  * OF SUCH DAMAGE.
  */
 
-/* Version: 2.0 (27 Feb 2011) */
-
 #include <stdio.h>
 #include "marcrecord.h"
 #include "marc_reader.h"
@@ -67,8 +65,9 @@ MarcRecord createRecord1(void)
 	fieldIt = record.addDataField("463", '1', '0');
 	fieldIt->addSubfield('1', "001xyz");
 	fieldIt->addSubfield('1', "30012");
-	fieldIt->addSubfield('a', "\xD0\xA2\xD0\xB5\xD1\x81\xD1\x82");
-	fieldIt->addSubfield('b', "\xCF\xF0\xEE\xE2\xE5\xF0\xEA\xE0");
+	fieldIt->addSubfield('a',
+		"\xD0\x9F\xD1\x80\xD0\xBE\xD0\xB2\xD0\xB5\xD1\x80\xD0\xBA\xD0\xB0");
+	fieldIt->addSubfield('b', "\xD0\xA2\xD0\xB5\xD1\x81\xD1\x82");
 	fieldIt = record.addDataField("899", '2', '3');
 	fieldIt->addSubfield('c', "123");
 	fieldIt->addSubfield('d', "12345");
@@ -94,8 +93,8 @@ MarcRecord createRecord2(void)
 	fieldIt = record.addDataField("201", '0', '1');
 	fieldIt->addSubfield('a', "123");
 	fieldIt->addSubfield('b', "456");
-	fieldIt = record.addDataField("901", 'æ', '@');
-	fieldIt->addSubfield('ô', "789");
+	fieldIt = record.addDataField("901", '^', '*');
+	fieldIt->addSubfield('%', "789");
 
 	return record;
 }
@@ -126,13 +125,13 @@ bool test1(void)
 		printf("%s\n", record.toString().c_str());
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -148,13 +147,13 @@ bool test2(void)
 		printf("%s\n", record.toString().c_str());
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -185,13 +184,13 @@ bool test3(void)
 		printf("Bibliographic level: %c\n", leader.bibliographicLevel);
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -219,13 +218,13 @@ bool test4(void)
 		printf("Subfield 200b: '%s'\n", subfieldIt->m_data.c_str());
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -261,13 +260,13 @@ bool test5(void)
 		}
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -300,13 +299,13 @@ bool test6(void)
 		}
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -338,13 +337,13 @@ bool test7(void)
 		}
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -382,13 +381,13 @@ bool test8(void)
 		printf("%s\n", record.toString().c_str());
 	} catch (std::string errorMessage) {
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -407,13 +406,13 @@ bool test9(void)
 		}
 
 		/* Initialize MARC writer. */
-		MarcWriter marcWriter(outputFile);
+		MarcWriter marcWriter(outputFile, "CP1251");
 
 		/* Write MARC records to ISO 2709 file. */
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		if (!marcWriter.write(record1) || !marcWriter.write(record2)) {
-			throw std::string("can't write MARC record to file");
+			throw marcWriter.getErrorMessage();
 		}
 
 		/* Close ISO 2709 file. */
@@ -425,13 +424,13 @@ bool test9(void)
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -450,7 +449,7 @@ bool test10(void)
 		}
 
 		/* Initialize MARC reader. */
-		MarcReader marcReader(inputFile);
+		MarcReader marcReader(inputFile, "CP1251");
 
 		/* Read records. */
 		MarcRecord record(MarcRecord::UNIMARC);
@@ -472,13 +471,13 @@ bool test10(void)
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -520,13 +519,13 @@ bool test11(void)
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -545,7 +544,7 @@ bool test12(void)
 		}
 
 		/* Initialize MARCXML writer. */
-		MarcXmlWriter marcXmlWriter(outputFile, "WINDOWS-1251");
+		MarcXmlWriter marcXmlWriter(outputFile, "CP866");
 
 		/* Write MARC records to MARCXML file. */
 		MarcRecord record1 = createRecord1();
@@ -565,13 +564,13 @@ bool test12(void)
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }
@@ -612,13 +611,13 @@ bool test13(void)
 		}
 
 		/* Print error message. */
-		printf("Error: %s.\n\n", errorMessage.c_str());
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
 	/* Print status. */
-	printf("ok\n\n");
+	printf("OK\n\n");
 
 	return true;
 }

@@ -124,7 +124,7 @@ bool MarcReader::open(FILE *inputFile, const char *inputEncoding)
 	if (inputEncoding == NULL) {
 		m_iconvDesc = (iconv_t) -1;
 	} else {
-		/* Create iconv descriptor for input file encoding conversion to UTF-8. */
+		/* Create iconv descriptor for input encoding conversion to UTF-8. */
 		m_iconvDesc = iconv_open("UTF-8", inputEncoding);
 		if (m_iconvDesc == (iconv_t) -1) {
 			m_errorCode = ERROR_ICONV;
@@ -145,19 +145,18 @@ bool MarcReader::open(FILE *inputFile, const char *inputEncoding)
  */
 void MarcReader::close(void)
 {
-	/* Clear error code and message. */
-	m_errorCode = OK;
-	m_errorMessage = "";
-
-	/* Clear input stream parameters. */
-	m_inputFile = NULL;
-	m_inputEncoding = "";
-
 	/* Finalize iconv. */
 	if (m_iconvDesc != (iconv_t) -1) {
 		iconv_close(m_iconvDesc);
 	}
+
+	/* Clear member variables. */
+	m_errorCode = OK;
+	m_errorMessage = "";
+	m_inputFile = NULL;
+	m_inputEncoding = "";
 	m_iconvDesc = (iconv_t) -1;
+	m_autoCorrectionMode = false;
 }
 
 /*

@@ -140,15 +140,12 @@ void MarcXmlReader::close(void)
 		XML_ParserFree(m_xmlParser);
 	}
 
-	/* Clear error code and message. */
+	/* Clear member variables. */
 	m_errorCode = OK;
 	m_errorMessage = "";
-
-	/* Clear input stream parameters. */
 	m_inputFile = NULL;
 	m_inputEncoding = "";
-
-	/* Clear XML parser. */
+	m_autoCorrectionMode = false;
 	m_xmlParser = NULL;
 
 	/* Clear XML parser state. */
