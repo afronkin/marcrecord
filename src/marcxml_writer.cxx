@@ -93,7 +93,9 @@ bool MarcXmlWriter::open(FILE *outputFile, const char *outputEncoding)
 	m_outputEncoding = outputEncoding == NULL ? "" : outputEncoding;
 
 	/* Initialize encoding conversion. */
-	if (outputEncoding == NULL) {
+	if (outputEncoding == NULL
+		|| strcmp(outputEncoding, "UTF-8") == 0 || strcmp(outputEncoding, "utf-8") == 0)
+	{
 		m_iconvDesc = (iconv_t) -1;
 	} else {
 		/* Create iconv descriptor for output encoding conversion from UTF-8. */

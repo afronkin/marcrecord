@@ -121,7 +121,9 @@ bool MarcReader::open(FILE *inputFile, const char *inputEncoding)
 	m_inputEncoding = inputEncoding == NULL ? "" : inputEncoding;
 
 	/* Initialize encoding conversion. */
-	if (inputEncoding == NULL) {
+	if (inputEncoding == NULL
+		|| strcmp(inputEncoding, "UTF-8") == 0 || strcmp(inputEncoding, "utf-8") == 0)
+	{
 		m_iconvDesc = (iconv_t) -1;
 	} else {
 		/* Create iconv descriptor for input encoding conversion to UTF-8. */

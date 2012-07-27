@@ -5,11 +5,11 @@ PROGRAM=test
 
 CXX=g++
 CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long \
-  -I$(SRC_DIR) -I$(SRC_DIR)/expat -DMARCRECORD_USE_UTF8
+  -I$(SRC_DIR) -I$(SRC_DIR)/expat
 CC=gcc
 CFLAGS_EXPAT=-O2 -Wall -ansi -pedantic -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes \
   -Wold-style-definition -Wwrite-strings -Wno-long-long -I$(SRC_DIR)/expat \
-  -DHAVE_EXPAT_CONFIG_H -DMARCRECORD_USE_UTF8
+  -DHAVE_EXPAT_CONFIG_H
 LDFLAGS=
 LIBS=-lm -liconv
 
