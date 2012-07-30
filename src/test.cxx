@@ -35,6 +35,7 @@
 #include "marcrecord.h"
 #include "marc_reader.h"
 #include "marc_writer.h"
+#include "marctext_writer.h"
 #include "marcxml_reader.h"
 #include "marcxml_writer.h"
 
@@ -534,11 +535,56 @@ bool test12(void)
 {
 	FILE *outputFile = NULL;
 
+	printf("Testing MarcTextWriter.\n");
+
+	try {
+		/* Open MARC text file. */
+		outputFile = fopen("test2.txt", "wb");
+		if (outputFile == NULL) {
+			throw std::string("can't open output file");
+		}
+
+		/* Initialize MARC text writer. */
+		MarcTextWriter marcTextWriter(outputFile, "KOI8-R");
+
+		/* Write MARC records to MARC text file. */
+		MarcRecord record1 = createRecord1();
+		MarcRecord record2 = createRecord2();
+		if (!marcTextWriter.write(record1, "Record 1\n", "\n")
+			|| !marcTextWriter.write(record2, "\nRecord 2\n", "\n"))
+		{
+			throw marcTextWriter.getErrorMessage();
+		}
+
+		/* Close MARC text file. */
+		fclose(outputFile);
+	} catch (std::string errorMessage) {
+		/* Close files. */
+		if (outputFile) {
+			fclose(outputFile);
+		}
+
+		/* Print error message. */
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
+
+		return false;
+	}
+
+	/* Print status. */
+	printf("OK\n\n");
+
+	return true;
+}
+
+bool test13(void)
+{
+	FILE *outputFile = NULL;
+
 	printf("Testing MarcXmlWriter.\n");
 
 	try {
 		/* Open MARCXML file. */
-		outputFile = fopen("test2.xml", "wb");
+		outputFile = fopen("test3.xml", "wb");
 		if (outputFile == NULL) {
 			throw std::string("can't open output file");
 		}
@@ -575,7 +621,7 @@ bool test12(void)
 	return true;
 }
 
-bool test13(void)
+bool test14(void)
 {
 	FILE *inputFile = NULL;
 
@@ -583,7 +629,7 @@ bool test13(void)
 
 	try {
 		/* Open MARCXML file. */
-		inputFile = fopen("test2.xml", "rb");
+		inputFile = fopen("test3.xml", "rb");
 		if (inputFile == NULL) {
 			throw std::string("can't open input file");
 		}
@@ -643,6 +689,7 @@ int main(void)
 	result &= test11();
 	result &= test12();
 	result &= test13();
+	result &= test14();
 
 	if (!result) {
 		printf("Tests failed.\n");
