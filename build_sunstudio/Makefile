@@ -4,9 +4,9 @@ OBJS=marc_reader.o marc_writer.o marcrecord.o marcrecord_field.o marcrecord_subf
 PROGRAM=test
 
 CXX=CC
-CXXFLAGS=-O2 -I$(SRC_DIR) -I$(SRC_DIR)/expat
+CXXFLAGS=-O2 -I$(SRC_DIR) -I$(SRC_DIR)/expat -D_XPG6
 CC=cc
-CFLAGS=-O2 -I$(SRC_DIR)/expat -DHAVE_EXPAT_CONFIG_H
+CFLAGS_EXPAT=-O2 -I$(SRC_DIR)/expat -DHAVE_EXPAT_CONFIG_H
 LDFLAGS=
 LIBS=-lm
 
@@ -32,4 +32,4 @@ verify:
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 %.o: $(SRC_DIR)/expat/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS_EXPAT) -c $< -o $@
