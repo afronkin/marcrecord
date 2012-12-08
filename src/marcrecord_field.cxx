@@ -73,8 +73,8 @@ void MarcRecord::Field::clear(void)
 void MarcRecord::Field::setControlFieldType(void)
 {
 	if (m_type != CONTROLFIELD) {
-		m_type = CONTROLFIELD;
 		clear();
+		m_type = CONTROLFIELD;
 	}
 }
 
@@ -84,8 +84,8 @@ void MarcRecord::Field::setControlFieldType(void)
 void MarcRecord::Field::setDataFieldType(void)
 {
 	if (m_type != DATAFIELD) {
-		m_type = DATAFIELD;
 		clear();
+		m_type = DATAFIELD;
 	}
 }
 
