@@ -52,7 +52,8 @@ MarcRecord::Field::Field(const std::string &tag, char ind1, char ind2)
 /*
  * Clear field data.
  */
-void MarcRecord::Field::clear(void)
+void
+MarcRecord::Field::clear(void)
 {
 	m_type = CONTROLFIELD;
 	m_tag = "";
@@ -65,7 +66,8 @@ void MarcRecord::Field::clear(void)
 /*
  * Set type of field to control field.
  */
-void MarcRecord::Field::setControlFieldType(void)
+void
+MarcRecord::Field::setControlFieldType(void)
 {
 	if (m_type != CONTROLFIELD) {
 		clear();
@@ -76,7 +78,8 @@ void MarcRecord::Field::setControlFieldType(void)
 /*
  * Set type of field to data field.
  */
-void MarcRecord::Field::setDataFieldType(void)
+void
+MarcRecord::Field::setDataFieldType(void)
 {
 	if (m_type != DATAFIELD) {
 		clear();
@@ -87,7 +90,8 @@ void MarcRecord::Field::setDataFieldType(void)
 /*
  * Return true if file type is control field.
  */
-bool MarcRecord::Field::isControlField(void)
+bool
+MarcRecord::Field::isControlField(void)
 {
 	return (m_type == CONTROLFIELD);
 }
@@ -95,7 +99,8 @@ bool MarcRecord::Field::isControlField(void)
 /*
  * Return true if file type is data field.
  */
-bool MarcRecord::Field::isDataField(void)
+bool
+MarcRecord::Field::isDataField(void)
 {
 	return (m_type == DATAFIELD);
 }
@@ -103,7 +108,8 @@ bool MarcRecord::Field::isDataField(void)
 /*
  * Get tag of data field.
  */
-std::string & MarcRecord::Field::getTag(void)
+std::string &
+MarcRecord::Field::getTag(void)
 {
 	return m_tag;
 }
@@ -111,7 +117,8 @@ std::string & MarcRecord::Field::getTag(void)
 /*
  * Set tag of data field.
  */
-void MarcRecord::Field::setTag(const std::string &tag)
+void
+MarcRecord::Field::setTag(const std::string &tag)
 {
 	m_tag = tag;
 }
@@ -119,7 +126,8 @@ void MarcRecord::Field::setTag(const std::string &tag)
 /*
  * Get indicator 1 of data field.
  */
-char & MarcRecord::Field::getInd1(void)
+char &
+MarcRecord::Field::getInd1(void)
 {
 	return m_ind1;
 }
@@ -127,7 +135,8 @@ char & MarcRecord::Field::getInd1(void)
 /*
  * Get indicator 2 of data field.
  */
-char & MarcRecord::Field::getInd2(void)
+char &
+MarcRecord::Field::getInd2(void)
 {
 	return m_ind2;
 }
@@ -135,7 +144,8 @@ char & MarcRecord::Field::getInd2(void)
 /*
  * Set indicator 1 of data field.
  */
-void MarcRecord::Field::setInd1(const char ind1)
+void
+MarcRecord::Field::setInd1(const char ind1)
 {
 	m_ind1 = ind1;
 }
@@ -143,7 +153,8 @@ void MarcRecord::Field::setInd1(const char ind1)
 /*
  * Set indicator 2 of data field.
  */
-void MarcRecord::Field::setInd2(const char ind2)
+void
+MarcRecord::Field::setInd2(const char ind2)
 {
 	m_ind2 = ind2;
 }
@@ -151,7 +162,8 @@ void MarcRecord::Field::setInd2(const char ind2)
 /*
  * Get data of control field.
  */
-std::string & MarcRecord::Field::getData(void)
+std::string &
+MarcRecord::Field::getData(void)
 {
 	return m_data;
 }
@@ -159,7 +171,8 @@ std::string & MarcRecord::Field::getData(void)
 /*
  * Set data of control field.
  */
-void MarcRecord::Field::setData(const std::string &data)
+void
+MarcRecord::Field::setData(const std::string &data)
 {
 	m_data = data;
 }
@@ -167,7 +180,8 @@ void MarcRecord::Field::setData(const std::string &data)
 /*
  * Format field to string.
  */
-std::string MarcRecord::Field::toString(void)
+std::string
+MarcRecord::Field::toString(void)
 {
 	/* Format control field to string. */
 	if (m_type == CONTROLFIELD) {
@@ -187,11 +201,11 @@ std::string MarcRecord::Field::toString(void)
 			/* Print header of embedded field. */
 			snprintf(textField, 4, " $%c ", subfieldIt->m_id);
 			if (subfieldIt->getEmbeddedTag() < "010") {
-				textField += "<" + subfieldIt->getEmbeddedTag() + "> "
-					+ subfieldIt->getEmbeddedData();
+				textField += "<" + subfieldIt->getEmbeddedTag()
+					+ "> " + subfieldIt->getEmbeddedData();
 			} else {
-				textField += "<" + subfieldIt->getEmbeddedTag() + "> ["
-					+ subfieldIt->getEmbeddedInd1()
+				textField += "<" + subfieldIt->getEmbeddedTag()
+					+ "> [" + subfieldIt->getEmbeddedInd1()
 					+ subfieldIt->getEmbeddedInd2() + "]";
 			}
 		} else {
@@ -207,15 +221,15 @@ std::string MarcRecord::Field::toString(void)
 /*
  * Get list of subfields.
  */
-MarcRecord::SubfieldRefList MarcRecord::Field::getSubfields(char subfieldId)
+MarcRecord::SubfieldRefList
+MarcRecord::Field::getSubfields(char subfieldId)
 {
 	SubfieldRefList resultSubfieldList;
 	SubfieldIt subfieldIt;
 
 	/* Check subfields in list. */
-	for (subfieldIt = m_subfieldList.begin(); subfieldIt != m_subfieldList.end();
-		subfieldIt++)
-	{
+	subfieldIt = m_subfieldList.begin();
+	for (; subfieldIt != m_subfieldList.end(); subfieldIt++) {
 		if (subfieldId == ' ' || subfieldIt->m_id == subfieldId) {
 			resultSubfieldList.push_back(subfieldIt);
 		}
@@ -227,14 +241,14 @@ MarcRecord::SubfieldRefList MarcRecord::Field::getSubfields(char subfieldId)
 /*
  * Get subfield.
  */
-MarcRecord::SubfieldIt MarcRecord::Field::getSubfield(char subfieldId)
+MarcRecord::SubfieldIt
+MarcRecord::Field::getSubfield(char subfieldId)
 {
 	SubfieldIt subfieldIt;
 
 	/* Check subfields in list. */
-	for (subfieldIt = m_subfieldList.begin(); subfieldIt != m_subfieldList.end();
-		subfieldIt++)
-	{
+	subfieldIt = m_subfieldList.begin();
+	for (; subfieldIt != m_subfieldList.end(); subfieldIt++) {
 		if (subfieldId == ' ' || subfieldIt->m_id == subfieldId) {
 			return subfieldIt;
 		}
@@ -246,7 +260,8 @@ MarcRecord::SubfieldIt MarcRecord::Field::getSubfield(char subfieldId)
 /*
  * Get list of embedded fields.
  */
-MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(const std::string &fieldTag)
+MarcRecord::EmbeddedFieldList
+MarcRecord::Field::getEmbeddedFields(const std::string &fieldTag)
 {
 	EmbeddedFieldList resultFieldList;
 	SubfieldRefList embeddedSubfieldList;
@@ -259,11 +274,14 @@ MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(const std::st
 		if (subfieldIt->m_id == '1') {
 			if (embeddedSubfieldList.empty() == false) {
 				/* Append embedded field to the result list. */
-				resultFieldList.push_back(embeddedSubfieldList);
+				resultFieldList.push_back(
+					embeddedSubfieldList);
 				embeddedSubfieldList.clear();
 			}
 
-			if (fieldTag == "" || fieldTag == subfieldIt->getEmbeddedTag()) {
+			if (fieldTag == ""
+				|| fieldTag == subfieldIt->getEmbeddedTag())
+			{
 				/* Append first subfield of embedded field. */
 				embeddedSubfieldList.push_back(subfieldIt);
 			}
@@ -284,7 +302,8 @@ MarcRecord::EmbeddedFieldList MarcRecord::Field::getEmbeddedFields(const std::st
 /*
  * Get embedded field.
  */
-MarcRecord::SubfieldRefList MarcRecord::Field::getEmbeddedField(const std::string &fieldTag)
+MarcRecord::SubfieldRefList
+MarcRecord::Field::getEmbeddedField(const std::string &fieldTag)
 {
 	SubfieldRefList embeddedSubfieldList;
 
@@ -298,7 +317,9 @@ MarcRecord::SubfieldRefList MarcRecord::Field::getEmbeddedField(const std::strin
 				break;
 			}
 
-			if (fieldTag == "" || fieldTag == subfieldIt->getEmbeddedTag()) {
+			if (fieldTag == ""
+				|| fieldTag == subfieldIt->getEmbeddedTag())
+			{
 				/* Append first subfield of embedded field. */
 				embeddedSubfieldList.push_back(subfieldIt);
 			}
@@ -314,14 +335,17 @@ MarcRecord::SubfieldRefList MarcRecord::Field::getEmbeddedField(const std::strin
 /*
  * Add subfield to the end of field.
  */
-MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(const Subfield &subfield)
+MarcRecord::SubfieldIt
+MarcRecord::Field::addSubfield(const Subfield &subfield)
 {
 	/* Append subfield to the list. */
-	SubfieldIt subfieldIt = m_subfieldList.insert(m_subfieldList.end(), subfield);
+	SubfieldIt subfieldIt =
+		m_subfieldList.insert(m_subfieldList.end(), subfield);
 	return subfieldIt;
 }
 
-MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(char subfieldId,
+MarcRecord::SubfieldIt
+MarcRecord::Field::addSubfield(char subfieldId,
 	const std::string &subfieldData)
 {
 	/* Append subfield to the list. */
@@ -333,15 +357,18 @@ MarcRecord::SubfieldIt MarcRecord::Field::addSubfield(char subfieldId,
 /*
  * Add subfield to the field before specified subfield.
  */
-MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
+MarcRecord::SubfieldIt
+MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
 	const Subfield &subfield)
 {
 	/* Append subfield to the list. */
-	SubfieldIt subfieldIt = m_subfieldList.insert(nextSubfieldIt, subfield);
+	SubfieldIt subfieldIt =
+		m_subfieldList.insert(nextSubfieldIt, subfield);
 	return subfieldIt;
 }
 
-MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
+MarcRecord::SubfieldIt
+MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfieldIt,
 	char subfieldId, const std::string &subfieldData)
 {
 	/* Append subfield to the list. */
@@ -353,7 +380,8 @@ MarcRecord::SubfieldIt MarcRecord::Field::addSubfieldBefore(SubfieldIt nextSubfi
 /*
  * Remove subfield from the field.
  */
-void MarcRecord::Field::removeSubfield(SubfieldIt subfieldIt)
+void
+MarcRecord::Field::removeSubfield(SubfieldIt subfieldIt)
 {
 	/* Remove subfield from the list. */
 	m_subfieldList.erase(subfieldIt);

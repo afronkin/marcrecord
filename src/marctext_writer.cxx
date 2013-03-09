@@ -62,7 +62,8 @@ MarcTextWriter::~MarcTextWriter()
 /*
  * Get last error code.
  */
-MarcTextWriter::ErrorCode MarcTextWriter::getErrorCode(void)
+MarcTextWriter::ErrorCode
+MarcTextWriter::getErrorCode(void)
 {
 	return m_errorCode;
 }
@@ -70,7 +71,8 @@ MarcTextWriter::ErrorCode MarcTextWriter::getErrorCode(void)
 /*
  * Get last error message.
  */
-std::string & MarcTextWriter::getErrorMessage(void)
+std::string &
+MarcTextWriter::getErrorMessage(void)
 {
 	return m_errorMessage;
 }
@@ -78,7 +80,8 @@ std::string & MarcTextWriter::getErrorMessage(void)
 /*
  * Open output file.
  */
-bool MarcTextWriter::open(FILE *outputFile, const char *outputEncoding)
+bool
+MarcTextWriter::open(FILE *outputFile, const char *outputEncoding)
 {
 	/* Clear error code and message. */
 	m_errorCode = OK;
@@ -90,16 +93,18 @@ bool MarcTextWriter::open(FILE *outputFile, const char *outputEncoding)
 
 	/* Initialize encoding conversion. */
 	if (outputEncoding == NULL
-		|| strcmp(outputEncoding, "UTF-8") == 0 || strcmp(outputEncoding, "utf-8") == 0)
+		|| strcmp(outputEncoding, "UTF-8") == 0
+		|| strcmp(outputEncoding, "utf-8") == 0)
 	{
 		m_iconvDesc = (iconv_t) -1;
 	} else {
-		/* Create iconv descriptor for output encoding conversion from UTF-8. */
+		/* Create iconv descriptor for output encoding conversion. */
 		m_iconvDesc = iconv_open(outputEncoding, "UTF-8");
 		if (m_iconvDesc == (iconv_t) -1) {
 			m_errorCode = ERROR_ICONV;
 			if (errno == EINVAL) {
-				m_errorMessage = "encoding conversion is not supported";
+				m_errorMessage =
+					"encoding conversion is not supported";
 			} else {
 				m_errorMessage = "iconv initialization failed";
 			}
@@ -113,7 +118,8 @@ bool MarcTextWriter::open(FILE *outputFile, const char *outputEncoding)
 /*
  * Close output file.
  */
-void MarcTextWriter::close(void)
+void
+MarcTextWriter::close(void)
 {
 	/* Finalize iconv. */
 	if (m_iconvDesc != (iconv_t) -1) {
@@ -131,13 +137,17 @@ void MarcTextWriter::close(void)
 /*
  * Write record to MARC text file.
  */
-bool MarcTextWriter::write(MarcRecord &record, const char *header, const char *footer)
+bool
+MarcTextWriter::write(MarcRecord &record,
+	const char *header, const char *footer)
 {
 	std::string recordBuf = header + record.toString() + footer;
 
 	if (m_iconvDesc == (iconv_t) -1) {
 		/* Write MARCXML record. */
-		if (fwrite(recordBuf.c_str(), recordBuf.size(), 1, m_outputFile) != 1) {
+		if (fwrite(recordBuf.c_str(), recordBuf.size(), 1,
+			m_outputFile) != 1)
+		{
 			m_errorCode = ERROR_IO;
 			m_errorMessage = "i/o operation failed";
 			return false;
@@ -150,7 +160,9 @@ bool MarcTextWriter::write(MarcRecord &record, const char *header, const char *f
 			m_errorMessage = "encoding conversion failed";
 			return false;
 		}
-		if (fwrite(iconvBuf.c_str(), iconvBuf.size(), 1, m_outputFile) != 1) {
+		if (fwrite(iconvBuf.c_str(), iconvBuf.size(), 1,
+			m_outputFile) != 1)
+		{
 			m_errorCode = ERROR_IO;
 			m_errorMessage = "i/o operation failed";
 			return false;

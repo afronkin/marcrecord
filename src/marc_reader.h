@@ -66,6 +66,9 @@ private:
 	/* Parse field from ISO 2709 buffer. */
 	inline MarcRecord::Field parseField(const std::string &fieldTag,
 		const char *fieldData, unsigned int fieldLength);
+	/* Parse subfield. */
+	MarcRecord::Subfield parseSubfield(const char *fieldData,
+		unsigned int subfieldStartPos, unsigned int subfieldEndPos);
 
 public:
 	/* Constructor. */
@@ -89,7 +92,8 @@ public:
 	/* Read next record from MARCXML file. */
 	bool next(MarcRecord &record);
 	/* Parse record from ISO 2709 buffer. */
-	bool parse(const char *recordBuf, unsigned int recordBufLen, MarcRecord &record);
+	bool parse(const char *recordBuf, unsigned int recordBufLen,
+		MarcRecord &record);
 };
 
 #endif /* MARC_READER_H */

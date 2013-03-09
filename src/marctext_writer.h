@@ -60,7 +60,8 @@ protected:
 
 public:
 	/* Constructor. */
-	MarcTextWriter(FILE *outputFile = NULL, const char *outputEncoding = NULL);
+	MarcTextWriter(FILE *outputFile = NULL,
+		const char *outputEncoding = NULL);
 	/* Destructor. */
 	~MarcTextWriter();
 

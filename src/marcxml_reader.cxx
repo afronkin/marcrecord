@@ -36,13 +36,15 @@
 
 extern "C" { 
 /* XML start element handler for expat library. */
-void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML_Char **atts);
+void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name,
+	const XML_Char **atts);
 /* XML end element handler for expat library. */
 void XMLCALL marcXmlEndElement(void *userData, const XML_Char *name);
 /* XML character data handler for expat library. */
 void XMLCALL marcXmlCharacterData(void *userData, const XML_Char *s, int len);
 /* XML unknown encoding handler for expat library. */
-int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, XML_Encoding *info);
+int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding,
+	XML_Encoding *info);
 }
 
 /*
@@ -75,7 +77,8 @@ MarcXmlReader::~MarcXmlReader()
 /*
  * Get last error code.
  */
-MarcXmlReader::ErrorCode MarcXmlReader::getErrorCode(void)
+MarcXmlReader::ErrorCode
+MarcXmlReader::getErrorCode(void)
 {
 	return m_errorCode;
 }
@@ -83,7 +86,8 @@ MarcXmlReader::ErrorCode MarcXmlReader::getErrorCode(void)
 /*
  * Get last error message.
  */
-std::string & MarcXmlReader::getErrorMessage(void)
+std::string &
+MarcXmlReader::getErrorMessage(void)
 {
 	return m_errorMessage;
 }
@@ -91,7 +95,8 @@ std::string & MarcXmlReader::getErrorMessage(void)
 /*
  * Set automatic error correction mode.
  */
-void MarcXmlReader::setAutoCorrectionMode(bool autoCorrectionMode)
+void
+MarcXmlReader::setAutoCorrectionMode(bool autoCorrectionMode)
 {
 	m_autoCorrectionMode = autoCorrectionMode;
 }
@@ -99,7 +104,8 @@ void MarcXmlReader::setAutoCorrectionMode(bool autoCorrectionMode)
 /*
  * Open input file and initialize parser.
  */
-void MarcXmlReader::open(FILE *inputFile, const char *inputEncoding)
+void
+MarcXmlReader::open(FILE *inputFile, const char *inputEncoding)
 {
 	/* Clear error code and message. */
 	m_errorCode = OK;
@@ -112,9 +118,11 @@ void MarcXmlReader::open(FILE *inputFile, const char *inputEncoding)
 	/* Create XML parser. */
 	m_xmlParser = XML_ParserCreate(inputEncoding);
 	XML_SetUserData(m_xmlParser, &m_parserState);
-	XML_SetElementHandler(m_xmlParser, marcXmlStartElement, marcXmlEndElement);
+	XML_SetElementHandler(m_xmlParser,
+		marcXmlStartElement, marcXmlEndElement);
 	XML_SetCharacterDataHandler(m_xmlParser, marcXmlCharacterData);
-	XML_SetUnknownEncodingHandler(m_xmlParser, marcXmlUnknownEncoding, NULL);
+	XML_SetUnknownEncodingHandler(m_xmlParser,
+		marcXmlUnknownEncoding, NULL);
 
 	/* Initialize XML parser state. */
 	m_parserState.xmlParser = m_xmlParser;
@@ -128,7 +136,8 @@ void MarcXmlReader::open(FILE *inputFile, const char *inputEncoding)
 /*
  * Close input file and finalize parser.
  */
-void MarcXmlReader::close(void)
+void
+MarcXmlReader::close(void)
 {
 	/* Free XML parser. */
 	if (m_xmlParser) {
@@ -155,7 +164,8 @@ void MarcXmlReader::close(void)
 /*
  * Read next record from MARCXML file.
  */
-bool MarcXmlReader::next(MarcRecord &record)
+bool
+MarcXmlReader::next(MarcRecord &record)
 {
 	enum XML_Status parserResult;
 
@@ -175,10 +185,11 @@ bool MarcXmlReader::next(MarcRecord &record)
 			parserResult = XML_ResumeParser(m_xmlParser);
 		} else {
 			/* Read and parse buffer from file. */
-			size_t dataLength = (int) fread(m_buffer, 1, sizeof(m_buffer), m_inputFile);
+			size_t dataLength = (int) fread(m_buffer,
+				1, sizeof(m_buffer), m_inputFile);
 			m_parserState.done = dataLength < sizeof(m_buffer);
-			parserResult = XML_Parse(m_xmlParser, m_buffer, dataLength,
-				m_parserState.done);
+			parserResult = XML_Parse(m_xmlParser,
+				m_buffer, dataLength, m_parserState.done);
 		}
 
 		/* Handle parser errors. */
@@ -186,12 +197,16 @@ bool MarcXmlReader::next(MarcRecord &record)
 			record.clear();
 			m_parserState.parentTag = "";
 			m_errorCode = ERROR_XML_PARSER;
-			m_errorMessage = XML_ErrorString(XML_GetErrorCode(m_xmlParser));
+			m_errorMessage =
+				XML_ErrorString(XML_GetErrorCode(m_xmlParser));
 			return false;
 		}
 	} while (!m_parserState.done && !m_parserState.paused);
 
-	/* Finish if parser wasn't paused (means there is no more tags 'record'). */
+	/*
+	 * Finish if parser wasn't paused
+	 * (means there is no more tags 'record').
+	 */
 	if (!m_parserState.paused) {
 		m_errorCode = END_OF_FILE;
 		return false;
@@ -203,7 +218,9 @@ bool MarcXmlReader::next(MarcRecord &record)
 /*
  * XML start element handler for expat library.
  */
-void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML_Char **atts)
+void XMLCALL
+marcXmlStartElement(void *userData, const XML_Char *name,
+	const XML_Char **atts)
 {
 	struct MarcXmlReader::XmlParserState *parserState =
 		(struct MarcXmlReader::XmlParserState *) userData;
@@ -212,10 +229,14 @@ void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML
 	if (strcmp(name, "record") == 0 && parserState->parentTag == "") {
 		/* Set parent tag. */
 		parserState->parentTag = name;
-	} else if (strcmp(name, "leader") == 0 && parserState->parentTag == "record") {
+	} else if (strcmp(name, "leader") == 0
+		&& parserState->parentTag == "record")
+	{
 		/* Set parent tag. */
 		parserState->parentTag = name;
-	} else if (strcmp(name, "controlfield") == 0 && parserState->parentTag == "record") {
+	} else if (strcmp(name, "controlfield") == 0
+		&& parserState->parentTag == "record")
+	{
 		/* Get attribute 'tag' for control field. */
 		char *tag = (char *) "";
 
@@ -226,10 +247,13 @@ void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML
 		}
 
 		/* Add control field to the record. */
-		parserState->fieldIt = parserState->record->addControlField(tag);
+		parserState->fieldIt =
+			parserState->record->addControlField(tag);
 		/* Set parent tag. */
 		parserState->parentTag = name;
-	} else if (strcmp(name, "datafield") == 0 && parserState->parentTag == "record") {
+	} else if (strcmp(name, "datafield") == 0
+		&& parserState->parentTag == "record")
+	{
 		/* Get attributes 'tag', 'ind1, 'ind2' for data field. */
 		char *tag = (char *) "";
 		char ind1 = ' ', ind2 = ' ';
@@ -245,10 +269,13 @@ void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML
 		}
 
 		/* Add data field to the record. */
-		parserState->fieldIt = parserState->record->addDataField(tag, ind1, ind2);
+		parserState->fieldIt =
+			parserState->record->addDataField(tag, ind1, ind2);
 		/* Set parent tag. */
 		parserState->parentTag = name;
-	} else if (strcmp(name, "subfield") == 0 && parserState->parentTag == "datafield") {
+	} else if (strcmp(name, "subfield") == 0
+		&& parserState->parentTag == "datafield")
+	{
 		/* Get attribute 'code' for subfield. */
 		char subfieldId = ' ';
 
@@ -259,7 +286,8 @@ void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML
 		}
 
 		/* Add subfield to the data field. */
-		parserState->subfieldIt = parserState->fieldIt->addSubfield(subfieldId);
+		parserState->subfieldIt =
+			parserState->fieldIt->addSubfield(subfieldId);
 		/* Set parent tag. */
 		parserState->parentTag = name;
 	}
@@ -271,7 +299,8 @@ void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name, const XML
 /*
  * XML end element handler for expat library.
  */
-void XMLCALL marcXmlEndElement(void *userData, const XML_Char *name)
+void XMLCALL
+marcXmlEndElement(void *userData, const XML_Char *name)
 {
 	struct MarcXmlReader::XmlParserState *parserState =
 		(struct MarcXmlReader::XmlParserState *) userData;
@@ -312,7 +341,8 @@ void XMLCALL marcXmlEndElement(void *userData, const XML_Char *name)
 /*
  * XML character data handler for expat library.
  */
-void XMLCALL marcXmlCharacterData(void *userData, const XML_Char *s, int len)
+void XMLCALL
+marcXmlCharacterData(void *userData, const XML_Char *s, int len)
 {
 	struct MarcXmlReader::XmlParserState *parserState =
 		(struct MarcXmlReader::XmlParserState *) userData;
@@ -323,7 +353,9 @@ void XMLCALL marcXmlCharacterData(void *userData, const XML_Char *s, int len)
 /*
  * XML unknown encoding handler for expat library.
  */
-int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, XML_Encoding *info)
+int XMLCALL
+marcXmlUnknownEncoding(void *data, const XML_Char *encoding,
+	XML_Encoding *info)
 {
 	(void) (data);
 	iconv_t iconvDesc = (iconv_t) -1;
@@ -347,11 +379,14 @@ int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding, XML_Enc
 		size_t srcLen = 1;
 		size_t destLen = sizeof(iconvBuf);
 
-		if (iconv(iconvDesc, &src, &srcLen, &dest, &destLen) == (size_t) -1) {
+		if (iconv(iconvDesc, &src, &srcLen, &dest, &destLen)
+			== (size_t) -1)
+		{
 			info->map[i] = -1;
 		} else {
 			int value = 0;
-			for (unsigned char *p = iconvBuf; (char *) p != dest; p++) {
+			unsigned char *p;
+			for (p = iconvBuf; (char *) p != dest; p++) {
 				value = (value << 8) + *p;
 			}
 

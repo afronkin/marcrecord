@@ -165,9 +165,11 @@ public:
 	/* Add field to the record before specified field. */
 	FieldIt addFieldBefore(FieldIt nextFieldIt, const Field &field);
 	FieldIt addControlFieldBefore(FieldIt nextFieldIt,
-		const std::string &fieldTag = "", const std::string &fieldData = "");
+		const std::string &fieldTag = "",
+		const std::string &fieldData = "");
 	FieldIt addDataFieldBefore(FieldIt nextFieldIt,
-		const std::string &fieldTag = "", char fieldInd1 = ' ', char fieldInd2 = ' ');
+		const std::string &fieldTag = "",
+		char fieldInd1 = ' ', char fieldInd2 = ' ');
 	/* Remove field from the record. */
 	void removeField(FieldIt fieldIt);
 
@@ -256,9 +258,11 @@ public:
 
 	/* Add subfield to the end of field. */
 	SubfieldIt addSubfield(const Subfield &subfield);
-	SubfieldIt addSubfield(char subfieldId = ' ', const std::string &subfieldData = "");
+	SubfieldIt addSubfield(char subfieldId = ' ',
+		const std::string &subfieldData = "");
 	/* Add subfield to the field before specified subfield. */
-	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt, const Subfield &subfield);
+	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt,
+		const Subfield &subfield);
 	SubfieldIt addSubfieldBefore(SubfieldIt nextSubfieldIt,
 		char subfieldId = ' ', const std::string &subfieldData = "");
 	/* Remove subfield from the field. */

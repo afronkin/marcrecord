@@ -89,7 +89,8 @@ MarcReader::ErrorCode MarcReader::getErrorCode(void)
 /*
  * Get last error message.
  */
-std::string & MarcReader::getErrorMessage(void)
+std::string &
+MarcReader::getErrorMessage(void)
 {
 	return m_errorMessage;
 }
@@ -97,7 +98,8 @@ std::string & MarcReader::getErrorMessage(void)
 /*
  * Set automatic error correction mode.
  */
-void MarcReader::setAutoCorrectionMode(bool autoCorrectionMode)
+void
+MarcReader::setAutoCorrectionMode(bool autoCorrectionMode)
 {
 	m_autoCorrectionMode = autoCorrectionMode;
 }
@@ -105,7 +107,8 @@ void MarcReader::setAutoCorrectionMode(bool autoCorrectionMode)
 /*
  * Open input file.
  */
-bool MarcReader::open(FILE *inputFile, const char *inputEncoding)
+bool
+MarcReader::open(FILE *inputFile, const char *inputEncoding)
 {
 	/* Clear error code and message. */
 	m_errorCode = OK;
@@ -117,16 +120,18 @@ bool MarcReader::open(FILE *inputFile, const char *inputEncoding)
 
 	/* Initialize encoding conversion. */
 	if (inputEncoding == NULL
-		|| strcmp(inputEncoding, "UTF-8") == 0 || strcmp(inputEncoding, "utf-8") == 0)
+		|| strcmp(inputEncoding, "UTF-8") == 0
+		|| strcmp(inputEncoding, "utf-8") == 0)
 	{
 		m_iconvDesc = (iconv_t) -1;
 	} else {
-		/* Create iconv descriptor for input encoding conversion to UTF-8. */
+		/* Create iconv descriptor for input encoding conversion. */
 		m_iconvDesc = iconv_open("UTF-8", inputEncoding);
 		if (m_iconvDesc == (iconv_t) -1) {
 			m_errorCode = ERROR_ICONV;
 			if (errno == EINVAL) {
-				m_errorMessage = "encoding conversion is not supported";
+				m_errorMessage =
+					"encoding conversion is not supported";
 			} else {
 				m_errorMessage = "iconv initialization failed";
 			}
@@ -140,7 +145,8 @@ bool MarcReader::open(FILE *inputFile, const char *inputEncoding)
 /*
  * Close input file.
  */
-void MarcReader::close(void)
+void
+MarcReader::close(void)
 {
 	/* Finalize iconv. */
 	if (m_iconvDesc != (iconv_t) -1) {
@@ -159,7 +165,8 @@ void MarcReader::close(void)
 /*
  * Read next record from MARCXML file.
  */
-bool MarcReader::next(MarcRecord &record)
+bool
+MarcReader::next(MarcRecord &record)
 {
 	int symbol;
 	char recordBuf[100000];
@@ -187,16 +194,21 @@ bool MarcReader::next(MarcRecord &record)
 	}
 
 	/* Parse record length. */
-	if (!is_numeric(recordBuf, 5) || sscanf(recordBuf, "%5u", &recordLen) != 1) {
+	if (!is_numeric(recordBuf, 5)
+		|| sscanf(recordBuf, "%5u", &recordLen) != 1)
+	{
 		m_errorCode = ERROR_INVALID_RECORD;
 		m_errorMessage = "invalid record length";
 		return false;
 	}
 
 	/* Read record. */
-	if (fread(recordBuf + 5, 1, recordLen - 5, m_inputFile) != recordLen - 5) {
+	if (fread(recordBuf + 5, 1, recordLen - 5, m_inputFile)
+		!= recordLen - 5)
+	{
 		m_errorCode = ERROR_INVALID_RECORD;
-		m_errorMessage = "invalid record length or record data incomplete";
+		m_errorMessage =
+			"invalid record length or record data incomplete";
 		return false;
 	}
 
@@ -207,7 +219,9 @@ bool MarcReader::next(MarcRecord &record)
 /*
  * Parse record from ISO 2709 buffer.
  */
-bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRecord &record)
+bool
+MarcReader::parse(const char *recordBuf, unsigned int recordBufLen,
+	MarcRecord &record)
 {
 	/* Clear error code and message. */
 	m_errorCode = OK;
@@ -230,11 +244,13 @@ bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRec
 		}
 
 		/* Copy record leader. */
-		memcpy(&record.m_leader, recordBuf, sizeof(struct MarcRecord::Leader));
+		memcpy(&record.m_leader, recordBuf,
+			sizeof(struct MarcRecord::Leader));
 
 		/* Replace incorrect characters in record leader to '?'. */
 		if (m_autoCorrectionMode) {
-			for (unsigned int i = 0; i < sizeof(struct MarcRecord::Leader); i++) {
+			unsigned int i = 0;
+			for (; i < sizeof(struct MarcRecord::Leader); i++) {
 				char c = *((char *) &record.m_leader + i);
 				if ((c != ' ') && (c != '|')
 					&& (c < '0' || c > '9')
@@ -248,7 +264,8 @@ bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRec
 		/* Get base address of data. */
 		unsigned int baseAddress;
 		if (!is_numeric(record.m_leader.baseAddress, 5)
-			|| sscanf(record.m_leader.baseAddress, "%05u", &baseAddress) != 1
+			|| sscanf(record.m_leader.baseAddress, "%05u",
+				&baseAddress) != 1
 			|| recordLen < baseAddress)
 		{
 			m_errorCode = ERROR_INVALID_RECORD;
@@ -257,8 +274,9 @@ bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRec
 		}
 
 		/* Get number of fields. */
-		int numFields = (baseAddress - sizeof(struct MarcRecord::Leader) - 1) /
-			sizeof(struct RecordDirectoryEntry);
+		int numFields = (baseAddress
+			- sizeof(struct MarcRecord::Leader) - 1)
+			/ sizeof(struct RecordDirectoryEntry);
 		if (recordLen < sizeof(struct MarcRecord::Leader)
 			+ (sizeof(struct RecordDirectoryEntry) * numFields))
 		{
@@ -269,9 +287,11 @@ bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRec
 
 		/* Parse list of fields. */
 		struct RecordDirectoryEntry *directoryEntry = 
-			(RecordDirectoryEntry *) (recordBuf + sizeof(struct MarcRecord::Leader));
+			(RecordDirectoryEntry *) (recordBuf
+			+ sizeof(struct MarcRecord::Leader));
 		const char *recordData = recordBuf + baseAddress;
-		for (int fieldNo = 0; fieldNo < numFields; fieldNo++, directoryEntry++) {
+		int fieldNo = 0;
+		for (; fieldNo < numFields; fieldNo++, directoryEntry++) {
 			/* Check directory entry. */
 			if (!is_numeric((const char *) directoryEntry,
 				sizeof(struct RecordDirectoryEntry)))
@@ -288,20 +308,24 @@ bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRec
 				&fieldLength, &fieldStartPos) != 2)
 			{
 				m_errorCode = ERROR_INVALID_RECORD;
-				m_errorMessage = "invalid base address of data";
+				m_errorMessage =
+					"invalid base address of data";
 				throw m_errorCode;
 			}
 
 			/* Check field starting position and length. */
-			if (baseAddress + fieldStartPos + fieldLength > recordLen) {
+			if (baseAddress + fieldStartPos + fieldLength
+				> recordLen)
+			{
 				m_errorCode = ERROR_INVALID_RECORD;
-				m_errorMessage = "invalid field starting position or length";
+				m_errorMessage = "invalid field starting "
+					"position or length";
 				throw m_errorCode;
 			}
 
 			/* Parse field. */
-			MarcRecord::Field field =
-				parseField(fieldTag, recordData + fieldStartPos, fieldLength);
+			MarcRecord::Field field = parseField(fieldTag,
+				recordData + fieldStartPos, fieldLength);
 			/* Append field to list. */
 			record.m_fieldList.push_back(field);
 		}
@@ -316,7 +340,8 @@ bool MarcReader::parse(const char *recordBuf, unsigned int recordBufLen, MarcRec
 /*
  * Parse field from ISO 2709 buffer.
  */
-MarcRecord::Field MarcReader::parseField(const std::string &fieldTag,
+MarcRecord::Field
+MarcReader::parseField(const std::string &fieldTag,
 	const char *fieldData, unsigned int fieldLength)
 {
 	MarcRecord::Field field;
@@ -346,7 +371,9 @@ MarcRecord::Field MarcReader::parseField(const std::string &fieldTag,
 		if (m_iconvDesc == (iconv_t) -1) {
 			field.m_data.assign(fieldData, fieldLength);
 		} else {
-			if (!iconv(m_iconvDesc, fieldData, fieldLength, field.m_data)) {
+			if (!iconv(m_iconvDesc, fieldData, fieldLength,
+				field.m_data))
+			{
 				m_errorCode = ERROR_ICONV;
 				m_errorMessage = "encoding conversion failed";
 				throw m_errorCode;
@@ -384,46 +411,20 @@ MarcRecord::Field MarcReader::parseField(const std::string &fieldTag,
 
 		/* Parse list of subfields. */
 		unsigned int subfieldStartPos = 0;
-		for (unsigned int symbolPos = 2; symbolPos <= fieldLength; symbolPos++) {
+		unsigned int symbolPos;
+		for (symbolPos = 2; symbolPos <= fieldLength; symbolPos++) {
 			/* Skip symbols of subfield data. */
-			if (fieldData[symbolPos] != '\x1F' && symbolPos != fieldLength) {
+			if (fieldData[symbolPos] != '\x1F'
+				&& symbolPos != fieldLength)
+			{
 				continue;
 			}
 
 			if (symbolPos > 2) {
 				/* Parse regular subfield. */
 				MarcRecord::Subfield subfield;
-				subfield.clear();
-
-				/* Copy subfield identifier. */
-				subfield.m_id = fieldData[subfieldStartPos + 1];
-				/* Replace invalid subfield identifier to character '?'. */
-				if (m_autoCorrectionMode
-					&& (subfield.m_id < '0' || subfield.m_id > '9')
-					&& (subfield.m_id < 'a' || subfield.m_id > 'z'))
-				{
-					subfield.m_id = '?';
-				}
-
-				if (m_iconvDesc == (iconv_t) -1) {
-					/* Copy subfield data. */
-					subfield.m_data.assign(
-						fieldData + subfieldStartPos + 2,
-						symbolPos - subfieldStartPos - 2);
-				} else {
-					/* Copy subfield data with encoding conversion. */
-					if (!iconv(m_iconvDesc,
-						fieldData + subfieldStartPos + 2,
-						symbolPos - subfieldStartPos - 2,
-						subfield.m_data))
-					{
-						m_errorCode = ERROR_ICONV;
-						m_errorMessage = "encoding conversion failed";
-						throw m_errorCode;
-					}
-				}
-
-				/* Append subfield to list. */
+				subfield = parseSubfield(fieldData,
+					subfieldStartPos, symbolPos);
 				field.m_subfieldList.push_back(subfield);
 			}
 
@@ -432,4 +433,46 @@ MarcRecord::Field MarcReader::parseField(const std::string &fieldTag,
 	}
 
 	return field;
+}
+
+/*
+ * Parse subfield.
+ */
+MarcRecord::Subfield
+MarcReader::parseSubfield(const char *fieldData, unsigned int subfieldStartPos,
+	unsigned int subfieldEndPos)
+{
+	/* Parse regular subfield. */
+	MarcRecord::Subfield subfield;
+	subfield.clear();
+
+	/* Copy subfield identifier. */
+	subfield.m_id = fieldData[subfieldStartPos + 1];
+	/* Replace invalid subfield identifier. */
+	if (m_autoCorrectionMode
+		&& (subfield.m_id < '0' || subfield.m_id > '9')
+		&& (subfield.m_id < 'a' || subfield.m_id > 'z'))
+	{
+		subfield.m_id = '?';
+	}
+
+	if (m_iconvDesc == (iconv_t) -1) {
+		/* Copy subfield data. */
+		subfield.m_data.assign(
+			fieldData + subfieldStartPos + 2,
+			subfieldEndPos - subfieldStartPos - 2);
+	} else {
+		/* Copy subfield data with encoding conversion. */
+		if (!iconv(m_iconvDesc,
+			fieldData + subfieldStartPos + 2,
+			subfieldEndPos - subfieldStartPos - 2,
+			subfield.m_data))
+		{
+			m_errorCode = ERROR_ICONV;
+			m_errorMessage = "encoding conversion failed";
+			throw m_errorCode;
+		}
+	}
+
+	return subfield;
 }

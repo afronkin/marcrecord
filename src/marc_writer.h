@@ -59,6 +59,13 @@ protected:
 	/* Iconv descriptor for output encoding. */
 	iconv_t m_iconvDesc;
 
+private:
+	/* Append control field data to the write buffer. */
+	int appendControlField(char *fieldData, MarcRecord::FieldIt &fieldIt);
+	/* Append subfield data to the write buffer. */
+	int appendSubfield(char *fieldData,
+		MarcRecord::SubfieldIt &subfieldIt);
+
 public:
 	/* Constructor. */
 	MarcWriter(FILE *outputFile = NULL, const char *outputEncoding = NULL);

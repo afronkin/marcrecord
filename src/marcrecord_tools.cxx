@@ -35,7 +35,8 @@
 /*
  * Print formatted output to std::string.
  */
-int snprintf(std::string &s, size_t n, const char *format, ...)
+int
+snprintf(std::string &s, size_t n, const char *format, ...)
 {
 	va_list ap;
 	char *buf;
@@ -57,11 +58,15 @@ int snprintf(std::string &s, size_t n, const char *format, ...)
 /*
  * Serialize XML string.
  */
-std::string serialize_xml(std::string &s)
+std::string
+serialize_xml(std::string &s)
 {
 	std::string dest = "";
 
-	/* Copy characters from source sting to destination string, replace special characters. */
+	/*
+	 * Copy characters from source sting to destination string,
+	 * replace special characters.
+	 */
 	for (std::string::iterator it = s.begin(); it != s.end(); it++) {
 		unsigned char c = *it;
 
@@ -93,7 +98,8 @@ std::string serialize_xml(std::string &s)
 /*
  * Verify that all string characters are decimal digits in ASCII encoding.
  */
-int is_numeric(const char *s, size_t n)
+int
+is_numeric(const char *s, size_t n)
 {
 	char *p, *s_end;
 
@@ -110,7 +116,8 @@ int is_numeric(const char *s, size_t n)
 /*
  * Convert encoding for std::string.
  */
-bool iconv(iconv_t iconv_desc, const std::string &src, std::string &dest)
+bool
+iconv(iconv_t iconv_desc, const std::string &src, std::string &dest)
 {
 	char buf[4096];
 #if defined(WIN32)
@@ -124,7 +131,9 @@ bool iconv(iconv_t iconv_desc, const std::string &src, std::string &dest)
 	while (src_len > 0) {
 		size_t dest_len = sizeof(buf);
 		char *q = buf;
-		if (iconv(iconv_desc, &p, &src_len, &q, &dest_len) == (size_t) -1) {
+		if (iconv(iconv_desc, &p, &src_len, &q, &dest_len)
+			== (size_t) -1)
+		{
 			if (errno != E2BIG) {
 				return false;
 			}
@@ -139,7 +148,8 @@ bool iconv(iconv_t iconv_desc, const std::string &src, std::string &dest)
 /*
  * Convert encoding for std::string.
  */
-bool iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest)
+bool
+iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest)
 {
 	char buf[4096];
 #if defined(WIN32)
@@ -153,7 +163,9 @@ bool iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest)
 	while (src_len > 0) {
 		size_t dest_len = sizeof(buf);
 		char *q = buf;
-		if (iconv(iconv_desc, &p, &src_len, &q, &dest_len) == (size_t) -1) {
+		if (iconv(iconv_desc, &p, &src_len, &q, &dest_len)
+			== (size_t) -1)
+		{
 			if (errno != E2BIG) {
 				return false;
 			}

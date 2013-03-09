@@ -81,7 +81,8 @@ protected:
 
 public:
 	/* Constructor. */
-	MarcXmlReader(FILE *inputFile = NULL, const char *inputEncoding = NULL);
+	MarcXmlReader(FILE *inputFile = NULL,
+		const char *inputEncoding = NULL);
 	/* Destructor. */
 	~MarcXmlReader();
 
