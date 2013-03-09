@@ -12,7 +12,7 @@ CXXFLAGS=/nologo /MT /O2 /EHsc /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
   /D "XML_STATIC"
 CFLAGS_EXPAT=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
   /FD /I "$(PLATFORM_SDK)\Include" /I "..\src\expat" /D "HAVE_EXPAT_CONFIG_H"
-CFLAGS_ICONV=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
+CFLAGS_WIN_ICONV=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
   /FD /I "$(PLATFORM_SDK)\Include" /I "..\src\win-iconv"
 LDFLAGS=/nologo /machine:I386
 LIBS=
@@ -65,7 +65,7 @@ xmltok.obj: $(SRC_DIR)\expat\xmltok.c
 	cl /c $(CFLAGS_EXPAT) $**
 
 win_iconv.obj: $(SRC_DIR)\win-iconv\win_iconv.c
-	cl /c $(CFLAGS_IFCONV) $**
+	cl /c $(CFLAGS_WIN_ICONV) $**
 
 test.obj: $(SRC_DIR)\test.cxx
 	cl /c $(CXXFLAGS) $**
