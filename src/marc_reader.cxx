@@ -33,6 +33,8 @@
 #include "marcrecord_tools.h"
 #include "marc_reader.h"
 
+namespace marcrecord {
+
 #define ISO2709_RECORD_SEPARATOR	'\x1D'
 #define ISO2709_FIELD_SEPARATOR		'\x1E'
 #define ISO2709_IDENTIFIER_DELIMITER	'\x1F'
@@ -51,6 +53,10 @@ struct RecordDirectoryEntry {
 typedef struct RecordDirectoryEntry RecordDirectoryEntry;
 
 #pragma pack()
+
+} // namespace marcrecord
+
+using namespace marcrecord;
 
 /*
  * Constructor.

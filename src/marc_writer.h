@@ -33,6 +33,8 @@
 #include <string>
 #include "marcrecord.h"
 
+namespace marcrecord {
+
 /*
  * MARC (ISO 2709) records writer.
  */
@@ -85,5 +87,7 @@ public:
 	// Write record to ISO 2709 file.
 	bool write(MarcRecord &record);
 };
+
+} // namespace marcrecord
 
 #endif // MARCRECORD_SRC_MARC_WRITER_H

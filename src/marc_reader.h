@@ -33,6 +33,8 @@
 #include <string>
 #include "marcrecord.h"
 
+namespace marcrecord {
+
 /*
  * MARC (ISO 2709) records reader.
  */
@@ -95,5 +97,7 @@ public:
 	bool parse(const char *recordBuf, unsigned int recordBufLen,
 		MarcRecord &record);
 };
+
+} // namespace marcrecord
 
 #endif // MARCRECORD_SRC_MARC_READER_H

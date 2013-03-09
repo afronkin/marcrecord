@@ -33,6 +33,8 @@
 #include <string>
 #include <vector>
 
+namespace marcrecord {
+
 /*
  * MARC record class.
  */
@@ -319,5 +321,7 @@ public:
 	// Get data of embedded field.
 	std::string getEmbeddedData(void);
 };
+
+} // namespace marcrecord
 
 #endif // MARCRECORD_SRC_MARCRECORD_H

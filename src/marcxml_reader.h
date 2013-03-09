@@ -33,6 +33,8 @@
 #include "marcrecord.h"
 #include "expat/expat.h"
 
+namespace marcrecord {
+
 /*
  * MARCXML records reader.
  */
@@ -103,5 +105,7 @@ public:
 	// Read next record from MARCXML file.
 	bool next(MarcRecord &record);
 };
+
+} // namespace marcrecord
 
 #endif // MARCRECORD_SRC_MARCXML_READER_H

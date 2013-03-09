@@ -32,6 +32,8 @@
 #include <iconv.h>
 #include <string>
 
+namespace marcrecord {
+
 // Print formatted output to std::string.
 int snprintf(std::string &s, size_t n, const char *format, ...);
 // Serialize XML string.
@@ -42,5 +44,7 @@ int is_numeric(const char *s, size_t n);
 bool iconv(iconv_t iconv_desc, const std::string &src, std::string &dest);
 // Convert encoding for std::string.
 bool iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest);
+
+} // namespace marcrecord
 
 #endif // MARCRECORD_SRC_MARCRECORD_TOOLS_H

@@ -28,6 +28,8 @@
 
 #include "marcrecord.h"
 
+using namespace marcrecord;
+
 /*
  * Constructor.
  */

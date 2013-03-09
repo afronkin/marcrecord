@@ -34,6 +34,8 @@
 #include "marcrecord.h"
 #include "marcxml_reader.h"
 
+namespace marcrecord {
+
 extern "C" { 
 // XML start element handler for expat library.
 void XMLCALL marcXmlStartElement(void *userData, const XML_Char *name,
@@ -45,7 +47,11 @@ void XMLCALL marcXmlCharacterData(void *userData, const XML_Char *s, int len);
 // XML unknown encoding handler for expat library.
 int XMLCALL marcXmlUnknownEncoding(void *data, const XML_Char *encoding,
 	XML_Encoding *info);
-}
+} // extern "C"
+
+} // namespace marcrecord
+
+using namespace marcrecord;
 
 /*
  * Constructor.
@@ -214,6 +220,8 @@ MarcXmlReader::next(MarcRecord &record)
 
 	return true;
 }
+
+namespace marcrecord {
 
 /*
  * XML start element handler for expat library.
@@ -404,3 +412,5 @@ marcXmlUnknownEncoding(void *data, const XML_Char *encoding,
 
 	return XML_STATUS_OK;
 }
+
+} // namespace marcrecord

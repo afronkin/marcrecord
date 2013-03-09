@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include "marcrecord_tools.h"
 
+namespace marcrecord {
+
 /*
  * Print formatted output to std::string.
  */
@@ -131,7 +133,7 @@ iconv(iconv_t iconv_desc, const std::string &src, std::string &dest)
 	while (src_len > 0) {
 		size_t dest_len = sizeof(buf);
 		char *q = buf;
-		if (iconv(iconv_desc, &p, &src_len, &q, &dest_len)
+		if (::iconv(iconv_desc, &p, &src_len, &q, &dest_len)
 			== (size_t) -1)
 		{
 			if (errno != E2BIG) {
@@ -163,7 +165,7 @@ iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest)
 	while (src_len > 0) {
 		size_t dest_len = sizeof(buf);
 		char *q = buf;
-		if (iconv(iconv_desc, &p, &src_len, &q, &dest_len)
+		if (::iconv(iconv_desc, &p, &src_len, &q, &dest_len)
 			== (size_t) -1)
 		{
 			if (errno != E2BIG) {
@@ -176,3 +178,5 @@ iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest)
 
 	return true;
 }
+
+} // namespace marcrecord

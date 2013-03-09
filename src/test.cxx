@@ -34,6 +34,8 @@
 #include "marcxml_reader.h"
 #include "marcxml_writer.h"
 
+using namespace marcrecord;
+
 /*
  * Create test MARC record 1.
  */

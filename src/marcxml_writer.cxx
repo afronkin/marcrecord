@@ -33,6 +33,8 @@
 #include "marcrecord_tools.h"
 #include "marcxml_writer.h"
 
+using namespace marcrecord;
+
 /*
  * Constructor.
  */

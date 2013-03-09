@@ -33,6 +33,8 @@
 #include <string>
 #include "marcrecord.h"
 
+namespace marcrecord {
+
 /*
  * MARCXML records writer.
  */
@@ -82,5 +84,7 @@ public:
 	// Write record to MARCXML file.
 	bool write(MarcRecord &record);
 };
+
+} // namespace marcrecord
 
 #endif // MARCRECORD_SRC_MARCXML_WRITER_H
