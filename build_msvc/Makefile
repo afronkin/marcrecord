@@ -2,25 +2,25 @@ SRC_DIR=..\src
 OBJS = marc_reader.obj marc_writer.obj marcrecord.obj marcrecord_field.obj \
   marcrecord_subfield.obj marcrecord_tools.obj marctext_writer.obj \
   marcxml_reader.obj marcxml_writer.obj xmlparse.obj xmlrole.obj xmltok.obj \
-  test.obj
+  win_iconv.obj test.obj
 PROGRAM = test.exe
 
 PLATFORM_SDK=C:\Program Files\Microsoft SDKs\Windows\v7.1
-LIBICONV=D:\projects_lib\libiconv
 
 CXXFLAGS=/nologo /MT /O2 /EHsc /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
-  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src" /I "$(LIBICONV)\include" \
+  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src" /I "..\src\win-iconv" \
   /D "XML_STATIC"
 CFLAGS_EXPAT=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
-  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src\expat" /I "$(LIBICONV)\include" \
-  /D "HAVE_EXPAT_CONFIG_H"
+  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src\expat" /D "HAVE_EXPAT_CONFIG_H"
+CFLAGS_ICONV=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
+  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src\win-iconv"
 LDFLAGS=/nologo /machine:I386
-LIBS=$(LIBICONV)\lib\libiconv.lib
+LIBS=
 
 all: $(PROGRAM)
 
 $(PROGRAM): $(OBJS)
-	cl $** /link $(LDFLAGS) /out:$@ $(LIBS)
+	link $** $(LIBS) $(LDFLAGS) /out:$@
 
 clean:
 	del *.exe *.idb *.obj *.iso *.txt *.xml
@@ -63,6 +63,9 @@ xmlrole.obj: $(SRC_DIR)\expat\xmlrole.c
 
 xmltok.obj: $(SRC_DIR)\expat\xmltok.c
 	cl /c $(CFLAGS_EXPAT) $**
+
+win_iconv.obj: $(SRC_DIR)\win-iconv\win_iconv.c
+	cl /c $(CFLAGS_IFCONV) $**
 
 test.obj: $(SRC_DIR)\test.cxx
 	cl /c $(CXXFLAGS) $**

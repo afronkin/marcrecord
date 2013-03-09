@@ -102,8 +102,8 @@ createRecord2(void)
 bool
 test1(void)
 {
-	printf("Testing addField(), addFieldBefore(), addSubfield(), "
-		"addSubfieldBefore().\n");
+	printf("[1] addField(), addFieldBefore(), addSubfield(), "
+		"addSubfieldBefore()\n");
 
 	try {
 		// Create new MARC record.
@@ -144,7 +144,7 @@ test1(void)
 bool
 test2(void)
 {
-	printf("Testing toString().\n");
+	printf("[2] toString()\n");
 
 	try {
 		MarcRecord record = createRecord1();
@@ -167,7 +167,7 @@ test2(void)
 bool
 test3(void)
 {
-	printf("Testing setLeader(), getLeader().\n");
+	printf("[3] setLeader(), getLeader()\n");
 
 	try {
 		MarcRecord record = createRecord1();
@@ -207,7 +207,7 @@ test3(void)
 bool
 test4(void)
 {
-	printf("Testing getField(), getSubfield().\n");
+	printf("[4] getField(), getSubfield()\n");
 
 	try {
 		MarcRecord record = createRecord1();
@@ -242,7 +242,7 @@ test4(void)
 bool
 test5(void)
 {
-	printf("Testing getFields(), getSubfields().\n");
+	printf("[5] getFields(), getSubfields()\n");
 
 	try {
 		MarcRecord record = createRecord1();
@@ -288,7 +288,7 @@ test5(void)
 bool
 test6(void)
 {
-	printf("Testing getEmbeddedField(), getEmbeddedData().\n");
+	printf("[6] getEmbeddedField(), getEmbeddedData()\n");
 
 	try {
 		MarcRecord record = createRecord1();
@@ -328,7 +328,7 @@ test6(void)
 bool
 test7(void)
 {
-	printf("Testing getEmbeddedFields().\n");
+	printf("[7] getEmbeddedFields()\n");
 
 	try {
 		MarcRecord record = createRecord1();
@@ -371,7 +371,7 @@ test7(void)
 bool
 test8(void)
 {
-	printf("Testing removeField(), removeSubfield().\n");
+	printf("[8] removeField(), removeSubfield()\n");
 
 	try {
 		MarcRecord record = createRecord1();
@@ -418,7 +418,7 @@ test9(void)
 {
 	FILE *outputFile = NULL;
 
-	printf("Testing MarcWriter.\n");
+	printf("[9] MarcWriter\n");
 
 	try {
 		// Open ISO 2709 file.
@@ -462,7 +462,7 @@ test10(void)
 {
 	FILE *inputFile = NULL;
 
-	printf("Testing MarcReader.\n");
+	printf("[10] MarcReader\n");
 
 	try {
 		// Open ISO 2709 file.
@@ -510,8 +510,8 @@ test11(void)
 {
 	FILE *inputFile = NULL;
 
-	printf("Testing MarcReader with specified encoding and "
-		"autocorrection.\n");
+	printf("[11] MarcReader with specified encoding and "
+		"autocorrection\n");
 
 	try {
 		// Open ISO 2709 file.
@@ -560,7 +560,7 @@ test12(void)
 {
 	FILE *outputFile = NULL;
 
-	printf("Testing MarcTextWriter.\n");
+	printf("[12] MarcTextWriter\n");
 
 	try {
 		// Open MARC text file.
@@ -607,7 +607,7 @@ test13(void)
 {
 	FILE *outputFile = NULL;
 
-	printf("Testing MarcXmlWriter.\n");
+	printf("[13] MarcXmlWriter\n");
 
 	try {
 		// Open MARCXML file.
@@ -656,7 +656,7 @@ test14(void)
 {
 	FILE *inputFile = NULL;
 
-	printf("Testing MarcXmlReader.\n");
+	printf("[14] MarcXmlReader\n");
 
 	try {
 		// Open MARCXML file.
