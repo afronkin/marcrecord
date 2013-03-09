@@ -1,18 +1,14 @@
 SRC_DIR=../src
-OBJS=marc_reader.o marc_writer.o marcrecord.o marcrecord_field.o marcrecord_subfield.o \
-  marcrecord_tools.o marctext_writer.o marcxml_reader.o marcxml_writer.o test.o \
-  xmlparse.o xmlrole.o xmltok.o
+OBJS=test.o marc_reader.o marc_writer.o marcrecord.o marcrecord_field.o marcrecord_subfield.o \
+  marcrecord_tools.o marctext_writer.o marcxml_reader.o marcxml_writer.o
 PROGRAM=test
 
 CXX=g++
 CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long \
-  -I$(SRC_DIR) -I$(SRC_DIR)/expat
+  -I$(SRC_DIR)
 CC=gcc
-CFLAGS_EXPAT=-O2 -Wall -ansi -pedantic -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes \
-  -Wold-style-definition -Wwrite-strings -Wno-long-long -I$(SRC_DIR)/expat \
-  -DHAVE_EXPAT_CONFIG_H
 LDFLAGS=
-LIBS=-lm -liconv
+LIBS=-lm -lexpat -liconv
 
 .PHONY: all clean verify
 .SUFFIXES: .cxx .c .o
@@ -34,6 +30,3 @@ verify:
 
 %.o: $(SRC_DIR)/%.cxx
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-%.o: $(SRC_DIR)/expat/%.c
-	$(CC) $(CFLAGS_EXPAT) -c $< -o $@
