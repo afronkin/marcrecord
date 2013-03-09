@@ -156,7 +156,7 @@ iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest)
 	const char *p = src;
 #else
 	char *p = (char *) src;
-#endif /* WIN32 */
+#endif // WIN32
 	size_t src_len = len;
 
 	dest = "";

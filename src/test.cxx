@@ -104,10 +104,10 @@ test1(void)
 		"addSubfieldBefore().\n");
 
 	try {
-		/* Create new MARC record. */
+		// Create new MARC record.
 		MarcRecord record(MarcRecord::UNIMARC);
 
-		/* Add fields and subfields to new record. */
+		// Add fields and subfields to new record.
 		MarcRecord::FieldIt fieldIt =
 			record.addField(MarcRecord::Field("997", '3', '4'));
 		MarcRecord::SubfieldIt subfieldIt = fieldIt->addSubfield(
@@ -124,16 +124,16 @@ test1(void)
 		fieldIt = record.addDataFieldBefore(fieldIt, "998", '1', '2');
 		fieldIt->addSubfield(MarcRecord::Subfield('l', "lll"));
 	
-		/* Print content of new record. */
+		// Print content of new record.
 		printf("%s\n", record.toString().c_str());
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -147,16 +147,16 @@ test2(void)
 	try {
 		MarcRecord record = createRecord1();
 
-		/* Convert MARC record to string. */
+		// Convert MARC record to string.
 		printf("%s\n", record.toString().c_str());
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -170,33 +170,33 @@ test3(void)
 	try {
 		MarcRecord record = createRecord1();
 
-		/* Print original leader fields. */
+		// Print original leader fields.
 		MarcRecord::Leader leader = record.getLeader();
 		printf("Record status: %c\n", leader.recordStatus);
 		printf("Record type: %c\n", leader.recordType);
 		printf("Bibliographic level: %c\n---\n",
 			leader.bibliographicLevel);
 
-		/* Modify some fields in leader. */
+		// Modify some fields in leader.
 		leader.recordStatus = 'x';
 		leader.recordType = 'y';
 		leader.bibliographicLevel = 'z';
 		record.setLeader(leader);
 
-		/* Print modified leader fields. */
+		// Print modified leader fields.
 		leader = record.getLeader();
 		printf("Record status: %c\n", leader.recordStatus);
 		printf("Record type: %c\n", leader.recordType);
 		printf("Bibliographic level: %c\n",
 			leader.bibliographicLevel);
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -210,28 +210,28 @@ test4(void)
 	try {
 		MarcRecord record = createRecord1();
 
-		/* Get specified field. */
+		// Get specified field.
 		MarcRecord::FieldIt fieldIt = record.getField("200");
 		if (fieldIt == record.nullField()) {
 			throw std::string("field not found");
 		}
 
-		/* Get specified subfield from field. */
+		// Get specified subfield from field.
 		MarcRecord::SubfieldIt subfieldIt = fieldIt->getSubfield('b');
 		if (subfieldIt == fieldIt->nullSubfield()) {
 			throw std::string("subfield not found");
 		}
 
-		/* Print subfield value. */
+		// Print subfield value.
 		printf("Subfield 200b: '%s'\n", subfieldIt->m_data.c_str());
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -245,20 +245,20 @@ test5(void)
 	try {
 		MarcRecord record = createRecord1();
 
-		/* Get list of specified fields. */
+		// Get list of specified fields.
 		MarcRecord::FieldRefList fieldList = record.getFields("899");
 		for (MarcRecord::FieldRefIt fieldIt = fieldList.begin();
 			fieldIt != fieldList.end(); fieldIt++)
 		{
-			/* Print tag and indicators of field. */
+			// Print tag and indicators of field.
 			printf("%3s [%c%c]", (*fieldIt)->m_tag.c_str(),
 				(*fieldIt)->m_ind1, (*fieldIt)->m_ind2);
 
-			/* Get list of specified subfields from field. */
+			// Get list of specified subfields from field.
 			MarcRecord::SubfieldRefList subfieldList =
 				(*fieldIt)->getSubfields('e');
 			if (!subfieldList.empty()) {
-				/* Print values of subfields. */
+				// Print values of subfields.
 				MarcRecord::SubfieldRefIt subfieldIt =
 					subfieldList.begin();
 				for (; subfieldIt != subfieldList.end(); 
@@ -271,13 +271,13 @@ test5(void)
 			}
 		}
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -291,33 +291,33 @@ test6(void)
 	try {
 		MarcRecord record = createRecord1();
 
-		/* Get specified field. */
+		// Get specified field.
 		MarcRecord::FieldIt fieldIt = record.getField("463");
 		if (fieldIt == record.nullField()) {
 			throw std::string("field not found");
 		}
 
-		/* Get specified embedded control field. */
+		// Get specified embedded control field.
 		MarcRecord::SubfieldRefList subfieldList =
 			fieldIt->getEmbeddedField("001");
 		if (subfieldList.empty()) {
 			throw std::string("embedded field not found");
 		}
 
-		/* Print subfields of embedded control field*/
+		// Print subfields of embedded control field.
 		MarcRecord::SubfieldRefIt subfieldIt = subfieldList.begin();
 		for (; subfieldIt != subfieldList.end(); subfieldIt++) {
 			printf("Embedded field 461 <001>: '%s'\n",
 				(*subfieldIt)->getEmbeddedData().c_str());
 		}
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -331,10 +331,10 @@ test7(void)
 	try {
 		MarcRecord record = createRecord1();
 
-		/* Get specified field. */
+		// Get specified field.
 		MarcRecord::FieldIt fieldIt = record.getField("461");
 
-		/* Get list of specified embedded fields. */
+		// Get list of specified embedded fields.
 		MarcRecord::EmbeddedFieldList embeddedFieldList =
 			fieldIt->getEmbeddedFields("801");
 		printf("Found embedded fields: %u\n",
@@ -354,13 +354,13 @@ test7(void)
 			printf("\n");
 		}
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -374,16 +374,16 @@ test8(void)
 	try {
 		MarcRecord record = createRecord1();
 
-		/* Get specified field. */
+		// Get specified field.
 		MarcRecord::FieldIt fieldIt = record.getField("461");
 		if (fieldIt == record.nullField()) {
 			throw std::string("field not found");
 		}
 
-		/* Remove field. */
+		// Remove field.
 		record.removeField(fieldIt);
 
-		/* Get specified subfield. */
+		// Get specified subfield.
 		fieldIt = record.getField("899");
 		if (fieldIt == record.nullField()) {
 			throw std::string("field not found");
@@ -393,19 +393,19 @@ test8(void)
 			throw std::string("subfield not found");
 		}
 
-		/* Remove subfield. */
+		// Remove subfield.
 		fieldIt->removeSubfield(subfieldIt);
 
-		/* Print content of record. */
+		// Print content of record.
 		printf("%s\n", record.toString().c_str());
 	} catch (std::string errorMessage) {
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -419,37 +419,37 @@ test9(void)
 	printf("Testing MarcWriter.\n");
 
 	try {
-		/* Open ISO 2709 file. */
+		// Open ISO 2709 file.
 		outputFile = fopen("test1.iso", "wb");
 		if (outputFile == NULL) {
 			throw std::string("can't open output file");
 		}
 
-		/* Initialize MARC writer. */
+		// Initialize MARC writer.
 		MarcWriter marcWriter(outputFile, "CP1251");
 
-		/* Write MARC records to ISO 2709 file. */
+		// Write MARC records to ISO 2709 file.
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		if (!marcWriter.write(record1) || !marcWriter.write(record2)) {
 			throw marcWriter.getErrorMessage();
 		}
 
-		/* Close ISO 2709 file. */
+		// Close ISO 2709 file.
 		fclose(outputFile);
 	} catch (std::string errorMessage) {
-		/* Close files. */
+		// Close files.
 		if (outputFile) {
 			fclose(outputFile);
 		}
 
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -463,41 +463,41 @@ test10(void)
 	printf("Testing MarcReader.\n");
 
 	try {
-		/* Open ISO 2709 file. */
+		// Open ISO 2709 file.
 		inputFile = fopen("test1.iso", "rb");
 		if (inputFile == NULL) {
 			throw std::string("can't open input file");
 		}
 
-		/* Initialize MARC reader. */
+		// Initialize MARC reader.
 		MarcReader marcReader(inputFile, "CP1251");
 
-		/* Read records. */
+		// Read records.
 		MarcRecord record(MarcRecord::UNIMARC);
 		while (marcReader.next(record)) {
 			printf("%s\n", record.toString().c_str());
 		}
 
-		/* Check error code. */
+		// Check error code.
 		if (marcReader.getErrorCode() != MarcReader::END_OF_FILE) {
 			throw marcReader.getErrorMessage();
 		}
 
-		/* Close ISO 2709 file. */
+		// Close ISO 2709 file.
 		fclose(inputFile);
 	} catch (std::string errorMessage) {
-		/* Close files. */
+		// Close files.
 		if (inputFile) {
 			fclose(inputFile);
 		}
 
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -512,42 +512,42 @@ test11(void)
 		"autocorrection.\n");
 
 	try {
-		/* Open ISO 2709 file. */
+		// Open ISO 2709 file.
 		inputFile = fopen("test1.iso", "rb");
 		if (inputFile == NULL) {
 			throw std::string("can't open input file");
 		}
 
-		/* Initialize MARC reader. */
+		// Initialize MARC reader.
 		MarcReader marcReader(inputFile, "CP1251");
 		marcReader.setAutoCorrectionMode(true);
 
-		/* Read records. */
+		// Read records.
 		MarcRecord record(MarcRecord::UNIMARC);
 		while (marcReader.next(record)) {
 			printf("%s\n", record.toString().c_str());
 		}
 
-		/* Check error code. */
+		// Check error code.
 		if (marcReader.getErrorCode() != MarcReader::END_OF_FILE) {
 			throw marcReader.getErrorMessage();
 		}
 
-		/* Close ISO 2709 file. */
+		// Close ISO 2709 file.
 		fclose(inputFile);
 	} catch (std::string errorMessage) {
-		/* Close files. */
+		// Close files.
 		if (inputFile) {
 			fclose(inputFile);
 		}
 
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -561,16 +561,16 @@ test12(void)
 	printf("Testing MarcTextWriter.\n");
 
 	try {
-		/* Open MARC text file. */
+		// Open MARC text file.
 		outputFile = fopen("test2.txt", "wb");
 		if (outputFile == NULL) {
 			throw std::string("can't open output file");
 		}
 
-		/* Initialize MARC text writer. */
+		// Initialize MARC text writer.
 		MarcTextWriter marcTextWriter(outputFile, "KOI8-R");
 
-		/* Write MARC records to MARC text file. */
+		// Write MARC records to MARC text file.
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		if (!marcTextWriter.write(record1, "Record 1\n", "\n")
@@ -580,21 +580,21 @@ test12(void)
 			throw marcTextWriter.getErrorMessage();
 		}
 
-		/* Close MARC text file. */
+		// Close MARC text file.
 		fclose(outputFile);
 	} catch (std::string errorMessage) {
-		/* Close files. */
+		// Close files.
 		if (outputFile) {
 			fclose(outputFile);
 		}
 
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -608,16 +608,16 @@ test13(void)
 	printf("Testing MarcXmlWriter.\n");
 
 	try {
-		/* Open MARCXML file. */
+		// Open MARCXML file.
 		outputFile = fopen("test3.xml", "wb");
 		if (outputFile == NULL) {
 			throw std::string("can't open output file");
 		}
 
-		/* Initialize MARCXML writer. */
+		// Initialize MARCXML writer.
 		MarcXmlWriter marcXmlWriter(outputFile, "CP866");
 
-		/* Write MARC records to MARCXML file. */
+		// Write MARC records to MARCXML file.
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		marcXmlWriter.writeHeader();
@@ -629,21 +629,21 @@ test13(void)
 		}
 		marcXmlWriter.writeFooter();
 
-		/* Close MARCXML file. */
+		// Close MARCXML file.
 		fclose(outputFile);
 	} catch (std::string errorMessage) {
-		/* Close files. */
+		// Close files.
 		if (outputFile) {
 			fclose(outputFile);
 		}
 
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -657,43 +657,43 @@ test14(void)
 	printf("Testing MarcXmlReader.\n");
 
 	try {
-		/* Open MARCXML file. */
+		// Open MARCXML file.
 		inputFile = fopen("test3.xml", "rb");
 		if (inputFile == NULL) {
 			throw std::string("can't open input file");
 		}
 
-		/* Initialize MARCXML reader. */
+		// Initialize MARCXML reader.
 		MarcXmlReader marcXmlReader(inputFile);
 
-		/* Read records. */
+		// Read records.
 		MarcRecord record(MarcRecord::UNIMARC);
 		while (marcXmlReader.next(record)) {
 			printf("%s\n", record.toString().c_str());
 		}
 
-		/* Check error code. */
+		// Check error code.
 		if (marcXmlReader.getErrorCode()
 			!= MarcXmlReader::END_OF_FILE)
 		{
 			throw marcXmlReader.getErrorMessage();
 		}
 
-		/* Close MARCXML file. */
+		// Close MARCXML file.
 		fclose(inputFile);
 	} catch (std::string errorMessage) {
-		/* Close files. */
+		// Close files.
 		if (inputFile) {
 			fclose(inputFile);
 		}
 
-		/* Print error message. */
+		// Print error message.
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
 
 		return false;
 	}
 
-	/* Print status. */
+	// Print status.
 	printf("OK\n\n");
 
 	return true;
@@ -707,7 +707,7 @@ main(void)
 {
 	bool result = true;
 
-	/* Execute tests. */
+	// Execute tests.
 	result &= test1();
 	result &= test2();
 	result &= test3();

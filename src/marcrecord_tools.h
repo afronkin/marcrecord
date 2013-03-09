@@ -32,15 +32,15 @@
 #include <iconv.h>
 #include <string>
 
-/* Print formatted output to std::string. */
+// Print formatted output to std::string.
 int snprintf(std::string &s, size_t n, const char *format, ...);
-/* Serialize XML string. */
+// Serialize XML string.
 std::string serialize_xml(std::string &s);
-/* Verify that all string characters are decimal digits in ASCII encoding. */
+// Verify that all string characters are decimal digits in ASCII encoding.
 int is_numeric(const char *s, size_t n);
-/* Convert encoding for std::string. */
+// Convert encoding for std::string.
 bool iconv(iconv_t iconv_desc, const std::string &src, std::string &dest);
-/* Convert encoding for std::string. */
+// Convert encoding for std::string.
 bool iconv(iconv_t iconv_desc, const char *src, size_t len, std::string &dest);
 
 #endif // MARCRECORD_SRC_MARCRECORD_TOOLS_H

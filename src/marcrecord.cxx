@@ -61,10 +61,10 @@ MarcRecord::~MarcRecord()
 void
 MarcRecord::clear(void)
 {
-	/* Clear field list. */
+	// Clear field list.
 	m_fieldList.clear();
 
-	/* Reset record leader. */
+	// Reset record leader.
 	memset(m_leader.recordLength, ' ', sizeof(m_leader.recordLength));
 	m_leader.recordStatus = 'n';
 	m_leader.recordType = 'a';
@@ -135,7 +135,7 @@ MarcRecord::getFields(const std::string &fieldTag)
 	FieldRefList resultFieldList;
 	FieldIt fieldIt;
 
-	/* Check fields in list. */
+	// Check fields in list.
 	for (fieldIt = m_fieldList.begin(); fieldIt != m_fieldList.end();
 		fieldIt++)
 	{
@@ -155,7 +155,7 @@ MarcRecord::getField(const std::string &fieldTag)
 {
 	FieldIt fieldIt;
 
-	/* Check fields in list. */
+	// Check fields in list.
 	for (fieldIt = m_fieldList.begin(); fieldIt != m_fieldList.end();
 		fieldIt++)
 	{
@@ -173,7 +173,7 @@ MarcRecord::getField(const std::string &fieldTag)
 MarcRecord::FieldIt
 MarcRecord::addField(const Field &field)
 {
-	/* Append field to the list. */
+	// Append field to the list.
 	FieldIt fieldIt = m_fieldList.insert(m_fieldList.end(), field);
 	return fieldIt;
 }
@@ -182,7 +182,7 @@ MarcRecord::FieldIt
 MarcRecord::addControlField(const std::string &fieldTag,
 	const std::string &fieldData)
 {
-	/* Append field to the list. */
+	// Append field to the list.
 	FieldIt fieldIt = m_fieldList.insert(m_fieldList.end(),
 		Field(fieldTag, fieldData));
 	return fieldIt;
@@ -192,7 +192,7 @@ MarcRecord::FieldIt
 MarcRecord::addDataField(const std::string &fieldTag,
 	char fieldInd1, char fieldInd2)
 {
-	/* Append field to the list. */
+	// Append field to the list.
 	FieldIt fieldIt = m_fieldList.insert(m_fieldList.end(),
 		Field(fieldTag, fieldInd1, fieldInd2));
 	return fieldIt;
@@ -204,7 +204,7 @@ MarcRecord::addDataField(const std::string &fieldTag,
 MarcRecord::FieldIt
 MarcRecord::addFieldBefore(FieldIt nextFieldIt, const Field &field)
 {
-	/* Append field to the list. */
+	// Append field to the list.
 	FieldIt fieldIt = m_fieldList.insert(nextFieldIt, field);
 	return fieldIt;
 }
@@ -213,7 +213,7 @@ MarcRecord::FieldIt
 MarcRecord::addControlFieldBefore(FieldIt nextFieldIt,
 	const std::string &fieldTag, const std::string &fieldData)
 {
-	/* Append field to the list. */
+	// Append field to the list.
 	FieldIt fieldIt = m_fieldList.insert(nextFieldIt,
 		Field(fieldTag, fieldData));
 	return fieldIt;
@@ -223,7 +223,7 @@ MarcRecord::FieldIt
 MarcRecord::addDataFieldBefore(FieldIt nextFieldIt,
 	const std::string &fieldTag, char fieldInd1, char fieldInd2)
 {
-	/* Append field to the list. */
+	// Append field to the list.
 	FieldIt fieldIt = m_fieldList.insert(nextFieldIt,
 		Field(fieldTag, fieldInd1, fieldInd2));
 	return fieldIt;
@@ -235,7 +235,7 @@ MarcRecord::addDataFieldBefore(FieldIt nextFieldIt,
 void
 MarcRecord::removeField(FieldIt fieldIt)
 {
-	/* Remove field from the list. */
+	// Remove field from the list.
 	m_fieldList.erase(fieldIt);
 }
 
@@ -245,16 +245,16 @@ MarcRecord::removeField(FieldIt fieldIt)
 std::string
 MarcRecord::toString(void)
 {
-	/* Print leader. */
+	// Print leader.
 	std::string textRecord = "Leader [";
 	textRecord.append((const char *) &m_leader, sizeof(struct Leader));
 	textRecord += "]";
 
-	/* Iterate all fields. */
+	// Iterate all fields.
 	for (MarcRecord::FieldIt fieldIt = m_fieldList.begin();
 		fieldIt != m_fieldList.end(); fieldIt++)
 	{
-		/* Print field. */
+		// Print field.
 		textRecord += "\n" + fieldIt->toString();
 	}
 

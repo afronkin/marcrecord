@@ -38,14 +38,14 @@
  */
 MarcTextWriter::MarcTextWriter(FILE *outputFile, const char *outputEncoding)
 {
-	/* Clear member variables. */
+	// Clear member variables.
 	m_iconvDesc = (iconv_t) -1;
 
 	if (outputFile) {
-		/* Open output file. */
+		// Open output file.
 		open(outputFile, outputEncoding);
 	} else {
-		/* Clear object state. */
+		// Clear object state.
 		close();
 	}
 }
@@ -55,7 +55,7 @@ MarcTextWriter::MarcTextWriter(FILE *outputFile, const char *outputEncoding)
  */
 MarcTextWriter::~MarcTextWriter()
 {
-	/* Close output file. */
+	// Close output file.
 	close();
 }
 
@@ -83,22 +83,22 @@ MarcTextWriter::getErrorMessage(void)
 bool
 MarcTextWriter::open(FILE *outputFile, const char *outputEncoding)
 {
-	/* Clear error code and message. */
+	// Clear error code and message.
 	m_errorCode = OK;
 	m_errorMessage = "";
 
-	/* Initialize output stream parameters. */
+	// Initialize output stream parameters.
 	m_outputFile = outputFile == NULL ? stdout : outputFile;
 	m_outputEncoding = outputEncoding == NULL ? "" : outputEncoding;
 
-	/* Initialize encoding conversion. */
+	// Initialize encoding conversion.
 	if (outputEncoding == NULL
 		|| strcmp(outputEncoding, "UTF-8") == 0
 		|| strcmp(outputEncoding, "utf-8") == 0)
 	{
 		m_iconvDesc = (iconv_t) -1;
 	} else {
-		/* Create iconv descriptor for output encoding conversion. */
+		// Create iconv descriptor for output encoding conversion.
 		m_iconvDesc = iconv_open(outputEncoding, "UTF-8");
 		if (m_iconvDesc == (iconv_t) -1) {
 			m_errorCode = ERROR_ICONV;
@@ -121,12 +121,12 @@ MarcTextWriter::open(FILE *outputFile, const char *outputEncoding)
 void
 MarcTextWriter::close(void)
 {
-	/* Finalize iconv. */
+	// Finalize iconv.
 	if (m_iconvDesc != (iconv_t) -1) {
 		iconv_close(m_iconvDesc);
 	}
 
-	/* Clear member variables. */
+	// Clear member variables.
 	m_errorCode = OK;
 	m_errorMessage = "";
 	m_outputFile = NULL;
@@ -144,7 +144,7 @@ MarcTextWriter::write(MarcRecord &record,
 	std::string recordBuf = header + record.toString() + footer;
 
 	if (m_iconvDesc == (iconv_t) -1) {
-		/* Write MARCXML record. */
+		// Write MARCXML record.
 		if (fwrite(recordBuf.c_str(), recordBuf.size(), 1,
 			m_outputFile) != 1)
 		{
@@ -153,7 +153,7 @@ MarcTextWriter::write(MarcRecord &record,
 			return false;
 		}
 	} else {
-		/* Write MARCXML record with encoding conversion. */
+		// Write MARCXML record with encoding conversion.
 		std::string iconvBuf;
 		if (!iconv(m_iconvDesc, recordBuf, iconvBuf)) {
 			m_errorCode = ERROR_ICONV;

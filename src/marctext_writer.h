@@ -38,7 +38,7 @@
  */
 class MarcTextWriter {
 public:
-	/* Error codes. */
+	// Error codes.
 	enum ErrorCode {
 		OK = 0,
 		ERROR_ICONV = -1,
@@ -46,36 +46,36 @@ public:
 	};
 
 protected:
-	/* Code of last error. */
+	// Code of last error.
 	ErrorCode m_errorCode;
-	/* Message of last error. */
+	// Message of last error.
 	std::string m_errorMessage;
 
-	/* Output MARC text file. */
+	// Output MARC text file.
 	FILE *m_outputFile;
-	/* Encoding of output MARC text file. */
+	// Encoding of output MARC text file.
 	std::string m_outputEncoding;
-	/* Iconv descriptor for output encoding. */
+	// Iconv descriptor for output encoding.
 	iconv_t m_iconvDesc;
 
 public:
-	/* Constructor. */
+	// Constructor.
 	MarcTextWriter(FILE *outputFile = NULL,
 		const char *outputEncoding = NULL);
-	/* Destructor. */
+	// Destructor.
 	~MarcTextWriter();
 
-	/* Get last error code. */
+	// Get last error code.
 	ErrorCode getErrorCode(void);
-	/* Get last error message. */
+	// Get last error message.
 	std::string & getErrorMessage(void);
 
-	/* Open output file. */
+	// Open output file.
 	bool open(FILE *outputFile, const char *outputEncoding = NULL);
-	/* Close output file. */
+	// Close output file.
 	void close(void);
 
-	/* Write record to MARC text file. */
+	// Write record to MARC text file.
 	bool write(MarcRecord &record, const char *header, const char *footer);
 };
 

@@ -39,7 +39,9 @@
 
 #pragma pack(1)
 
-/* Structure of record directory entry. */
+/*
+ * Structure of record directory entry.
+ */
 struct RecordDirectoryEntry {
 	// Field tag.
 	char fieldTag[3];
@@ -56,14 +58,14 @@ struct RecordDirectoryEntry {
  */
 MarcWriter::MarcWriter(FILE *outputFile, const char *outputEncoding)
 {
-	/* Clear member variables. */
+	// Clear member variables.
 	m_iconvDesc = (iconv_t) -1;
 
 	if (outputFile) {
-		/* Open output file. */
+		// Open output file.
 		open(outputFile, outputEncoding);
 	} else {
-		/* Clear object state. */
+		// Clear object state.
 		close();
 	}
 }
@@ -73,7 +75,7 @@ MarcWriter::MarcWriter(FILE *outputFile, const char *outputEncoding)
  */
 MarcWriter::~MarcWriter()
 {
-	/* Close output file. */
+	// Close output file.
 	close();
 }
 
@@ -101,22 +103,22 @@ MarcWriter::getErrorMessage(void)
 bool
 MarcWriter::open(FILE *outputFile, const char *outputEncoding)
 {
-	/* Clear error code and message. */
+	// Clear error code and message.
 	m_errorCode = OK;
 	m_errorMessage = "";
 
-	/* Initialize output stream parameters. */
+	// Initialize output stream parameters.
 	m_outputFile = outputFile == NULL ? stdout : outputFile;
 	m_outputEncoding = outputEncoding == NULL ? "" : outputEncoding;
 
-	/* Initialize encoding conversion. */
+	// Initialize encoding conversion.
 	if (outputEncoding == NULL
 		|| strcmp(outputEncoding, "UTF-8") == 0
 		|| strcmp(outputEncoding, "utf-8") == 0)
 	{
 		m_iconvDesc = (iconv_t) -1;
 	} else {
-		/* Create iconv descriptor for output encoding conversion. */
+		// Create iconv descriptor for output encoding conversion.
 		m_iconvDesc = iconv_open(outputEncoding, "UTF-8");
 		if (m_iconvDesc == (iconv_t) -1) {
 			m_errorCode = ERROR_ICONV;
@@ -139,12 +141,12 @@ MarcWriter::open(FILE *outputFile, const char *outputEncoding)
 void
 MarcWriter::close(void)
 {
-	/* Finalize iconv. */
+	// Finalize iconv.
 	if (m_iconvDesc != (iconv_t) -1) {
 		iconv_close(m_iconvDesc);
 	}
 
-	/* Clear member variables. */
+	// Clear member variables.
 	m_errorCode = OK;
 	m_errorMessage = "";
 	m_outputFile = NULL;
@@ -160,11 +162,11 @@ MarcWriter::write(MarcRecord &record)
 {
 	char recordBuf[100000];
 
-	/* Copy record leader to buffer. */
+	// Copy record leader to buffer.
 	memcpy(recordBuf, (char *) &record.m_leader,
 		sizeof(struct MarcRecord::Leader));
 
-	/* Calculate base address of data and copy it to record buffer. */
+	// Calculate base address of data and copy it to record buffer.
 	unsigned int baseAddress = sizeof(struct MarcRecord::Leader)
 		+ record.m_fieldList.size()
 		* sizeof(struct RecordDirectoryEntry) + 1;
@@ -172,7 +174,7 @@ MarcWriter::write(MarcRecord &record)
 	sprintf(baseAddressBuf, "%05d", baseAddress);
 	memcpy(recordBuf + 12, baseAddressBuf, 5);
 
-	/* Iterate all fields. */
+	// Iterate all fields.
 	char *directoryData = recordBuf + sizeof(struct MarcRecord::Leader);
 	char *fieldData = recordBuf + baseAddress;
 	for (MarcRecord::FieldIt fieldIt = record.m_fieldList.begin();
@@ -183,12 +185,12 @@ MarcWriter::write(MarcRecord &record)
 			fieldLength = appendControlField(fieldData, fieldIt);
 			fieldData += fieldLength;
 		} else {
-			/* Copy indicators of data field to buffer. */
+			// Copy indicators of data field to buffer.
 			*(fieldData++) = fieldIt->m_ind1;
 			*(fieldData++) = fieldIt->m_ind2;
 			fieldLength += 2;
 
-			/* Iterate all subfields. */
+			// Iterate all subfields.
 			MarcRecord::SubfieldIt subfieldIt =
 				fieldIt->m_subfieldList.begin();
 			for (; subfieldIt != fieldIt->m_subfieldList.end();
@@ -201,7 +203,7 @@ MarcWriter::write(MarcRecord &record)
 			}
 		}
 
-		/* Set field separator at the end of field. */
+		// Set field separator at the end of field.
 		*(fieldData++) = ISO2709_FIELD_SEPARATOR;
 		fieldLength++;
 
@@ -217,18 +219,18 @@ MarcWriter::write(MarcRecord &record)
 		directoryData += sizeof(struct RecordDirectoryEntry);
 	}
 
-	/* Set field separator at the end of directory. */
+	// Set field separator at the end of directory.
 	directoryData[0] = ISO2709_FIELD_SEPARATOR;
-	/* Set record separator at the end of record. */
+	// Set record separator at the end of record.
 	*(fieldData++) = ISO2709_RECORD_SEPARATOR;
 
-	/* Calculate directory length and copy it to record buffer. */
+	// Calculate directory length and copy it to record buffer.
 	int recordLength = (int) (fieldData - recordBuf);
 	char recordLengthBuf[6];
 	sprintf(recordLengthBuf, "%05d", recordLength);
 	memcpy(recordBuf, recordLengthBuf, 5);
 
-	/* Write record buffer to file. */
+	// Write record buffer to file.
 	if (fwrite(recordBuf, recordLength, 1, m_outputFile) != 1) {
 		m_errorCode = ERROR_IO;
 		m_errorMessage = "i/o operation failed";
@@ -247,7 +249,7 @@ MarcWriter::appendControlField(char *fieldData, MarcRecord::FieldIt &fieldIt)
 	int fieldLength;
 
 	if (m_iconvDesc == (iconv_t) -1) {
-		/* Copy control field to buffer. */
+		// Copy control field to buffer.
 		fieldLength = fieldIt->m_data.size();
 		if (fieldLength > 10000) {
 			m_errorCode = ERROR_DATASIZE;
@@ -256,7 +258,7 @@ MarcWriter::appendControlField(char *fieldData, MarcRecord::FieldIt &fieldIt)
 		}
 		memcpy(fieldData, fieldIt->m_data.c_str(), fieldLength);
 	} else {
-		/* Copy control field to buffer with encoding conversion. */
+		// Copy control field to buffer with encoding conversion.
 		std::string iconvBuf;
 		if (!iconv(m_iconvDesc, fieldIt->m_data, iconvBuf)) {
 			m_errorCode = ERROR_ICONV;
@@ -286,7 +288,7 @@ MarcWriter::appendSubfield(char *fieldData, MarcRecord::SubfieldIt &subfieldIt)
 	*(fieldData) = ISO2709_IDENTIFIER_DELIMITER;
 	*(fieldData + 1) = subfieldIt->m_id;
 	if (m_iconvDesc == (iconv_t) -1) {
-		/* Copy subfield to buffer. */
+		// Copy subfield to buffer.
 		subfieldLength = subfieldIt->m_data.size();
 		if (subfieldLength > 10000) {
 			m_errorCode = ERROR_DATASIZE;
@@ -296,7 +298,7 @@ MarcWriter::appendSubfield(char *fieldData, MarcRecord::SubfieldIt &subfieldIt)
 		memcpy(fieldData + 2, subfieldIt->m_data.c_str(),
 			subfieldLength);
 	} else {
-		/* Copy subfield to buffer with encoding conversion. */
+		// Copy subfield to buffer with encoding conversion.
 		std::string iconvBuf;
 		if (!iconv(m_iconvDesc, subfieldIt->m_data, iconvBuf)) {
 			m_errorCode = ERROR_ICONV;

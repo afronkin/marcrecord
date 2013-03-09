@@ -38,7 +38,7 @@
  */
 class MarcReader {
 public:
-	/* Error codes. */
+	// Error codes.
 	enum ErrorCode {
 		OK = 0,
 		END_OF_FILE = 1,
@@ -47,51 +47,51 @@ public:
 	};
 
 protected:
-	/* Code of last error. */
+	// Code of last error.
 	ErrorCode m_errorCode;
-	/* Message of last error. */
+	// Message of last error.
 	std::string m_errorMessage;
 
-	/* Input ISO 2709 file. */
+	// Input ISO 2709 file.
 	FILE *m_inputFile;
-	/* Encoding of input ISO 2709 file. */
+	// Encoding of input ISO 2709 file.
 	std::string m_inputEncoding;
-	/* Iconv descriptor for input encoding. */
+	// Iconv descriptor for input encoding.
 	iconv_t m_iconvDesc;
 
-	/* Automatic error correction mode. */
+	// Automatic error correction mode.
 	bool m_autoCorrectionMode;
 
 private:
-	/* Parse field from ISO 2709 buffer. */
+	// Parse field from ISO 2709 buffer.
 	inline MarcRecord::Field parseField(const std::string &fieldTag,
 		const char *fieldData, unsigned int fieldLength);
-	/* Parse subfield. */
+	// Parse subfield.
 	MarcRecord::Subfield parseSubfield(const char *fieldData,
 		unsigned int subfieldStartPos, unsigned int subfieldEndPos);
 
 public:
-	/* Constructor. */
+	// Constructor.
 	MarcReader(FILE *inputFile = NULL, const char *inputEncoding = NULL);
-	/* Destructor. */
+	// Destructor.
 	~MarcReader();
 
-	/* Get last error code. */
+	// Get last error code.
 	ErrorCode getErrorCode(void);
-	/* Get last error message. */
+	// Get last error message.
 	std::string & getErrorMessage(void);
 
-	/* Set automatic error correction mode. */
+	// Set automatic error correction mode.
 	void setAutoCorrectionMode(bool autoCorrectionMode = true);
 
-	/* Open input file. */
+	// Open input file.
 	bool open(FILE *inputFile, const char *inputEncoding = NULL);
-	/* Close input file. */
+	// Close input file.
 	void close(void);
 
-	/* Read next record from MARCXML file. */
+	// Read next record from MARCXML file.
 	bool next(MarcRecord &record);
-	/* Parse record from ISO 2709 buffer. */
+	// Parse record from ISO 2709 buffer.
 	bool parse(const char *recordBuf, unsigned int recordBufLen,
 		MarcRecord &record);
 };
