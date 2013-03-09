@@ -6,7 +6,6 @@ PROGRAM=test
 CXX=g++
 CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long \
   -I$(SRC_DIR)
-CC=gcc
 LDFLAGS=
 LIBS=-lm -lexpat -liconv
 
