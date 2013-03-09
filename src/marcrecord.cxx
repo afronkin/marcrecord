@@ -123,7 +123,7 @@ void
 MarcRecord::setLeader(const std::string &leaderData)
 {
 	memcpy((void *) &m_leader, leaderData.c_str(),
-		std::min(sizeof(struct Leader), leaderData.size()));
+		std::min(sizeof(Leader), leaderData.size()));
 }
 
 /*
@@ -247,7 +247,7 @@ MarcRecord::toString(void)
 {
 	// Print leader.
 	std::string textRecord = "Leader [";
-	textRecord.append((const char *) &m_leader, sizeof(struct Leader));
+	textRecord.append((const char *) &m_leader, sizeof(Leader));
 	textRecord += "]";
 
 	// Iterate all fields.

@@ -89,6 +89,7 @@ public:
 		// [23] Undefined = '#'.
 		char undefined3;
 	};
+	typedef struct Leader Leader;
 
 	#pragma pack()
 

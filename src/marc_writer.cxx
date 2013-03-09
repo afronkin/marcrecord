@@ -50,6 +50,7 @@ struct RecordDirectoryEntry {
 	// Field starting position.
 	char fieldStartingPosition[5];
 };
+typedef struct RecordDirectoryEntry RecordDirectoryEntry;
 
 #pragma pack()
 
@@ -164,18 +165,18 @@ MarcWriter::write(MarcRecord &record)
 
 	// Copy record leader to buffer.
 	memcpy(recordBuf, (char *) &record.m_leader,
-		sizeof(struct MarcRecord::Leader));
+		sizeof(MarcRecord::Leader));
 
 	// Calculate base address of data and copy it to record buffer.
-	unsigned int baseAddress = sizeof(struct MarcRecord::Leader)
+	unsigned int baseAddress = sizeof(MarcRecord::Leader)
 		+ record.m_fieldList.size()
-		* sizeof(struct RecordDirectoryEntry) + 1;
+		* sizeof(RecordDirectoryEntry) + 1;
 	char baseAddressBuf[6];
 	sprintf(baseAddressBuf, "%05d", baseAddress);
 	memcpy(recordBuf + 12, baseAddressBuf, 5);
 
 	// Iterate all fields.
-	char *directoryData = recordBuf + sizeof(struct MarcRecord::Leader);
+	char *directoryData = recordBuf + sizeof(MarcRecord::Leader);
 	char *fieldData = recordBuf + baseAddress;
 	for (MarcRecord::FieldIt fieldIt = record.m_fieldList.begin();
 		fieldIt != record.m_fieldList.end(); fieldIt++)
@@ -216,7 +217,7 @@ MarcWriter::write(MarcRecord &record)
 			- fieldLength;
 		sprintf(directoryData, "%.3s%04d%05d",
 			fieldIt->m_tag.c_str(), fieldLength, fieldOffset);
-		directoryData += sizeof(struct RecordDirectoryEntry);
+		directoryData += sizeof(RecordDirectoryEntry);
 	}
 
 	// Set field separator at the end of directory.

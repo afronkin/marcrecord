@@ -50,6 +50,7 @@ public:
 		MarcRecord::SubfieldIt subfieldIt;
 		std::string characterData;
 	};
+	typedef struct XmlParserState XmlParserState;
 
 	// Error codes.
 	enum ErrorCode {
@@ -75,7 +76,7 @@ protected:
 	// XML parser.
 	XML_Parser m_xmlParser;
 	// XML parser state.
-	struct XmlParserState m_parserState;
+	XmlParserState m_parserState;
 	// Record buffer.
 	char m_buffer[4096];
 

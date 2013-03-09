@@ -48,6 +48,7 @@ struct RecordDirectoryEntry {
 	// Field starting position.
 	char fieldStartingPosition[5];
 };
+typedef struct RecordDirectoryEntry RecordDirectoryEntry;
 
 #pragma pack()
 
@@ -236,7 +237,7 @@ MarcReader::parse(const char *recordBuf, unsigned int recordBufLen,
 		if (!is_numeric(recordBuf, 5)
 			|| sscanf(recordBuf, "%5u", &recordLen) != 1
 			|| recordLen != recordBufLen
-			|| recordLen < sizeof(struct MarcRecord::Leader))
+			|| recordLen < sizeof(MarcRecord::Leader))
 		{
 			m_errorCode = ERROR_INVALID_RECORD;
 			m_errorMessage = "invalid record length";
@@ -245,12 +246,12 @@ MarcReader::parse(const char *recordBuf, unsigned int recordBufLen,
 
 		// Copy record leader.
 		memcpy(&record.m_leader, recordBuf,
-			sizeof(struct MarcRecord::Leader));
+			sizeof(MarcRecord::Leader));
 
 		// Replace incorrect characters in record leader to '?'.
 		if (m_autoCorrectionMode) {
 			unsigned int i = 0;
-			for (; i < sizeof(struct MarcRecord::Leader); i++) {
+			for (; i < sizeof(MarcRecord::Leader); i++) {
 				char c = *((char *) &record.m_leader + i);
 				if ((c != ' ') && (c != '|')
 					&& (c < '0' || c > '9')
@@ -274,11 +275,10 @@ MarcReader::parse(const char *recordBuf, unsigned int recordBufLen,
 		}
 
 		// Get number of fields.
-		int numFields = (baseAddress
-			- sizeof(struct MarcRecord::Leader) - 1)
-			/ sizeof(struct RecordDirectoryEntry);
-		if (recordLen < sizeof(struct MarcRecord::Leader)
-			+ (sizeof(struct RecordDirectoryEntry) * numFields))
+		int numFields = (baseAddress - sizeof(MarcRecord::Leader) - 1)
+			/ sizeof(RecordDirectoryEntry);
+		if (recordLen < sizeof(MarcRecord::Leader)
+			+ (sizeof(RecordDirectoryEntry) * numFields))
 		{
 			m_errorCode = ERROR_INVALID_RECORD;
 			m_errorMessage = "invalid record length";
@@ -286,15 +286,15 @@ MarcReader::parse(const char *recordBuf, unsigned int recordBufLen,
 		}
 
 		// Parse list of fields.
-		struct RecordDirectoryEntry *directoryEntry = 
+		RecordDirectoryEntry *directoryEntry = 
 			(RecordDirectoryEntry *) (recordBuf
-			+ sizeof(struct MarcRecord::Leader));
+			+ sizeof(MarcRecord::Leader));
 		const char *recordData = recordBuf + baseAddress;
 		int fieldNo = 0;
 		for (; fieldNo < numFields; fieldNo++, directoryEntry++) {
 			// Check directory entry.
 			if (!is_numeric((const char *) directoryEntry,
-				sizeof(struct RecordDirectoryEntry)))
+				sizeof(RecordDirectoryEntry)))
 			{
 				m_errorCode = ERROR_INVALID_RECORD;
 				m_errorMessage = "invalid directory entry";

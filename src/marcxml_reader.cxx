@@ -222,8 +222,8 @@ void XMLCALL
 marcXmlStartElement(void *userData, const XML_Char *name,
 	const XML_Char **atts)
 {
-	struct MarcXmlReader::XmlParserState *parserState =
-		(struct MarcXmlReader::XmlParserState *) userData;
+	MarcXmlReader::XmlParserState *parserState =
+		(MarcXmlReader::XmlParserState *) userData;
 
 	// Select MARCXML element.
 	if (strcmp(name, "record") == 0 && parserState->parentTag == "") {
@@ -302,8 +302,8 @@ marcXmlStartElement(void *userData, const XML_Char *name,
 void XMLCALL
 marcXmlEndElement(void *userData, const XML_Char *name)
 {
-	struct MarcXmlReader::XmlParserState *parserState =
-		(struct MarcXmlReader::XmlParserState *) userData;
+	MarcXmlReader::XmlParserState *parserState =
+		(MarcXmlReader::XmlParserState *) userData;
 
 	// Check if start and end tags are equal.
 	if (parserState->parentTag != name) {
@@ -344,8 +344,8 @@ marcXmlEndElement(void *userData, const XML_Char *name)
 void XMLCALL
 marcXmlCharacterData(void *userData, const XML_Char *s, int len)
 {
-	struct MarcXmlReader::XmlParserState *parserState =
-		(struct MarcXmlReader::XmlParserState *) userData;
+	MarcXmlReader::XmlParserState *parserState =
+		(MarcXmlReader::XmlParserState *) userData;
 
 	parserState->characterData.append(s, len);
 }

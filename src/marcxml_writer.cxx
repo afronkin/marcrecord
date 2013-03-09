@@ -232,7 +232,7 @@ MarcXmlWriter::write(MarcRecord &record)
 	// Append record leader.
 	recordBuf += "    <leader>     "
 		+ std::string((char *) &record.m_leader + 5,
-		(size_t) sizeof(struct MarcRecord::Leader) - 5)
+		(size_t) sizeof(MarcRecord::Leader) - 5)
 		+ "</leader>\n";
 
 	// Iterate all fields.
