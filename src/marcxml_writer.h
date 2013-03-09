@@ -26,8 +26,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(MARCXML_WRITER_H)
-#define MARCXML_WRITER_H
+#ifndef MARCRECORD_SRC_MARCXML_WRITER_H
+#define MARCRECORD_SRC_MARCXML_WRITER_H
 
 #include <iconv.h>
 #include <string>
@@ -83,4 +83,4 @@ public:
 	bool write(MarcRecord &record);
 };
 
-#endif /* MARCXML_WRITER_H */
+#endif // MARCRECORD_SRC_MARCXML_WRITER_H

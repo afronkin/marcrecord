@@ -26,8 +26,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(MARCXML_READER_H)
-#define MARCXML_READER_H
+#ifndef MARCRECORD_SRC_MARCXML_READER_H
+#define MARCRECORD_SRC_MARCXML_READER_H
 
 #include <string>
 #include "marcrecord.h"
@@ -103,4 +103,4 @@ public:
 	bool next(MarcRecord &record);
 };
 
-#endif /* MARCXML_READER_H */
+#endif // MARCRECORD_SRC_MARCXML_READER_H

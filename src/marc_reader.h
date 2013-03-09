@@ -26,8 +26,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(MARC_READER_H)
-#define MARC_READER_H
+#ifndef MARCRECORD_SRC_MARC_READER_H
+#define MARCRECORD_SRC_MARC_READER_H
 
 #include <iconv.h>
 #include <string>
@@ -96,4 +96,4 @@ public:
 		MarcRecord &record);
 };
 
-#endif /* MARC_READER_H */
+#endif // MARCRECORD_SRC_MARC_READER_H

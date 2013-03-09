@@ -26,8 +26,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined(MARCRECORD_H)
-#define MARCRECORD_H
+#ifndef MARCRECORD_SRC_MARCRECORD_H
+#define MARCRECORD_SRC_MARCRECORD_H
 
 #include <list>
 #include <string>
@@ -317,4 +317,4 @@ public:
 	std::string getEmbeddedData(void);
 };
 
-#endif /* MARCRECORD_H */
+#endif // MARCRECORD_SRC_MARCRECORD_H

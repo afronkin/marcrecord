@@ -37,7 +37,8 @@
 /*
  * Create test MARC record 1.
  */
-MarcRecord createRecord1(void)
+MarcRecord
+createRecord1(void)
 {
 	MarcRecord record(MarcRecord::UNIMARC);
 	MarcRecord::FieldIt fieldIt;
@@ -61,8 +62,8 @@ MarcRecord createRecord1(void)
 	fieldIt = record.addDataField("463", '1', '0');
 	fieldIt->addSubfield('1', "001xyz");
 	fieldIt->addSubfield('1', "30012");
-	fieldIt->addSubfield('a',
-		"\xD0\x9F\xD1\x80\xD0\xBE\xD0\xB2\xD0\xB5\xD1\x80\xD0\xBA\xD0\xB0");
+	fieldIt->addSubfield('a', "\xD0\x9F\xD1\x80\xD0\xBE\xD0\xB2\xD0\xB5"
+		"\xD1\x80\xD0\xBA\xD0\xB0");
 	fieldIt->addSubfield('b', "\xD0\xA2\xD0\xB5\xD1\x81\xD1\x82");
 	fieldIt = record.addDataField("899", '2', '3');
 	fieldIt->addSubfield('c', "123");
@@ -81,7 +82,8 @@ MarcRecord createRecord1(void)
 /*
  * Create test MARC record 2.
  */
-MarcRecord createRecord2(void)
+MarcRecord
+createRecord2(void)
 {
 	MarcRecord record(MarcRecord::UNIMARC);
 	MarcRecord::FieldIt fieldIt;
@@ -95,20 +97,25 @@ MarcRecord createRecord2(void)
 	return record;
 }
 
-bool test1(void)
+bool
+test1(void)
 {
-	printf("Testing addField(), addFieldBefore(), addSubfield(), addSubfieldBefore().\n");
+	printf("Testing addField(), addFieldBefore(), addSubfield(), "
+		"addSubfieldBefore().\n");
 
 	try {
 		/* Create new MARC record. */
 		MarcRecord record(MarcRecord::UNIMARC);
 
 		/* Add fields and subfields to new record. */
-		MarcRecord::FieldIt fieldIt = record.addField(MarcRecord::Field("997", '3', '4'));
+		MarcRecord::FieldIt fieldIt =
+			record.addField(MarcRecord::Field("997", '3', '4'));
 		MarcRecord::SubfieldIt subfieldIt = fieldIt->addSubfield(
 			MarcRecord::Subfield('c', "ccc"));
-		fieldIt->addSubfieldBefore(subfieldIt, MarcRecord::Subfield('b', "bbb"));
-		fieldIt = record.addFieldBefore(fieldIt, MarcRecord::Field("996", '1', '2'));
+		fieldIt->addSubfieldBefore(subfieldIt,
+			MarcRecord::Subfield('b', "bbb"));
+		fieldIt = record.addFieldBefore(fieldIt,
+			MarcRecord::Field("996", '1', '2'));
 		fieldIt->addSubfield(MarcRecord::Subfield('a', "aaa"));
 
 		fieldIt = record.addDataField("999", '3', '4');
@@ -132,7 +139,8 @@ bool test1(void)
 	return true;
 }
 
-bool test2(void)
+bool
+test2(void)
 {
 	printf("Testing toString().\n");
 
@@ -154,7 +162,8 @@ bool test2(void)
 	return true;
 }
 
-bool test3(void)
+bool
+test3(void)
 {
 	printf("Testing setLeader(), getLeader().\n");
 
@@ -165,7 +174,8 @@ bool test3(void)
 		MarcRecord::Leader leader = record.getLeader();
 		printf("Record status: %c\n", leader.recordStatus);
 		printf("Record type: %c\n", leader.recordType);
-		printf("Bibliographic level: %c\n---\n", leader.bibliographicLevel);
+		printf("Bibliographic level: %c\n---\n",
+			leader.bibliographicLevel);
 
 		/* Modify some fields in leader. */
 		leader.recordStatus = 'x';
@@ -177,7 +187,8 @@ bool test3(void)
 		leader = record.getLeader();
 		printf("Record status: %c\n", leader.recordStatus);
 		printf("Record type: %c\n", leader.recordType);
-		printf("Bibliographic level: %c\n", leader.bibliographicLevel);
+		printf("Bibliographic level: %c\n",
+			leader.bibliographicLevel);
 	} catch (std::string errorMessage) {
 		/* Print error message. */
 		printf("ERROR: %s.\n\n", errorMessage.c_str());
@@ -191,7 +202,8 @@ bool test3(void)
 	return true;
 }
 
-bool test4(void)
+bool
+test4(void)
 {
 	printf("Testing getField(), getSubfield().\n");
 
@@ -225,7 +237,8 @@ bool test4(void)
 	return true;
 }
 
-bool test5(void)
+bool
+test5(void)
 {
 	printf("Testing getFields(), getSubfields().\n");
 
@@ -242,14 +255,17 @@ bool test5(void)
 				(*fieldIt)->m_ind1, (*fieldIt)->m_ind2);
 
 			/* Get list of specified subfields from field. */
-			MarcRecord::SubfieldRefList subfieldList = (*fieldIt)->getSubfields('e');
+			MarcRecord::SubfieldRefList subfieldList =
+				(*fieldIt)->getSubfields('e');
 			if (!subfieldList.empty()) {
 				/* Print values of subfields. */
-				for (MarcRecord::SubfieldRefIt subfieldIt = subfieldList.begin();
-					subfieldIt != subfieldList.end();  subfieldIt++)
+				MarcRecord::SubfieldRefIt subfieldIt =
+					subfieldList.begin();
+				for (; subfieldIt != subfieldList.end(); 
+					subfieldIt++)
 				{
-					printf(" $%c %s",
-						(*subfieldIt)->m_id, (*subfieldIt)->m_data.c_str());
+					printf(" $%c %s", (*subfieldIt)->m_id,
+						(*subfieldIt)->m_data.c_str());
 				}
 				printf("\n");
 			}
@@ -267,7 +283,8 @@ bool test5(void)
 	return true;
 }
 
-bool test6(void)
+bool
+test6(void)
 {
 	printf("Testing getEmbeddedField(), getEmbeddedData().\n");
 
@@ -281,15 +298,15 @@ bool test6(void)
 		}
 
 		/* Get specified embedded control field. */
-		MarcRecord::SubfieldRefList subfieldList = fieldIt->getEmbeddedField("001");
+		MarcRecord::SubfieldRefList subfieldList =
+			fieldIt->getEmbeddedField("001");
 		if (subfieldList.empty()) {
 			throw std::string("embedded field not found");
 		}
 
 		/* Print subfields of embedded control field*/
-		for (MarcRecord::SubfieldRefIt subfieldIt = subfieldList.begin();
-			subfieldIt != subfieldList.end(); subfieldIt++)
-		{
+		MarcRecord::SubfieldRefIt subfieldIt = subfieldList.begin();
+		for (; subfieldIt != subfieldList.end(); subfieldIt++) {
 			printf("Embedded field 461 <001>: '%s'\n",
 				(*subfieldIt)->getEmbeddedData().c_str());
 		}
@@ -306,7 +323,8 @@ bool test6(void)
 	return true;
 }
 
-bool test7(void)
+bool
+test7(void)
 {
 	printf("Testing getEmbeddedFields().\n");
 
@@ -317,17 +335,21 @@ bool test7(void)
 		MarcRecord::FieldIt fieldIt = record.getField("461");
 
 		/* Get list of specified embedded fields. */
-		MarcRecord::EmbeddedFieldList embeddedFieldList = fieldIt->getEmbeddedFields("801");
-		printf("Found embedded fields: %u\n", (unsigned int) embeddedFieldList.size());
-		for (MarcRecord::EmbeddedFieldIt subfieldList = embeddedFieldList.begin();
-			subfieldList != embeddedFieldList.end(); subfieldList++)
+		MarcRecord::EmbeddedFieldList embeddedFieldList =
+			fieldIt->getEmbeddedFields("801");
+		printf("Found embedded fields: %u\n",
+			(unsigned int) embeddedFieldList.size());
+		MarcRecord::EmbeddedFieldIt subfieldList =
+			embeddedFieldList.begin();
+		for (; subfieldList != embeddedFieldList.end(); subfieldList++)
 		{
 			printf("Embedded field 461 <801>:");
-			for (MarcRecord::SubfieldRefIt subfieldIt = subfieldList->begin();
-				subfieldIt != subfieldList->end(); subfieldIt++)
+			MarcRecord::SubfieldRefIt subfieldIt =
+				subfieldList->begin();
+			for (; subfieldIt != subfieldList->end(); subfieldIt++)
 			{
-				printf(" $%c '%s'",
-					(*subfieldIt)->m_id, (*subfieldIt)->m_data.c_str());
+				printf(" $%c '%s'", (*subfieldIt)->m_id,
+					(*subfieldIt)->m_data.c_str());
 			}
 			printf("\n");
 		}
@@ -344,7 +366,8 @@ bool test7(void)
 	return true;
 }
 
-bool test8(void)
+bool
+test8(void)
 {
 	printf("Testing removeField(), removeSubfield().\n");
 
@@ -388,7 +411,8 @@ bool test8(void)
 	return true;
 }
 
-bool test9(void)
+bool
+test9(void)
 {
 	FILE *outputFile = NULL;
 
@@ -431,7 +455,8 @@ bool test9(void)
 	return true;
 }
 
-bool test10(void)
+bool
+test10(void)
 {
 	FILE *inputFile = NULL;
 
@@ -478,11 +503,13 @@ bool test10(void)
 	return true;
 }
 
-bool test11(void)
+bool
+test11(void)
 {
 	FILE *inputFile = NULL;
 
-	printf("Testing MarcReader with specified encoding and autocorrection.\n");
+	printf("Testing MarcReader with specified encoding and "
+		"autocorrection.\n");
 
 	try {
 		/* Open ISO 2709 file. */
@@ -526,7 +553,8 @@ bool test11(void)
 	return true;
 }
 
-bool test12(void)
+bool
+test12(void)
 {
 	FILE *outputFile = NULL;
 
@@ -546,7 +574,8 @@ bool test12(void)
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		if (!marcTextWriter.write(record1, "Record 1\n", "\n")
-			|| !marcTextWriter.write(record2, "\nRecord 2\n", "\n"))
+			|| !marcTextWriter.write(record2,
+				"\nRecord 2\n", "\n"))
 		{
 			throw marcTextWriter.getErrorMessage();
 		}
@@ -571,7 +600,8 @@ bool test12(void)
 	return true;
 }
 
-bool test13(void)
+bool
+test13(void)
 {
 	FILE *outputFile = NULL;
 
@@ -591,8 +621,11 @@ bool test13(void)
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
 		marcXmlWriter.writeHeader();
-		if (!marcXmlWriter.write(record1) || !marcXmlWriter.write(record2)) {
-			throw std::string("can't write MARCXML record to file");
+		if (!marcXmlWriter.write(record1)
+			|| !marcXmlWriter.write(record2))
+		{
+			throw std::string("can't write MARCXML record "
+				"to file");
 		}
 		marcXmlWriter.writeFooter();
 
@@ -616,7 +649,8 @@ bool test13(void)
 	return true;
 }
 
-bool test14(void)
+bool
+test14(void)
 {
 	FILE *inputFile = NULL;
 
@@ -639,7 +673,9 @@ bool test14(void)
 		}
 
 		/* Check error code. */
-		if (marcXmlReader.getErrorCode() != MarcXmlReader::END_OF_FILE) {
+		if (marcXmlReader.getErrorCode()
+			!= MarcXmlReader::END_OF_FILE)
+		{
 			throw marcXmlReader.getErrorMessage();
 		}
 
@@ -666,7 +702,8 @@ bool test14(void)
 /*
  * Main function.
  */
-int main(void)
+int
+main(void)
 {
 	bool result = true;
 
