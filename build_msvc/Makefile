@@ -1,19 +1,30 @@
 SRC_DIR=..\src
-OBJS = marc_reader.obj marc_writer.obj marcrecord.obj marcrecord_field.obj \
+SRC_DIR_EXPAT=$(SRC_DIR)\expat
+SRC_DIR_MARCRECORD=$(SRC_DIR)
+SRC_DIR_WIN_ICONV=$(SRC_DIR)\win-iconv
+
+OBJS_EXPAT=xmlparse.obj xmlrole.obj xmltok.obj
+OBJS_MARCRECORD=marc_reader.obj marc_writer.obj marcrecord.obj marcrecord_field.obj \
   marcrecord_subfield.obj marcrecord_tools.obj marctext_writer.obj \
-  marcxml_reader.obj marcxml_writer.obj xmlparse.obj xmlrole.obj xmltok.obj \
-  win_iconv.obj test.obj
-PROGRAM = test.exe
+  marcxml_reader.obj marcxml_writer.obj
+OBJS_WIN_ICONV=win_iconv.obj
+OBJS=test.obj $(OBJS_MARCRECORD) $(OBJS_WIN_ICONV) $(OBJS_EXPAT)
+
+PROGRAM=test.exe
 
 PLATFORM_SDK=C:\Program Files\Microsoft SDKs\Windows\v7.1
 
 CXXFLAGS=/nologo /MT /O2 /EHsc /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
-  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src" /I "..\src\win-iconv" \
-  /D "XML_STATIC"
-CFLAGS_EXPAT=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
-  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src\expat" /D "HAVE_EXPAT_CONFIG_H"
-CFLAGS_WIN_ICONV=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
-  /FD /I "$(PLATFORM_SDK)\Include" /I "..\src\win-iconv"
+  /FD /I "$(PLATFORM_SDK)\Include"
+CXXFLAGS_PROGRAM=$(CXXFLAGS) /I "$(SRC_DIR)" /I "$(SRC_DIR_EXPAT)" \
+  /I "$(SRC_DIR_WIN_ICONV)" /D "XML_STATIC"
+CXXFLAGS_MARCRECORD=$(CXXFLAGS) /I "$(SRC_DIR_MARCRECORD)" /I "$(SRC_DIR_EXPAT)" \
+  /I "$(SRC_DIR_WIN_ICONV)" /D "XML_STATIC"
+
+CFLAGS=/nologo /MT /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" \
+  /FD /I "$(PLATFORM_SDK)\Include"
+CFLAGS_EXPAT=$(CFLAGS) /I "$(SRC_DIR_EXPAT)" /D "HAVE_EXPAT_CONFIG_H" /D "XML_STATIC"
+
 LDFLAGS=/nologo /machine:I386
 LIBS=
 
@@ -28,44 +39,44 @@ clean:
 verify:
 	$(PROGRAM)
 
-marc_reader.obj: $(SRC_DIR)\marc_reader.cxx
-	cl /c $(CXXFLAGS) $**
-
-marc_writer.obj: $(SRC_DIR)\marc_writer.cxx
-	cl /c $(CXXFLAGS) $**
-
-marcrecord.obj: $(SRC_DIR)\marcrecord.cxx
-	cl /c $(CXXFLAGS) $**
-
-marcrecord_field.obj: $(SRC_DIR)\marcrecord_field.cxx
-	cl /c $(CXXFLAGS) $**
-
-marcrecord_subfield.obj: $(SRC_DIR)\marcrecord_subfield.cxx
-	cl /c $(CXXFLAGS) $**
-
-marcrecord_tools.obj: $(SRC_DIR)\marcrecord_tools.cxx
-	cl /c $(CXXFLAGS) $**
-
-marctext_writer.obj: $(SRC_DIR)\marctext_writer.cxx
-	cl /c $(CXXFLAGS) $**
-
-marcxml_reader.obj: $(SRC_DIR)\marcxml_reader.cxx
-	cl /c $(CXXFLAGS) $**
-
-marcxml_writer.obj: $(SRC_DIR)\marcxml_writer.cxx
-	cl /c $(CXXFLAGS) $**
-
-xmlparse.obj: $(SRC_DIR)\expat\xmlparse.c
-	cl /c $(CFLAGS_EXPAT) $**
-
-xmlrole.obj: $(SRC_DIR)\expat\xmlrole.c
-	cl /c $(CFLAGS_EXPAT) $**
-
-xmltok.obj: $(SRC_DIR)\expat\xmltok.c
-	cl /c $(CFLAGS_EXPAT) $**
-
-win_iconv.obj: $(SRC_DIR)\win-iconv\win_iconv.c
-	cl /c $(CFLAGS_WIN_ICONV) $**
-
 test.obj: $(SRC_DIR)\test.cxx
-	cl /c $(CXXFLAGS) $**
+	cl /c $(CXXFLAGS_PROGRAM) $**
+
+xmlparse.obj: $(SRC_DIR_EXPAT)\xmlparse.c
+	cl /c $(CFLAGS_EXPAT) $**
+
+xmlrole.obj: $(SRC_DIR_EXPAT)\xmlrole.c
+	cl /c $(CFLAGS_EXPAT) $**
+
+xmltok.obj: $(SRC_DIR_EXPAT)\xmltok.c
+	cl /c $(CFLAGS_EXPAT) $**
+
+marc_reader.obj: $(SRC_DIR_MARCRECORD)\marc_reader.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marc_writer.obj: $(SRC_DIR_MARCRECORD)\marc_writer.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marcrecord.obj: $(SRC_DIR_MARCRECORD)\marcrecord.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marcrecord_field.obj: $(SRC_DIR_MARCRECORD)\marcrecord_field.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marcrecord_subfield.obj: $(SRC_DIR_MARCRECORD)\marcrecord_subfield.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marcrecord_tools.obj: $(SRC_DIR_MARCRECORD)\marcrecord_tools.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marctext_writer.obj: $(SRC_DIR_MARCRECORD)\marctext_writer.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marcxml_reader.obj: $(SRC_DIR_MARCRECORD)\marcxml_reader.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+marcxml_writer.obj: $(SRC_DIR_MARCRECORD)\marcxml_writer.cxx
+	cl /c $(CXXFLAGS_MARCRECORD) $**
+
+win_iconv.obj: $(SRC_DIR_WIN_ICONV)\win_iconv.c
+	cl /c $(CFLAGS_WIN_ICONV) $**
