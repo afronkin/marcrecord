@@ -1,4 +1,4 @@
-SRC_DIR=../src
+SRC_DIR=../../src
 SRC_DIR_TEST=$(SRC_DIR)
 SRC_DIR_MARCRECORD=$(SRC_DIR)/marcrecord
 
@@ -23,12 +23,12 @@ BIN_DIR=bin
 BIN_TEST=$(BIN_DIR)/test
 
 CXX=g++
-CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long
+CXXFLAGS=-O2 -W -Wall -Wextra -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long -I/opt/local/include
 CXXFLAGS_TEST=$(CXXFLAGS) -I$(SRC_DIR) -I$(SRC_DIR_MARCRECORD)
-CXXFLAGS_MARCRECORD=$(CXXFLAGS) -I$(SRC_DIR_MARCRECORD)
+CXXFLAGS_MARCRECORD=$(CXXFLAGS) -I$(SRC_DIR_MARCRECORD) -DICONV_CONST_CHAR
 
 LINK=g++
-LDFLAGS=
+LDFLAGS=-L/opt/local/lib -R/opt/local/lib
 LIBS=-lm -lexpat -liconv
 
 .PHONY: all clean verify

@@ -1,4 +1,4 @@
-SRC_DIR=../src
+SRC_DIR=../../src
 OBJS=marc_reader.o marc_writer.o marcrecord.o marcrecord_field.o marcrecord_subfield.o \
   marcrecord_tools.o marctext_writer.o marcxml_reader.o marcxml_writer.o test.o \
   xmlparse.o xmlrole.o xmltok.o

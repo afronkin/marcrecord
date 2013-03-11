@@ -1,4 +1,4 @@
-SRC_DIR=..\src
+SRC_DIR=..\..\src
 SRC_DIR_EXPAT=$(SRC_DIR)\expat
 SRC_DIR_MARCRECORD=$(SRC_DIR)
 SRC_DIR_WIN_ICONV=$(SRC_DIR)\win-iconv
