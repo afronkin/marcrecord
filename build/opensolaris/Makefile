@@ -1,36 +1,78 @@
 SRC_DIR=../../src
-OBJS=marc_reader.o marc_writer.o marcrecord.o marcrecord_field.o marcrecord_subfield.o \
-  marcrecord_tools.o marctext_writer.o marcxml_reader.o marcxml_writer.o test.o \
-  xmlparse.o xmlrole.o xmltok.o
-PROGRAM=test
+SRC_DIR_TEST=$(SRC_DIR)
+SRC_DIR_MARCRECORD=$(SRC_DIR)/marcrecord
+
+OBJS_DIR=objs
+OBJS_DIR_TEST=$(OBJS_DIR)
+OBJS_DIR_MARCRECORD=$(OBJS_DIR)/marcrecord
+
+OBJS_TEST=\
+  $(OBJS_DIR_TEST)/test.o
+OBJS_MARCRECORD=\
+  $(OBJS_DIR_MARCRECORD)/marc_reader.o \
+  $(OBJS_DIR_MARCRECORD)/marc_writer.o \
+  $(OBJS_DIR_MARCRECORD)/marcrecord.o \
+  $(OBJS_DIR_MARCRECORD)/marcrecord_field.o \
+  $(OBJS_DIR_MARCRECORD)/marcrecord_subfield.o \
+  $(OBJS_DIR_MARCRECORD)/marcrecord_tools.o \
+  $(OBJS_DIR_MARCRECORD)/marctext_writer.o \
+  $(OBJS_DIR_MARCRECORD)/marcxml_reader.o \
+  $(OBJS_DIR_MARCRECORD)/marcxml_writer.o
+
+BIN_DIR=bin
+BIN_TEST=$(BIN_DIR)/test
 
 CXX=CC
-CXXFLAGS=-O2 -I$(SRC_DIR) -I$(SRC_DIR)/expat -D_XPG6
-CC=cc
-CFLAGS_EXPAT=-O2 -I$(SRC_DIR)/expat -DHAVE_EXPAT_CONFIG_H
+CXXFLAGS=-O2
+CXXFLAGS_TEST=$(CXXFLAGS) -I$(SRC_DIR) -I$(SRC_DIR_MARCRECORD)
+CXXFLAGS_MARCRECORD=$(CXXFLAGS) -I$(SRC_DIR_MARCRECORD) -DICONV_CONST_CHAR
+
+LINK=CC
 LDFLAGS=
-LIBS=-lm
+LIBS=-lm -lexpat
 
 .PHONY: all clean verify
-.SUFFIXES: .cxx .c .o
+.SUFFIXES: .cxx .o
 
-all: $(PROGRAM)
-	@echo $@ done.
-
-$(PROGRAM): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LIBS) -o $@
-	@echo $@ done.
+all: $(BIN_TEST)
 
 clean:
-	rm -f $(PROGRAM) $(OBJS) *.iso *.xml
-	@echo $@ done.
+	$(RM) $(BIN_TEST) $(OBJS_TEST) $(OBJS_MARCRECORD)
+	$(RM) -R tmp
 
 verify:
-	./$(PROGRAM) | more
-	@echo $@ done.
+	mkdir -p tmp
+	(cd tmp ; ../$(BIN_TEST) | more)
 
-%.o: $(SRC_DIR)/%.cxx
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+$(BIN_TEST): $(OBJS_TEST) $(OBJS_MARCRECORD)
+	$(LINK) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-%.o: $(SRC_DIR)/expat/%.c
-	$(CC) $(CFLAGS_EXPAT) -c $< -o $@
+$(OBJS_DIR_TEST)/test.o: $(SRC_DIR_TEST)/test.cxx
+	$(CXX) $(CXXFLAGS_TEST) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marc_reader.o: $(SRC_DIR_MARCRECORD)/marc_reader.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marc_writer.o: $(SRC_DIR_MARCRECORD)/marc_writer.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marcrecord.o: $(SRC_DIR_MARCRECORD)/marcrecord.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marcrecord_field.o: $(SRC_DIR_MARCRECORD)/marcrecord_field.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marcrecord_subfield.o: $(SRC_DIR_MARCRECORD)/marcrecord_subfield.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marcrecord_tools.o: $(SRC_DIR_MARCRECORD)/marcrecord_tools.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marctext_writer.o: $(SRC_DIR_MARCRECORD)/marctext_writer.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marcxml_reader.o: $(SRC_DIR_MARCRECORD)/marcxml_reader.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
+
+$(OBJS_DIR_MARCRECORD)/marcxml_writer.o: $(SRC_DIR_MARCRECORD)/marcxml_writer.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $^
