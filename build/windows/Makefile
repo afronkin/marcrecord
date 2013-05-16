@@ -50,16 +50,20 @@ LINK=link
 LDFLAGS=/nologo /machine:I386
 LIBS=
 
-all: $(BIN_TEST)
+all: depend $(BIN_TEST)
 
 clean:
-	del /Q $(BIN_TEST) $(OBJS_TEST) $(OBJS_EXPAT) $(OBJS_MARCRECORD) $(OBJS_WIN_ICONV) 2> nul:
-	del /Q *.idb 2> nul:
-	IF EXIST tmp rmdir /S /Q tmp
+	IF EXIST test rmdir /s /q test
+	IF EXIST $(BIN_DIR) rmdir /s /q $(BIN_DIR)
+	IF EXIST $(OBJS_DIR) rmdir /s /q $(OBJS_DIR)
+	IF EXIST $(OBJS_DIR_MARCRECORD) rmdir /s /q $(OBJS_DIR_MARCRECORD)
+
+depend:
+	mkdir $(BIN_DIR) $(OBJS_DIR) $(OBJS_DIR_MARCRECORD)
 
 verify:
-	IF NOT EXIST tmp mkdir tmp
-	cd tmp & ..\$(BIN_TEST) | more
+	IF NOT EXIST test mkdir test
+	cd test & ..\$(BIN_TEST) | more
 
 $(BIN_TEST): $(OBJS_TEST) $(OBJS_EXPAT) $(OBJS_MARCRECORD) $(OBJS_WIN_ICONV)
 	$(LINK) $(LDFLAGS) /out:$@ $** $(LIBS)

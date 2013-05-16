@@ -32,18 +32,20 @@ LINK=CC
 LDFLAGS=
 LIBS=-lm -lexpat
 
-.PHONY: all clean verify
+.PHONY: all clean depend verify
 .SUFFIXES: .cxx .o
 
-all: $(BIN_TEST)
+all: depend $(BIN_TEST)
 
 clean:
-	$(RM) $(BIN_TEST) $(OBJS_TEST) $(OBJS_MARCRECORD)
-	$(RM) -R tmp
+	$(RM) -R test $(BIN_DIR) $(OBJS_DIR) $(OBJS_DIR_MARCRECORD)
+
+depend:
+	mkdir -p $(BIN_DIR) $(OBJS_DIR) $(OBJS_DIR_MARCRECORD)
 
 verify:
-	mkdir -p tmp
-	(cd tmp ; ../$(BIN_TEST) | more)
+	mkdir -p test
+	(cd test ; ../$(BIN_TEST) | more)
 
 $(BIN_TEST): $(OBJS_TEST) $(OBJS_MARCRECORD)
 	$(LINK) $(LDFLAGS) -o $@ $^ $(LIBS)
