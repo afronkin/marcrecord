@@ -53,13 +53,16 @@ LIBS=
 all: depend $(BIN_TEST)
 
 clean:
+	IF EXIST *.idb del /q *.idb
 	IF EXIST test rmdir /s /q test
 	IF EXIST $(BIN_DIR) rmdir /s /q $(BIN_DIR)
 	IF EXIST $(OBJS_DIR) rmdir /s /q $(OBJS_DIR)
+	IF EXIST $(OBJS_DIR_EXPAT) rmdir /s /q $(OBJS_DIR_EXPAT)
 	IF EXIST $(OBJS_DIR_MARCRECORD) rmdir /s /q $(OBJS_DIR_MARCRECORD)
+	IF EXIST $(OBJS_DIR_WIN_ICONV) rmdir /s /q $(OBJS_DIR_WIN_ICONV)
 
 depend:
-	mkdir $(BIN_DIR) $(OBJS_DIR) $(OBJS_DIR_MARCRECORD)
+	mkdir $(BIN_DIR) $(OBJS_DIR) $(OBJS_DIR_EXPAT) $(OBJS_DIR_MARCRECORD) $(OBJS_DIR_WIN_ICONV)
 
 verify:
 	IF NOT EXIST test mkdir test
