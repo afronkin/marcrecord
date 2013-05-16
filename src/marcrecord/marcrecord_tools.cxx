@@ -26,10 +26,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <errno.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 #include "marcrecord_tools.h"
 
 namespace marcrecord {
@@ -77,7 +77,11 @@ serialize_xml(std::string &s)
 			dest.append("&quot;");
 			break;
 		case '&':
-			dest.append("&amp;");
+			if ((it + 1) == s.end() || *(it + 1) != '#') {
+				dest.append("&amp;");
+			} else {
+				dest += c;
+			}
 			break;
 		case '\'':
 			dest.append("&apos;");

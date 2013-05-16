@@ -26,10 +26,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <cstdio>
+#include <cstring>
 #include <iconv.h>
-#include <stdio.h>
 #include <string>
-#include <string.h>
 
 #include "marcrecord.h"
 #include "marcxml_reader.h"
