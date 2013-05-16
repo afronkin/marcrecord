@@ -33,6 +33,7 @@
 #include "marctext_writer.h"
 #include "marcxml_reader.h"
 #include "marcxml_writer.h"
+#include "unimarcxml_writer.h"
 
 using namespace marcrecord;
 
@@ -422,7 +423,7 @@ test9(void)
 
 	try {
 		// Open ISO 2709 file.
-		outputFile = fopen("test1.iso", "wb");
+		outputFile = fopen("test_003.iso", "wb");
 		if (outputFile == NULL) {
 			throw std::string("can't open output file");
 		}
@@ -466,7 +467,7 @@ test10(void)
 
 	try {
 		// Open ISO 2709 file.
-		inputFile = fopen("test1.iso", "rb");
+		inputFile = fopen("test_003.iso", "rb");
 		if (inputFile == NULL) {
 			throw std::string("can't open input file");
 		}
@@ -515,7 +516,7 @@ test11(void)
 
 	try {
 		// Open ISO 2709 file.
-		inputFile = fopen("test1.iso", "rb");
+		inputFile = fopen("test_003.iso", "rb");
 		if (inputFile == NULL) {
 			throw std::string("can't open input file");
 		}
@@ -564,7 +565,7 @@ test12(void)
 
 	try {
 		// Open MARC text file.
-		outputFile = fopen("test2.txt", "wb");
+		outputFile = fopen("test_012.txt", "wb");
 		if (outputFile == NULL) {
 			throw std::string("can't open output file");
 		}
@@ -611,7 +612,7 @@ test13(void)
 
 	try {
 		// Open MARCXML file.
-		outputFile = fopen("test3.xml", "wb");
+		outputFile = fopen("test_013.xml", "wb");
 		if (outputFile == NULL) {
 			throw std::string("can't open output file");
 		}
@@ -660,7 +661,7 @@ test14(void)
 
 	try {
 		// Open MARCXML file.
-		inputFile = fopen("test3.xml", "rb");
+		inputFile = fopen("test_013.xml", "rb");
 		if (inputFile == NULL) {
 			throw std::string("can't open input file");
 		}
@@ -701,6 +702,55 @@ test14(void)
 	return true;
 }
 
+bool
+test15(void)
+{
+	FILE *outputFile = NULL;
+
+	printf("[15] UnimarcXmlWriter\n");
+
+	try {
+		// Open UNIMARCXML file.
+		outputFile = fopen("test_015.xml", "wb");
+		if (outputFile == NULL) {
+			throw std::string("can't open output file");
+		}
+
+		// Initialize UNIMARCXML writer.
+		UnimarcXmlWriter unimarcXmlWriter(outputFile, "CP866");
+
+		// Write MARC records to UNIMARCXML file.
+		MarcRecord record1 = createRecord1();
+		MarcRecord record2 = createRecord2();
+		unimarcXmlWriter.writeHeader();
+		if (!unimarcXmlWriter.write(record1)
+			|| !unimarcXmlWriter.write(record2))
+		{
+			throw std::string("can't write UNIMARCXML record "
+				"to file");
+		}
+		unimarcXmlWriter.writeFooter();
+
+		// Close UNIMARCXML file.
+		fclose(outputFile);
+	} catch (std::string errorMessage) {
+		// Close files.
+		if (outputFile) {
+			fclose(outputFile);
+		}
+
+		// Print error message.
+		printf("ERROR: %s.\n\n", errorMessage.c_str());
+
+		return false;
+	}
+
+	// Print status.
+	printf("OK\n\n");
+
+	return true;
+}
+
 /*
  * Main function.
  */
@@ -724,6 +774,7 @@ main(void)
 	result &= test12();
 	result &= test13();
 	result &= test14();
+	result &= test15();
 
 	if (!result) {
 		printf("Tests failed.\n");

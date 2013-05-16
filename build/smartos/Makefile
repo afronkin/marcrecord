@@ -17,7 +17,8 @@ OBJS_MARCRECORD=\
   $(OBJS_DIR_MARCRECORD)/marcrecord_tools.o \
   $(OBJS_DIR_MARCRECORD)/marctext_writer.o \
   $(OBJS_DIR_MARCRECORD)/marcxml_reader.o \
-  $(OBJS_DIR_MARCRECORD)/marcxml_writer.o
+  $(OBJS_DIR_MARCRECORD)/marcxml_writer.o \
+  $(OBJS_DIR_MARCRECORD)/unimarcxml_writer.o
 
 BIN_DIR=bin
 BIN_TEST=$(BIN_DIR)/test
@@ -75,4 +76,7 @@ $(OBJS_DIR_MARCRECORD)/marcxml_reader.o: $(SRC_DIR_MARCRECORD)/marcxml_reader.cx
 	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $<
 
 $(OBJS_DIR_MARCRECORD)/marcxml_writer.o: $(SRC_DIR_MARCRECORD)/marcxml_writer.cxx
+	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $<
+
+$(OBJS_DIR_MARCRECORD)/unimarcxml_writer.o: $(SRC_DIR_MARCRECORD)/unimarcxml_writer.cxx
 	$(CXX) $(CXXFLAGS_MARCRECORD) -c -o $@ $<

@@ -25,7 +25,8 @@ OBJS_MARCRECORD=\
   $(OBJS_DIR_MARCRECORD)\marcrecord_tools.obj \
   $(OBJS_DIR_MARCRECORD)\marctext_writer.obj \
   $(OBJS_DIR_MARCRECORD)\marcxml_reader.obj \
-  $(OBJS_DIR_MARCRECORD)\marcxml_writer.obj
+  $(OBJS_DIR_MARCRECORD)\marcxml_writer.obj \
+  $(OBJS_DIR_MARCRECORD)\unimarcxml_writer.obj
 OBJS_WIN_ICONV=\
   $(OBJS_DIR_WIN_ICONV)\win_iconv.obj
 
@@ -100,6 +101,9 @@ $(OBJS_DIR_MARCRECORD)\marcxml_reader.obj: $(SRC_DIR_MARCRECORD)\marcxml_reader.
 	cl $(CXXFLAGS_MARCRECORD) /c /Fo$@ $**
 
 $(OBJS_DIR_MARCRECORD)\marcxml_writer.obj: $(SRC_DIR_MARCRECORD)\marcxml_writer.cxx
+	cl $(CXXFLAGS_MARCRECORD) /c /Fo$@ $**
+
+$(OBJS_DIR_MARCRECORD)\unimarcxml_writer.obj: $(SRC_DIR_MARCRECORD)\unimarcxml_writer.cxx
 	cl $(CXXFLAGS_MARCRECORD) /c /Fo$@ $**
 
 $(OBJS_DIR_WIN_ICONV)\win_iconv.obj: $(SRC_DIR_WIN_ICONV)\win_iconv.c
