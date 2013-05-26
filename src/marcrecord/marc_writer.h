@@ -67,6 +67,9 @@ public:
 	// Get last error message.
 	std::string & getErrorMessage(void);
 
+	// Return output file handle.
+	FILE *getOutputFile();
+
 	// Open output file.
 	virtual bool open(FILE *outputFile,
 		const char *outputEncoding = NULL) = 0;

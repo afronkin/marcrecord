@@ -29,7 +29,9 @@
 #include <stdio.h>
 #include "marcrecord.h"
 #include "marc_reader.h"
-#include "marc_writer.h"
+// #include "marc_writer.h"
+#include "marciso_reader.h"
+#include "marciso_writer.h"
 #include "marctext_writer.h"
 #include "marcxml_reader.h"
 #include "marcxml_writer.h"
@@ -419,7 +421,7 @@ test9(void)
 {
 	FILE *outputFile = NULL;
 
-	printf("[9] MarcWriter\n");
+	printf("[9] MarcIsoWriter\n");
 
 	try {
 		// Open ISO 2709 file.
@@ -428,14 +430,16 @@ test9(void)
 			throw std::string("can't open output file");
 		}
 
-		// Initialize MARC writer.
-		MarcWriter marcWriter(outputFile, "CP1251");
+		// Initialize ISO 2709 writer.
+		MarcIsoWriter marcIsoWriter(outputFile, "CP1251");
 
 		// Write MARC records to ISO 2709 file.
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
-		if (!marcWriter.write(record1) || !marcWriter.write(record2)) {
-			throw marcWriter.getErrorMessage();
+		if (!marcIsoWriter.write(record1)
+			|| !marcIsoWriter.write(record2))
+		{
+			throw marcIsoWriter.getErrorMessage();
 		}
 
 		// Close ISO 2709 file.
@@ -463,7 +467,7 @@ test10(void)
 {
 	FILE *inputFile = NULL;
 
-	printf("[10] MarcReader\n");
+	printf("[10] MarcIsoReader\n");
 
 	try {
 		// Open ISO 2709 file.
@@ -472,18 +476,18 @@ test10(void)
 			throw std::string("can't open input file");
 		}
 
-		// Initialize MARC reader.
-		MarcReader marcReader(inputFile, "CP1251");
+		// Initialize ISO 2709 reader.
+		MarcIsoReader marcIsoReader(inputFile, "CP1251");
 
 		// Read records.
 		MarcRecord record(MarcRecord::UNIMARC);
-		while (marcReader.next(record)) {
+		while (marcIsoReader.next(record)) {
 			printf("%s\n", record.toString().c_str());
 		}
 
 		// Check error code.
-		if (marcReader.getErrorCode() != MarcReader::END_OF_FILE) {
-			throw marcReader.getErrorMessage();
+		if (marcIsoReader.getErrorCode() != MarcReader::END_OF_FILE) {
+			throw marcIsoReader.getErrorMessage();
 		}
 
 		// Close ISO 2709 file.
@@ -511,7 +515,7 @@ test11(void)
 {
 	FILE *inputFile = NULL;
 
-	printf("[11] MarcReader with specified encoding and "
+	printf("[11] MarcIsoReader with specified encoding and "
 		"autocorrection\n");
 
 	try {
@@ -521,19 +525,19 @@ test11(void)
 			throw std::string("can't open input file");
 		}
 
-		// Initialize MARC reader.
-		MarcReader marcReader(inputFile, "CP1251");
-		marcReader.setAutoCorrectionMode(true);
+		// Initialize ISO 2709 reader.
+		MarcIsoReader marcIsoReader(inputFile, "CP1251");
+		marcIsoReader.setAutoCorrectionMode(true);
 
 		// Read records.
 		MarcRecord record(MarcRecord::UNIMARC);
-		while (marcReader.next(record)) {
+		while (marcIsoReader.next(record)) {
 			printf("%s\n", record.toString().c_str());
 		}
 
 		// Check error code.
-		if (marcReader.getErrorCode() != MarcReader::END_OF_FILE) {
-			throw marcReader.getErrorMessage();
+		if (marcIsoReader.getErrorCode() != MarcReader::END_OF_FILE) {
+			throw marcIsoReader.getErrorMessage();
 		}
 
 		// Close ISO 2709 file.
@@ -572,14 +576,19 @@ test12(void)
 
 		// Initialize MARC text writer.
 		MarcTextWriter marcTextWriter(outputFile, "KOI8-R");
+		marcTextWriter.setRecordFooter("\n");
 
 		// Write MARC records to MARC text file.
 		MarcRecord record1 = createRecord1();
 		MarcRecord record2 = createRecord2();
-		if (!marcTextWriter.write(record1, "Record 1\n", "\n")
-			|| !marcTextWriter.write(record2,
-				"\nRecord 2\n", "\n"))
-		{
+
+		marcTextWriter.setRecordHeader("Record 1\n");
+		if (!marcTextWriter.write(record1)) {
+			throw marcTextWriter.getErrorMessage();
+		}
+
+		marcTextWriter.setRecordHeader("Record 2\n");
+		if (!marcTextWriter.write(record2)) {
 			throw marcTextWriter.getErrorMessage();
 		}
 

@@ -61,3 +61,12 @@ MarcWriter::getErrorMessage(void)
 {
 	return m_errorMessage;
 }
+
+/*
+ * Return output file handle.
+ */
+FILE *
+MarcWriter::getOutputFile()
+{
+	return m_outputFile;
+}
