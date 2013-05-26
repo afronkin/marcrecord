@@ -26,8 +26,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MARCRECORD_MARCXML_WRITER_H
-#define MARCRECORD_MARCXML_WRITER_H
+#ifndef MARCRECORD_MARCISO_WRITER_H
+#define MARCRECORD_MARCISO_WRITER_H
 
 #include <iconv.h>
 #include <string>
@@ -37,19 +37,26 @@
 namespace marcrecord {
 
 /*
- * MARCXML records writer.
+ *ISO 2709 records writer.
  */
-class MarcXmlWriter : public MarcWriter {
+class MarcIsoWriter : public MarcWriter {
 protected:
 	// Iconv descriptor for output encoding.
 	iconv_t m_iconvDesc;
 
+private:
+	// Append control field data to the write buffer.
+	int appendControlField(char *fieldData, MarcRecord::FieldIt &fieldIt);
+	// Append subfield data to the write buffer.
+	int appendSubfield(char *fieldData,
+		MarcRecord::SubfieldIt &subfieldIt);
+
 public:
 	// Constructor.
-	MarcXmlWriter(FILE *outputFile = NULL,
+	MarcIsoWriter(FILE *outputFile = NULL,
 		const char *outputEncoding = NULL);
 	// Destructor.
-	~MarcXmlWriter();
+	~MarcIsoWriter();
 
 	// Open output file.
 	bool open(FILE *outputFile, const char *outputEncoding = NULL);
@@ -57,13 +64,8 @@ public:
 	void close(void);
 	// Write record to output file.
 	bool write(MarcRecord &record);
-
-	// Write header to output file.
-	bool writeHeader(void);
-	// Write footer to output file.
-	bool writeFooter(void);
 };
 
 } // namespace marcrecord
 
-#endif // MARCRECORD_MARCXML_WRITER_H
+#endif // MARCRECORD_MARCISO_WRITER_H

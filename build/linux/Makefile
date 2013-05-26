@@ -11,6 +11,8 @@ OBJS_TEST=\
 OBJS_MARCRECORD=\
   $(OBJS_DIR_MARCRECORD)/marc_reader.o \
   $(OBJS_DIR_MARCRECORD)/marc_writer.o \
+  $(OBJS_DIR_MARCRECORD)/marciso_reader.o \
+  $(OBJS_DIR_MARCRECORD)/marciso_writer.o \
   $(OBJS_DIR_MARCRECORD)/marcrecord.o \
   $(OBJS_DIR_MARCRECORD)/marcrecord_field.o \
   $(OBJS_DIR_MARCRECORD)/marcrecord_subfield.o \

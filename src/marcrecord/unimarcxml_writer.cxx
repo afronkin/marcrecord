@@ -40,6 +40,7 @@ using namespace marcrecord;
  */
 UnimarcXmlWriter::UnimarcXmlWriter(FILE *outputFile,
 	const char *outputEncoding)
+	: MarcWriter()
 {
 	// Clear member variables.
 	m_iconvDesc = (iconv_t) -1;
@@ -60,24 +61,6 @@ UnimarcXmlWriter::~UnimarcXmlWriter()
 {
 	// Close output file.
 	close();
-}
-
-/*
- * Get last error code.
- */
-UnimarcXmlWriter::ErrorCode
-UnimarcXmlWriter::getErrorCode(void)
-{
-	return m_errorCode;
-}
-
-/*
- * Get last error message.
- */
-std::string &
-UnimarcXmlWriter::getErrorMessage(void)
-{
-	return m_errorMessage;
 }
 
 /*
@@ -138,92 +121,7 @@ UnimarcXmlWriter::close(void)
 }
 
 /*
- * Write header to UNIMARCXML file.
- */
-bool
-UnimarcXmlWriter::writeHeader(void)
-{
-	std::string header = "";
-
-	// Create UNIMARCXML header.
-	if (m_outputEncoding != "") {
-		header += "<?xml version=\"1.0\" encoding=\""
-			+ m_outputEncoding + "\"?>\n";
-	} else {
-		header = "<?xml version=\"1.0\"?>\n";
-	}
-
-	header += "<collection xmlns="
-		"\"http://www.rusmarc.ru/shema/UNISlim.xsd\">\n";
-
-	if (m_iconvDesc == (iconv_t) -1) {
-		// Write UNIMARCXML header.
-		if (fwrite(header.c_str(), header.size(), 1,
-			m_outputFile) != 1)
-		{
-			m_errorCode = ERROR_IO;
-			m_errorMessage = "i/o operation failed";
-			return false;
-		}
-	} else {
-		// Write UNIMARCXML header with encoding conversion.
-		std::string iconvBuf;
-		if (!iconv(m_iconvDesc, header, iconvBuf)) {
-			m_errorCode = ERROR_ICONV;
-			m_errorMessage = "encoding conversion failed";
-			return false;
-		}
-		if (fwrite(iconvBuf.c_str(), iconvBuf.size(), 1,
-			m_outputFile) != 1)
-		{
-			m_errorCode = ERROR_IO;
-			m_errorMessage = "i/o operation failed";
-			return false;
-		}
-	}
-
-	return true;
-}
-
-/*
- * Write footer to UNIMARCXML file.
- */
-bool
-UnimarcXmlWriter::writeFooter(void)
-{
-	std::string footer = "</collection>\n";
-
-	if (m_iconvDesc == (iconv_t) -1) {
-		// Write UNIMARCXML footer.
-		if (fwrite(footer.c_str(), footer.size(), 1,
-			m_outputFile) != 1)
-		{
-			m_errorCode = ERROR_IO;
-			m_errorMessage = "i/o operation failed";
-			return false;
-		}
-	} else {
-		// Write UNIMARCXML footer with encoding conversion.
-		std::string iconvBuf;
-		if (!iconv(m_iconvDesc, footer, iconvBuf)) {
-			m_errorCode = ERROR_ICONV;
-			m_errorMessage = "encoding conversion failed";
-			return false;
-		}
-		if (fwrite(iconvBuf.c_str(), iconvBuf.size(), 1,
-			m_outputFile) != 1)
-		{
-			m_errorCode = ERROR_IO;
-			m_errorMessage = "i/o operation failed";
-			return false;
-		}
-	}
-
-	return true;
-}
-
-/*
- * Write record to UNIMARCXML file.
+ * Write record to output file.
  */
 bool
 UnimarcXmlWriter::write(MarcRecord &record)
@@ -273,6 +171,91 @@ UnimarcXmlWriter::write(MarcRecord &record)
 		// Write UNIMARCXML record with encoding conversion.
 		std::string iconvBuf;
 		if (!iconv(m_iconvDesc, recordBuf, iconvBuf)) {
+			m_errorCode = ERROR_ICONV;
+			m_errorMessage = "encoding conversion failed";
+			return false;
+		}
+		if (fwrite(iconvBuf.c_str(), iconvBuf.size(), 1,
+			m_outputFile) != 1)
+		{
+			m_errorCode = ERROR_IO;
+			m_errorMessage = "i/o operation failed";
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/*
+ * Write header to output file.
+ */
+bool
+UnimarcXmlWriter::writeHeader(void)
+{
+	std::string header = "";
+
+	// Create UNIMARCXML header.
+	if (m_outputEncoding != "") {
+		header += "<?xml version=\"1.0\" encoding=\""
+			+ m_outputEncoding + "\"?>\n";
+	} else {
+		header = "<?xml version=\"1.0\"?>\n";
+	}
+
+	header += "<collection xmlns="
+		"\"http://www.rusmarc.ru/shema/UNISlim.xsd\">\n";
+
+	if (m_iconvDesc == (iconv_t) -1) {
+		// Write UNIMARCXML header.
+		if (fwrite(header.c_str(), header.size(), 1,
+			m_outputFile) != 1)
+		{
+			m_errorCode = ERROR_IO;
+			m_errorMessage = "i/o operation failed";
+			return false;
+		}
+	} else {
+		// Write UNIMARCXML header with encoding conversion.
+		std::string iconvBuf;
+		if (!iconv(m_iconvDesc, header, iconvBuf)) {
+			m_errorCode = ERROR_ICONV;
+			m_errorMessage = "encoding conversion failed";
+			return false;
+		}
+		if (fwrite(iconvBuf.c_str(), iconvBuf.size(), 1,
+			m_outputFile) != 1)
+		{
+			m_errorCode = ERROR_IO;
+			m_errorMessage = "i/o operation failed";
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/*
+ * Write footer to output file.
+ */
+bool
+UnimarcXmlWriter::writeFooter(void)
+{
+	std::string footer = "</collection>\n";
+
+	if (m_iconvDesc == (iconv_t) -1) {
+		// Write UNIMARCXML footer.
+		if (fwrite(footer.c_str(), footer.size(), 1,
+			m_outputFile) != 1)
+		{
+			m_errorCode = ERROR_IO;
+			m_errorMessage = "i/o operation failed";
+			return false;
+		}
+	} else {
+		// Write UNIMARCXML footer with encoding conversion.
+		std::string iconvBuf;
+		if (!iconv(m_iconvDesc, footer, iconvBuf)) {
 			m_errorCode = ERROR_ICONV;
 			m_errorMessage = "encoding conversion failed";
 			return false;

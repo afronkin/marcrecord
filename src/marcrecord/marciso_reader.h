@@ -26,44 +26,51 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MARCRECORD_MARCXML_WRITER_H
-#define MARCRECORD_MARCXML_WRITER_H
+#ifndef MARCRECORD_MARCISO_READER_H
+#define MARCRECORD_MARCISO_READER_H
 
 #include <iconv.h>
 #include <string>
-#include "marc_writer.h"
+#include "marc_reader.h"
 #include "marcrecord.h"
 
 namespace marcrecord {
 
 /*
- * MARCXML records writer.
+ * ISO 2709 records reader.
  */
-class MarcXmlWriter : public MarcWriter {
+class MarcIsoReader : public MarcReader {
 protected:
-	// Iconv descriptor for output encoding.
+	// Iconv descriptor for input encoding.
 	iconv_t m_iconvDesc;
+
+private:
+	// Parse field from ISO 2709 buffer.
+	inline MarcRecord::Field parseField(const std::string &fieldTag,
+		const char *fieldData, unsigned int fieldLength);
+	// Parse subfield.
+	MarcRecord::Subfield parseSubfield(const char *fieldData,
+		unsigned int subfieldStartPos, unsigned int subfieldEndPos);
 
 public:
 	// Constructor.
-	MarcXmlWriter(FILE *outputFile = NULL,
-		const char *outputEncoding = NULL);
+	MarcIsoReader(FILE *inputFile = NULL,
+		const char *inputEncoding = NULL);
 	// Destructor.
-	~MarcXmlWriter();
+	~MarcIsoReader();
 
-	// Open output file.
-	bool open(FILE *outputFile, const char *outputEncoding = NULL);
-	// Close output file.
+	// Open input file.
+	bool open(FILE *inputFile, const char *inputEncoding = NULL);
+	// Close input file.
 	void close(void);
-	// Write record to output file.
-	bool write(MarcRecord &record);
+	// Read next record from file.
+	bool next(MarcRecord &record);
 
-	// Write header to output file.
-	bool writeHeader(void);
-	// Write footer to output file.
-	bool writeFooter(void);
+	// Parse record from ISO 2709 buffer.
+	bool parse(const char *recordBuf, unsigned int recordBufLen,
+		MarcRecord &record);
 };
 
 } // namespace marcrecord
 
-#endif // MARCRECORD_MARCXML_WRITER_H
+#endif // MARCRECORD_MARCISO_READER_H
