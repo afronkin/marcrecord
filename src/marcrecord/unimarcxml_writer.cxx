@@ -286,15 +286,15 @@ UnimarcXmlWriter::appendDataField(std::string &recordBuf,
 
 	// Iterate all subfields.
 	MarcRecord::SubfieldIt subfieldIt = fieldIt->m_subfieldList.begin();
-	bool isEmbeddedField = false;
+	bool isEmbeddedDataField = false;
 	for (; subfieldIt != fieldIt->m_subfieldList.end();
 		subfieldIt++)
 	{
 		std::string xmlData;
 
 		if (subfieldIt->isEmbedded()) {
-			if (isEmbeddedField) {
-				// Append embedded field footer.
+			if (isEmbeddedDataField) {
+				// Append embedded data field footer.
 				recordBuf = recordBuf
 					+ "        </datafield>\n"
 					+ "      </s1>\n";
@@ -313,8 +313,8 @@ UnimarcXmlWriter::appendDataField(std::string &recordBuf,
 					+ embeddedTag + "\">"
 					+ xmlData + "</controlfield>\n"
 					+ "      </s1>\n";
+				isEmbeddedDataField = false;
 			} else {
-				isEmbeddedField = true;
 				recordBuf = recordBuf
 					+ "      <s1>\n"
 					+ "        <datafield tag=\""
@@ -324,12 +324,13 @@ UnimarcXmlWriter::appendDataField(std::string &recordBuf,
 					+ "\" ind2=\""
 					+ subfieldIt->getEmbeddedInd2()
 					+ "\">\n";
+				isEmbeddedDataField = true;
 			}
 			continue;
 		}
 
 		// Append indent for embedded field.
-		if (isEmbeddedField) {
+		if (isEmbeddedDataField) {
 			recordBuf += "    ";
 		}
 
@@ -341,8 +342,8 @@ UnimarcXmlWriter::appendDataField(std::string &recordBuf,
 			+ xmlData + "</subfield>\n";
 	}
 
-	// Append embedded field footer.
-	if (isEmbeddedField) {
+	// Append embedded data field footer.
+	if (isEmbeddedDataField) {
 		recordBuf = recordBuf
 			+ "        </datafield>\n"
 			+ "      </s1>\n";
