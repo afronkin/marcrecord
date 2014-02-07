@@ -19,6 +19,8 @@ OBJS_EXPAT=\
 OBJS_MARCRECORD=\
   $(OBJS_DIR_MARCRECORD)\marc_reader.obj \
   $(OBJS_DIR_MARCRECORD)\marc_writer.obj \
+  $(OBJS_DIR_MARCRECORD)\marciso_reader.obj \
+  $(OBJS_DIR_MARCRECORD)\marciso_writer.obj \
   $(OBJS_DIR_MARCRECORD)\marcrecord.obj \
   $(OBJS_DIR_MARCRECORD)\marcrecord_field.obj \
   $(OBJS_DIR_MARCRECORD)\marcrecord_subfield.obj \
@@ -87,6 +89,12 @@ $(OBJS_DIR_MARCRECORD)\marc_reader.obj: $(SRC_DIR_MARCRECORD)\marc_reader.cxx
 	cl $(CXXFLAGS_MARCRECORD) /c /Fo$@ $**
 
 $(OBJS_DIR_MARCRECORD)\marc_writer.obj: $(SRC_DIR_MARCRECORD)\marc_writer.cxx
+	cl $(CXXFLAGS_MARCRECORD) /c /Fo$@ $**
+
+$(OBJS_DIR_MARCRECORD)\marciso_reader.obj: $(SRC_DIR_MARCRECORD)\marciso_reader.cxx
+	cl $(CXXFLAGS_MARCRECORD) /c /Fo$@ $**
+
+$(OBJS_DIR_MARCRECORD)\marciso_writer.obj: $(SRC_DIR_MARCRECORD)\marciso_writer.cxx
 	cl $(CXXFLAGS_MARCRECORD) /c /Fo$@ $**
 
 $(OBJS_DIR_MARCRECORD)\marcrecord.obj: $(SRC_DIR_MARCRECORD)\marcrecord.cxx
